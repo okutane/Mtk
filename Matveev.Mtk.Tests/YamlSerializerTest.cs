@@ -16,7 +16,7 @@ namespace Matveev.Mtk.Tests
     [Serializable]
     public class YamlSerializerTest
     {
-        IFormatter formatter = new YamlFormatter();
+        private static IFormatter formatter = new YamlFormatter();
 
         [Test]
         public void TestSerialize()
@@ -33,7 +33,7 @@ namespace Matveev.Mtk.Tests
             TestSerialize("ArrayOfInts.yaml", new int[] { 3, 2, 1, 6, 7 });
         }
 
-        private void TestSerialize(string actual, object obj)
+        public static void TestSerialize(string actual, object obj)
         {
             string expected = Path.Combine("../../YamlExpected", actual);
             actual = Path.Combine("YamlActual", actual);
