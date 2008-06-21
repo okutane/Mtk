@@ -1,6 +1,7 @@
 ﻿using System.Runtime.Serialization;
 using System;
 using System.IO;
+using System.Collections;
 
 namespace Matveev.Common
 {
@@ -43,24 +44,37 @@ namespace Matveev.Common
             using (TextWriter writer = new StreamWriter(serializationStream))
             {
                 writer.WriteLine("---");
-                Type type = graph.GetType();
-                if (type.IsArray)
+                Serialize(writer, graph, 0);
+            }
+        }
+
+        private static void Serialize(TextWriter writer, object graph, int indentSize)
+        {
+            Type type = graph.GetType();
+            if (graph is IEnumerable)
+            {
+                foreach (var item in (IEnumerable)graph)
                 {
-                    Array array = (Array)graph;
-                    for (int i = 0; i < array.Length; i++)
-                    {
-                        writer.Write("- ");
-                        writer.WriteLine(array.GetValue(i));
-                    }
-                    return;
+                    writer.Write("- ");
+                    writer.WriteLine(item);
                 }
+            }
+            else
+            {
                 foreach (var field in type.GetFields())
                 {
                     writer.WriteLine("{0}: {1}", field.Name, field.GetValue(graph));
                 }
                 foreach (var property in type.GetProperties())
                 {
-                    writer.WriteLine("{0}: {1}", property.Name, property.GetValue(graph, null));
+                    object value = property.GetValue(graph, null);
+                    if (value is IEnumerable)
+                    {
+                        writer.WriteLine("{0} :", property.Name);
+                        Serialize(writer, value, indentSize + 2);
+                        continue;
+                    }
+                    writer.WriteLine("{0}: {1}", property.Name, value);
                 }
             }
         }

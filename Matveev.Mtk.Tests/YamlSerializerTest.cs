@@ -9,6 +9,8 @@ using NUnit.Framework;
 
 using Matveev.Common;
 using System.Runtime.Serialization;
+using Matveev.Mtk.Library;
+using Matveev.Mtk.Core;
 
 namespace Matveev.Mtk.Tests
 {
@@ -31,6 +33,20 @@ namespace Matveev.Mtk.Tests
         public void ArrayOfInts()
         {
             TestSerialize("ArrayOfInts.yaml", new int[] { 3, 2, 1, 6, 7 });
+        }
+
+        [Test]
+        public void GenericCollection()
+        {
+            TestSerialize("GenericCollection.yaml", new List<string>(new string[] { "abc", "def" }));
+        }
+
+        [Test]
+        public void SimpleMesh()
+        {
+            HeaMesh mesh = new HeaMesh();
+            mesh.AddVertex(new Point(0, 0, 0), new Vector(0, 0, 1));
+            TestSerialize("SimpleMesh.yaml", mesh);
         }
 
         public static void TestSerialize(string actual, object obj)
