@@ -1,0 +1,22 @@
+syntax: glob
+UI\obj\Debug/*.resources
+UI\bin\Debug/*.config
+*.Cache
+*.dll
+*.exe
+*.idb
+*.ilk
+*.suo
+*.meta
+*.txt
+*.xml
+*.htm
+*.manifest
+*.obj
+*.dep
+*.cache
+*.pdb
+*.old
+*.ncb
+*.user
+*.d
