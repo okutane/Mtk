@@ -1,4 +1,5 @@
 syntax: glob
+Coverage.Log
 Matveev.Mtk.Tests\bin\Debug\YamlActual/*.yaml
 UI\obj\Debug/*.resources
 UI\bin\Debug/*.config
