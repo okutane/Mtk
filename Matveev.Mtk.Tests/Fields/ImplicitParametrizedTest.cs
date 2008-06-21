@@ -61,11 +61,5 @@ namespace Matveev.Mtk.Library.Tests.Fields
         {
             ForEachPointOnParametrizedSurface(EqualNormals);
         }
-
-        [Test, Ignore]
-        public void FaceNormalBetweenVertexNormals()
-        {
-            Assert.Fail("Write test");
-        }
     }
 }
