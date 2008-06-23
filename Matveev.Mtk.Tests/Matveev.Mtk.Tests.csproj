@@ -56,6 +56,7 @@
     <Compile Include="Fields\SphereTest.cs" />
     <Compile Include="Fields\TorusTest.cs" />
     <Compile Include="GradientDescentTest.cs" />
+    <Compile Include="HeaMeshTest.cs" />
     <Compile Include="HEVertexTest.cs" />
     <Compile Include="IntegrationTests.cs" />
     <Compile Include="MT6Test.cs" />

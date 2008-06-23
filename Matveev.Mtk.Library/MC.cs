@@ -42,7 +42,7 @@ namespace Matveev.Mtk.Library
             int n, int m, int l)
         {
             //MC._mesh = new HEMesh();
-            MC._mesh = new HeaMesh();
+            MC._mesh = new HEMesh();
             MC._surface = surface;
 
             double hx, hy, hz;
