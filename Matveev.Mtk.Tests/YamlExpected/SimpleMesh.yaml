@@ -1,4 +1,5 @@
 ---
-Vertices: Matveev.Mtk.Library.HEMesh+<get_Vertices>d__0
-Edges: Matveev.Mtk.Library.HEMesh+<get_Edges>d__6
-Faces: Matveev.Mtk.Library.HEMesh+<get_Faces>d__c
+Vertices :
+- (0,0,0) Isolated
+Edges :
+Faces :
