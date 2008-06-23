@@ -26,7 +26,19 @@ namespace Matveev.Mtk.Library
 
         public override void RemoveVertex(Vertex vert)
         {
-            throw new NotImplementedException();
+            HeaVertex heaVert = (HeaVertex)vert;
+            Buffer.BlockCopy(_a, _a.Length - 3, _a, heaVert._offset, 3);
+            base.RemoveVertex(vert);
+        }
+
+        public double[] GetBuffer()
+        {
+            return _a;
+        }
+
+        public void SetBuffer(double[] buffer)
+        {
+            _a = buffer;
         }
     }
 }

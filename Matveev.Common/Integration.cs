@@ -29,5 +29,15 @@ namespace Matveev.Common
             }
             return sum * p0.DistanceTo(p1) / n;
         }
+
+        public static double Integrate(IPoint p0, IPoint p1, IPoint p2, PointFunction f, int n)
+        {
+            if (n == 1)
+            {
+                double sum = (f(p0) + f(p1) + f(p2)) / 3;
+                return sum * p0.AreaTo(p1, p2);
+            }
+            throw new NotSupportedException();
+        }
     }
 }
