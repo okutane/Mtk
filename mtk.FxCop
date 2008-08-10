@@ -1,0 +1,2857 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FxCopProject Version="1.36" Name="My FxCop Project">
+ <ProjectOptions>
+  <SharedProject>True</SharedProject>
+  <Stylesheet Apply="False">c:\program files\microsoft fxcop 1.36\Xml\FxCopReport.xsl</Stylesheet>
+  <SaveMessages>
+   <Project Status="Active, Excluded" NewOnly="False" />
+   <Report Status="Active" NewOnly="False" />
+  </SaveMessages>
+  <ProjectFile Compress="True" DefaultTargetCheck="True" DefaultRuleCheck="True" SaveByRuleGroup="" Deterministic="True" />
+  <EnableMultithreadedLoad>True</EnableMultithreadedLoad>
+  <EnableMultithreadedAnalysis>True</EnableMultithreadedAnalysis>
+  <SourceLookup>True</SourceLookup>
+  <AnalysisExceptionsThreshold>10</AnalysisExceptionsThreshold>
+  <RuleExceptionsThreshold>1</RuleExceptionsThreshold>
+  <Spelling Locale="ru-RU" />
+  <OverrideRuleVisibilities>False</OverrideRuleVisibilities>
+  <CustomDictionaries SearchFxCopDir="True" SearchUserProfile="True" SearchProjectDir="True" />
+  <SearchGlobalAssemblyCache>False</SearchGlobalAssemblyCache>
+  <DeadlockDetectionTimeout>120</DeadlockDetectionTimeout>
+  <IgnoreGeneratedCode>False</IgnoreGeneratedCode>
+ </ProjectOptions>
+ <Targets>
+  <AssemblyReferenceDirectories>
+   <Directory>$(ProjectDir)/Core/bin/Debug/</Directory>
+   <Directory>$(ProjectDir)/Matveev.Common/bin/Debug/</Directory>
+  </AssemblyReferenceDirectories>
+  <Target Name="$(ProjectDir)/UI/bin/Debug/Matveev.Common.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/UI/bin/Debug/Matveev.Mtk.Core.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/UI/bin/Debug/Matveev.Mtk.Library.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/UI/bin/Debug/OglVisualizer.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/UI/bin/Debug/UI.exe" Analyze="True" AnalyzeAllChildren="True" />
+ </Targets>
+ <Rules>
+  <RuleFiles>
+   <RuleFile Name="$(FxCopDir)\Rules\DesignRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\GlobalizationRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\InteroperabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\MobilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\NamingRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PerformanceRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PortabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\SecurityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\UsageRules.dll" Enabled="True" AllRulesEnabled="True" />
+  </RuleFiles>
+  <Groups />
+  <Settings />
+ </Rules>
+ <FxCopReport Version="1.36">
+  <Namespaces>
+   <Namespace Name="LinAlg">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2008-08-10 10:43:39Z">
+      <Issue>
+       <Item>LinAlg</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="Matveev.Mtk.Library.EdgeFunctions">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2008-08-10 10:43:39Z">
+      <Issue>
+       <Item>Matveev.Mtk.Library.EdgeFunctions</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="Matveev.Mtk.Library.Fields">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2008-08-10 10:43:39Z">
+      <Issue>
+       <Item>Matveev.Mtk.Library.Fields</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="Matveev.Mtk.Library.PositionOptimizers">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2008-08-10 10:43:39Z">
+      <Issue>
+       <Item>Matveev.Mtk.Library.PositionOptimizers</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="OglVisualizer">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2008-08-10 10:43:39Z">
+      <Issue>
+       <Item>OglVisualizer</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+  </Namespaces>
+  <Targets>
+   <Target Name="$(ProjectDir)/UI/bin/Debug/Matveev.Common.dll">
+    <Modules>
+     <Module Name="matveev.common.dll">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2008-08-10 10:43:39Z">
+        <Issue Name="NoStrongName">
+         <Item>'Matveev.Common.dll'</Item>
+        </Issue>
+       </Message>
+       <Message TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014" Created="2008-08-10 10:43:39Z">
+        <Issue>
+         <Item>'Matveev.Common.dll'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+      <Namespaces>
+       <Namespace Name="Matveev.Common">
+        <Types>
+         <Type Name="EnumerableHelpers">
+          <Members>
+           <Member Name="#Aggregate`2(System.Collections.Generic.IEnumerable`1&lt;!!0&gt;,Matveev.Common.Function`2&lt;!!0,!!1&gt;,Matveev.Common.IAggregator`1&lt;!!1&gt;)">
+            <Messages>
+             <Message Id="1" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:53:56Z" FixCategory="NonBreaking">
+              <Issue Name="MethodTypeParameterMoreMeaningfulName">
+               <Item>'EnumerableHelpers.Aggregate&lt;T1, T2&gt;(IEnumerable&lt;T1&gt;, Function&lt;T1, T2&gt;, IAggregator&lt;T2&gt;)'</Item>
+               <Item>'T1'</Item>
+              </Issue>
+             </Message>
+             <Message Id="2" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:53:56Z" FixCategory="NonBreaking">
+              <Issue Name="MethodTypeParameterMoreMeaningfulName">
+               <Item>'EnumerableHelpers.Aggregate&lt;T1, T2&gt;(IEnumerable&lt;T1&gt;, Function&lt;T1, T2&gt;, IAggregator&lt;T2&gt;)'</Item>
+               <Item>'T2'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Function`2">
+          <Messages>
+           <Message Id="1" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:53:56Z" FixCategory="NonBreaking">
+            <Issue Name="TypeTypeParameterMoreMeaningfulName">
+             <Item>'Function&lt;T1, T2&gt;'</Item>
+             <Item>'T1'</Item>
+            </Issue>
+           </Message>
+           <Message Id="2" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:53:56Z" FixCategory="NonBreaking">
+            <Issue Name="TypeTypeParameterMoreMeaningfulName">
+             <Item>'Function&lt;T1, T2&gt;'</Item>
+             <Item>'T2'</Item>
+            </Issue>
+           </Message>
+           <Message Id="Function" TypeName="IdentifiersShouldNotMatchKeywords" Category="Microsoft.Naming" CheckId="CA1716" Created="2008-08-10 10:53:56Z">
+            <Issue Name="Type">
+             <Item>'Function&lt;T1, T2&gt;'</Item>
+             <Item>Function</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="InstanceCollector`1">
+          <Members>
+           <Member Name="#Instances">
+            <Messages>
+             <Message TypeName="DoNotDeclareStaticMembersOnGenericTypes" Category="Microsoft.Design" CheckId="CA1000" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'InstanceCollector&lt;T&gt;.Instances'</Item>
+               <Item>'InstanceCollector&lt;T&gt;'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Integration">
+          <Members>
+           <Member Name="#Integrate(Matveev.Common.IPoint,Matveev.Common.IPoint,Matveev.Common.IPoint,Matveev.Common.PointFunction,System.Int32)">
+            <Messages>
+             <Message Id="f" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Integration.Integrate(IPoint, IPoint, IPoint, PointFunction, int)'</Item>
+               <Item>'f'</Item>
+              </Issue>
+             </Message>
+             <Message Id="n" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Integration.Integrate(IPoint, IPoint, IPoint, PointFunction, int)'</Item>
+               <Item>'n'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Integrate(Matveev.Common.IPoint,Matveev.Common.IPoint,Matveev.Common.PointFunction,System.Int32)">
+            <Messages>
+             <Message Id="f" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Integration.Integrate(IPoint, IPoint, PointFunction, int)'</Item>
+               <Item>'f'</Item>
+              </Issue>
+             </Message>
+             <Message Id="n" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Integration.Integrate(IPoint, IPoint, PointFunction, int)'</Item>
+               <Item>'n'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="IPoint">
+          <Members>
+           <Member Name="#Interpolate(Matveev.Common.IPoint,Matveev.Common.IPoint,System.Double,System.Double)">
+            <Messages>
+             <Message Id="u" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'IPoint.Interpolate(IPoint, IPoint, double, double)'</Item>
+               <Item>'u'</Item>
+              </Issue>
+             </Message>
+             <Message Id="v" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'IPoint.Interpolate(IPoint, IPoint, double, double)'</Item>
+               <Item>'v'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Interpolate(Matveev.Common.IPoint,System.Double)">
+            <Messages>
+             <Message Id="t" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'IPoint.Interpolate(IPoint, double)'</Item>
+               <Item>'t'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="PointFunction">
+          <Messages>
+           <Message Id="p" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+            <Issue Name="DelegateParameterMoreMeaningfulName">
+             <Item>'PointFunction'</Item>
+             <Item>'p'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="YamlFormatter">
+          <Members>
+           <Member Name="#Binder">
+            <Accessors>
+             <Accessor Name="#get_Binder()">
+              <Messages>
+               <Message TypeName="DoNotRaiseExceptionsInUnexpectedLocations" Category="Microsoft.Design" CheckId="CA1065" Created="2008-08-10 10:43:39Z" FixCategory="Breaking">
+                <Issue Name="PropertyGetter" Level="Warning">
+                 <Item>'YamlFormatter.Binder.get()'</Item>
+                 <Item>'NotImplementedException'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#Context">
+            <Accessors>
+             <Accessor Name="#get_Context()">
+              <Messages>
+               <Message TypeName="DoNotRaiseExceptionsInUnexpectedLocations" Category="Microsoft.Design" CheckId="CA1065" Created="2008-08-10 10:43:39Z" FixCategory="Breaking">
+                <Issue Name="PropertyGetter" Level="Warning">
+                 <Item>'YamlFormatter.Context.get()'</Item>
+                 <Item>'NotImplementedException'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#SurrogateSelector">
+            <Accessors>
+             <Accessor Name="#get_SurrogateSelector()">
+              <Messages>
+               <Message TypeName="DoNotRaiseExceptionsInUnexpectedLocations" Category="Microsoft.Design" CheckId="CA1065" Created="2008-08-10 10:43:39Z" FixCategory="Breaking">
+                <Issue Name="PropertyGetter" Level="Warning">
+                 <Item>'YamlFormatter.SurrogateSelector.get()'</Item>
+                 <Item>'NotImplementedException'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
+     </Module>
+    </Modules>
+   </Target>
+   <Target Name="$(ProjectDir)/UI/bin/Debug/Matveev.Mtk.Core.dll">
+    <Modules>
+     <Module Name="matveev.mtk.core.dll">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2008-08-10 10:43:39Z">
+        <Issue Name="NoStrongName">
+         <Item>'Matveev.Mtk.Core.dll'</Item>
+        </Issue>
+       </Message>
+       <Message TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014" Created="2008-08-10 10:43:39Z">
+        <Issue>
+         <Item>'Matveev.Mtk.Core.dll'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+      <Namespaces>
+       <Namespace Name="LinAlg">
+        <Types>
+         <Type Name="LinSolve">
+          <Members>
+           <Member Name="#Gauss(LinAlg.Matrix,LinAlg.Matrix)">
+            <Messages>
+             <Message TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201" Created="2008-08-10 10:43:39Z">
+              <Issue Name="TooGeneric">
+               <Item>'LinSolve.Gauss(Matrix, Matrix)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="A" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameter">
+               <Item>'LinSolve.Gauss(Matrix, Matrix)'</Item>
+               <Item>A</Item>
+               <Item>'A'</Item>
+               <Item>a</Item>
+              </Issue>
+             </Message>
+             <Message Id="A" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'LinSolve.Gauss(Matrix, Matrix)'</Item>
+               <Item>'A'</Item>
+              </Issue>
+             </Message>
+             <Message Id="f" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'LinSolve.Gauss(Matrix, Matrix)'</Item>
+               <Item>'f'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Matrix">
+          <Members>
+           <Member Name="#.ctor(System.Int32,System.Int32)">
+            <Messages>
+             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'Matrix.Matrix(int, int)'</Item>
+               <Item>'Matrix._isTransponed'</Item>
+               <Item>'bool'</Item>
+               <Item>false</Item>
+              </Issue>
+             </Message>
+             <Message Id="m" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Matrix.Matrix(int, int)'</Item>
+               <Item>'m'</Item>
+              </Issue>
+             </Message>
+             <Message Id="n" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Matrix.Matrix(int, int)'</Item>
+               <Item>'n'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2008-08-10 10:43:39Z">
+              <Issue Name="NoArguments">
+               <Item>'ArgumentOutOfRangeException'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Inversed">
+            <Accessors>
+             <Accessor Name="#get_Inversed()">
+              <Messages>
+               <Message TypeName="DoNotRaiseExceptionsInUnexpectedLocations" Category="Microsoft.Design" CheckId="CA1065" Created="2008-08-10 10:43:39Z" FixCategory="Breaking">
+                <Issue Name="PropertyGetter" Level="Warning">
+                 <Item>'Matrix.Inversed.get()'</Item>
+                 <Item>'Exception'</Item>
+                </Issue>
+                <Issue Name="PropertyGetter" Level="Warning">
+                 <Item>'Matrix.Inversed.get()'</Item>
+                 <Item>'Exception'</Item>
+                </Issue>
+               </Message>
+               <Message TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201" Created="2008-08-10 10:43:39Z">
+                <Issue Name="TooGeneric">
+                 <Item>'Matrix.Inversed.get()'</Item>
+                 <Item>'Exception'</Item>
+                </Issue>
+                <Issue Name="TooGeneric">
+                 <Item>'Matrix.Inversed.get()'</Item>
+                 <Item>'Exception'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#Item[LinAlg.Matrix+Access,System.Int32]">
+            <Messages>
+             <Message Id="k" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Matrix.this[Matrix.Access, int]'</Item>
+               <Item>'k'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IndexersShouldNotBeMultidimensional" Category="Microsoft.Design" CheckId="CA1023" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'Matrix.this[Matrix.Access, int]'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+            <Accessors>
+             <Accessor Name="#set_Item(LinAlg.Matrix+Access,System.Int32,LinAlg.Matrix)">
+              <Messages>
+               <Message Id="access" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-08-10 10:43:39Z" FixCategory="DependsOnFix">
+                <Issue>
+                 <Item>'access'</Item>
+                 <Item>'Matrix.this.set(Matrix.Access, int, Matrix)'</Item>
+                </Issue>
+               </Message>
+               <Message Id="k" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-08-10 10:43:39Z" FixCategory="DependsOnFix">
+                <Issue>
+                 <Item>'k'</Item>
+                 <Item>'Matrix.this.set(Matrix.Access, int, Matrix)'</Item>
+                </Issue>
+               </Message>
+               <Message Id="value" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-08-10 10:43:39Z" FixCategory="DependsOnFix">
+                <Issue>
+                 <Item>'value'</Item>
+                 <Item>'Matrix.this.set(Matrix.Access, int, Matrix)'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#Item[System.Int32,System.Int32]">
+            <Messages>
+             <Message Id="i" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Matrix.this[int, int]'</Item>
+               <Item>'i'</Item>
+              </Issue>
+             </Message>
+             <Message Id="j" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Matrix.this[int, int]'</Item>
+               <Item>'j'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IndexersShouldNotBeMultidimensional" Category="Microsoft.Design" CheckId="CA1023" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'Matrix.this[int, int]'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+            <Accessors>
+             <Accessor Name="#get_Item(System.Int32,System.Int32)">
+              <Messages>
+               <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2008-08-10 10:43:39Z">
+                <Issue Name="NoArguments">
+                 <Item>'ArgumentOutOfRangeException'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+             <Accessor Name="#set_Item(System.Int32,System.Int32,System.Double)">
+              <Messages>
+               <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2008-08-10 10:43:39Z">
+                <Issue Name="NoArguments">
+                 <Item>'ArgumentOutOfRangeException'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#M">
+            <Messages>
+             <Message Id="M" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Matrix.M'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#N">
+            <Messages>
+             <Message Id="N" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Matrix.N'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_Addition(LinAlg.Matrix,LinAlg.Matrix)">
+            <Messages>
+             <Message TypeName="OverloadOperatorEqualsOnOverloadingAddAndSubtract" Category="Microsoft.Design" CheckId="CA1013" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'Matrix'</Item>
+               <Item>'Matrix.operator +(Matrix, Matrix)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_Subtraction(LinAlg.Matrix,LinAlg.Matrix)">
+            <Messages>
+             <Message TypeName="OverloadOperatorEqualsOnOverloadingAddAndSubtract" Category="Microsoft.Design" CheckId="CA1013" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'Matrix'</Item>
+               <Item>'Matrix.operator -(Matrix, Matrix)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SwapRows(System.Int32,System.Int32)">
+            <Messages>
+             <Message Id="i" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Matrix.SwapRows(int, int)'</Item>
+               <Item>'i'</Item>
+              </Issue>
+             </Message>
+             <Message Id="k" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Matrix.SwapRows(int, int)'</Item>
+               <Item>'k'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Matrix+Access">
+          <Messages>
+           <Message TypeName="NestedTypesShouldNotBeVisible" Category="Microsoft.Design" CheckId="CA1034" Created="2008-08-10 10:43:39Z">
+            <Issue>
+             <Item>'Matrix.Access'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="Matveev.Mtk.Core">
+        <Types>
+         <Type Name="Edge">
+          <Members>
+           <Member Name="#End">
+            <Messages>
+             <Message Id="End" TypeName="IdentifiersShouldNotMatchKeywords" Category="Microsoft.Naming" CheckId="CA1716" Created="2008-08-10 10:43:39Z">
+              <Issue Name="Member">
+               <Item>'Edge.End'</Item>
+               <Item>End</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Next">
+            <Messages>
+             <Message Id="Next" TypeName="IdentifiersShouldNotMatchKeywords" Category="Microsoft.Naming" CheckId="CA1716" Created="2008-08-10 10:43:39Z">
+              <Issue Name="Member">
+               <Item>'Edge.Next'</Item>
+               <Item>Next</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ToString()">
+            <Messages>
+             <Message Id="System.String.Format(System.String,System.Object,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'string.Format(string, object, object)'</Item>
+               <Item>'Edge.ToString()'</Item>
+               <Item>'string.Format(IFormatProvider, string, params object[])'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="IImplicitSurface">
+          <Members>
+           <Member Name="#Eval(Matveev.Mtk.Core.Face)">
+            <Messages>
+             <Message Id="p" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'IImplicitSurface.Eval(Face)'</Item>
+               <Item>'p'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Eval(Matveev.Mtk.Core.Point)">
+            <Messages>
+             <Message Id="p" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'IImplicitSurface.Eval(Point)'</Item>
+               <Item>'p'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Grad(Matveev.Mtk.Core.Point)">
+            <Messages>
+             <Message Id="p" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'IImplicitSurface.Grad(Point)'</Item>
+               <Item>'p'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="IParametrizedSurface">
+          <Members>
+           <Member Name="#Eval(System.Double,System.Double)">
+            <Messages>
+             <Message Id="u" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'IParametrizedSurface.Eval(double, double)'</Item>
+               <Item>'u'</Item>
+              </Issue>
+             </Message>
+             <Message Id="v" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'IParametrizedSurface.Eval(double, double)'</Item>
+               <Item>'v'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Normal(System.Double,System.Double)">
+            <Messages>
+             <Message Id="u" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'IParametrizedSurface.Normal(double, double)'</Item>
+               <Item>'u'</Item>
+              </Issue>
+             </Message>
+             <Message Id="v" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'IParametrizedSurface.Normal(double, double)'</Item>
+               <Item>'v'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Mesh">
+          <Members>
+           <Member Name="#AddVertex(Matveev.Mtk.Core.Point,Matveev.Mtk.Core.Vector)">
+            <Messages>
+             <Message Id="n" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Mesh.AddVertex(Point, Vector)'</Item>
+               <Item>'n'</Item>
+              </Issue>
+             </Message>
+             <Message Id="p" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Mesh.AddVertex(Point, Vector)'</Item>
+               <Item>'p'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Point">
+          <Members>
+           <Member Name="#.ctor(System.Double,System.Double,System.Double)">
+            <Messages>
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Point.Point(double, double, double)'</Item>
+               <Item>'x'</Item>
+              </Issue>
+             </Message>
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Point.Point(double, double, double)'</Item>
+               <Item>'y'</Item>
+              </Issue>
+             </Message>
+             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Point.Point(double, double, double)'</Item>
+               <Item>'z'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Equals(System.Object)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'Point.Equals(object)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_Addition(Matveev.Mtk.Core.Point,Matveev.Mtk.Core.Vector)">
+            <Messages>
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>Add</Item>
+               <Item>'Point.operator +(Point, Vector)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_Explicit(Matveev.Mtk.Core.Point):Matveev.Mtk.Core.Vector">
+            <Messages>
+             <Message Id="p" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Point.explicit operator Vector(Point)'</Item>
+               <Item>'p'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_Subtraction(Matveev.Mtk.Core.Point,Matveev.Mtk.Core.Point)">
+            <Messages>
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>Subtract</Item>
+               <Item>'Point.operator -(Point, Point)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_Subtraction(Matveev.Mtk.Core.Point,Matveev.Mtk.Core.Vector)">
+            <Messages>
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>Subtract</Item>
+               <Item>'Point.operator -(Point, Vector)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#X">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'Point.X'</Item>
+              </Issue>
+             </Message>
+             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Point.X'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Y">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'Point.Y'</Item>
+              </Issue>
+             </Message>
+             <Message Id="Y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Point.Y'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Z">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'Point.Z'</Item>
+              </Issue>
+             </Message>
+             <Message Id="Z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Point.Z'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Ray">
+          <Messages>
+           <Message TypeName="OverrideEqualsAndOperatorEqualsOnValueTypes" Category="Microsoft.Performance" CheckId="CA1815" Created="2008-08-10 10:43:39Z">
+            <Issue Name="Equals">
+             <Item>'Ray'</Item>
+            </Issue>
+            <Issue Name="op_Equality">
+             <Item>'Ray'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#direction">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'Ray.direction'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#origin">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'Ray.origin'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Trace(Matveev.Mtk.Core.Face,System.Double&amp;,System.Double&amp;,System.Double&amp;)">
+            <Messages>
+             <Message Id="1#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'distance'</Item>
+              </Issue>
+             </Message>
+             <Message Id="2#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'u'</Item>
+              </Issue>
+             </Message>
+             <Message Id="3#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'v'</Item>
+              </Issue>
+             </Message>
+             <Message Id="u" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Ray.Trace(Face, out double, out double, out double)'</Item>
+               <Item>'u'</Item>
+              </Issue>
+             </Message>
+             <Message Id="v" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Ray.Trace(Face, out double, out double, out double)'</Item>
+               <Item>'v'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SphereFunctions">
+          <Members>
+           <Member Name="#f(System.Double,System.Double,System.Double)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'SphereFunctions.f(double, double, double)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#grad(System.Double,System.Double,System.Double)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'SphereFunctions.grad(double, double, double)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#hessian(System.Double,System.Double,System.Double)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'SphereFunctions.hessian(double, double, double)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="Body" TypeName="PreferJaggedArraysOverMultidimensional" Category="Microsoft.Performance" CheckId="CA1814" Created="2008-08-10 10:43:39Z">
+              <Issue Name="Body">
+               <Item>'SphereFunctions.hessian(double, double, double)'</Item>
+               <Item>'double[,]'</Item>
+              </Issue>
+             </Message>
+             <Message Id="Return" TypeName="PreferJaggedArraysOverMultidimensional" Category="Microsoft.Performance" CheckId="CA1814" Created="2008-08-10 10:43:39Z">
+              <Issue Name="Return">
+               <Item>'SphereFunctions.hessian(double, double, double)'</Item>
+               <Item>'double[,]'</Item>
+              </Issue>
+             </Message>
+             <Message Id="x" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-08-10 10:43:39Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'x'</Item>
+               <Item>'SphereFunctions.hessian(double, double, double)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="y" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-08-10 10:43:39Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'y'</Item>
+               <Item>'SphereFunctions.hessian(double, double, double)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="z" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-08-10 10:43:39Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'z'</Item>
+               <Item>'SphereFunctions.hessian(double, double, double)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Vector">
+          <Messages>
+           <Message TypeName="OverrideEqualsAndOperatorEqualsOnValueTypes" Category="Microsoft.Performance" CheckId="CA1815" Created="2008-08-10 10:43:39Z">
+            <Issue Name="op_Equality">
+             <Item>'Vector'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#.ctor(System.Double,System.Double,System.Double)">
+            <Messages>
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector.Vector(double, double, double)'</Item>
+               <Item>'x'</Item>
+              </Issue>
+             </Message>
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector.Vector(double, double, double)'</Item>
+               <Item>'y'</Item>
+              </Issue>
+             </Message>
+             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector.Vector(double, double, double)'</Item>
+               <Item>'z'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Equals(System.Object)">
+            <Messages>
+             <Message TypeName="OverloadOperatorEqualsOnOverridingValueTypeEquals" Category="Microsoft.Usage" CheckId="CA2231" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'Vector'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_Addition(Matveev.Mtk.Core.Vector,Matveev.Mtk.Core.Vector)">
+            <Messages>
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>Add</Item>
+               <Item>'Vector.operator +(Vector, Vector)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="OverloadOperatorEqualsOnOverloadingAddAndSubtract" Category="Microsoft.Design" CheckId="CA1013" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'Vector'</Item>
+               <Item>'Vector.operator +(Vector, Vector)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_ExclusiveOr(Matveev.Mtk.Core.Vector,Matveev.Mtk.Core.Vector)">
+            <Messages>
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>Xor</Item>
+               <Item>'Vector.operator ^(Vector, Vector)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_Explicit(Matveev.Mtk.Core.Vector):Matveev.Mtk.Core.Point">
+            <Messages>
+             <Message Id="v" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Vector.explicit operator Point(Vector)'</Item>
+               <Item>'v'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_Multiply(Matveev.Mtk.Core.Vector,Matveev.Mtk.Core.Vector)">
+            <Messages>
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>Multiply</Item>
+               <Item>'Vector.operator *(Vector, Vector)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_Multiply(System.Double,Matveev.Mtk.Core.Vector)">
+            <Messages>
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>Multiply</Item>
+               <Item>'Vector.operator *(double, Vector)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_Subtraction(Matveev.Mtk.Core.Vector,Matveev.Mtk.Core.Vector)">
+            <Messages>
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>Subtract</Item>
+               <Item>'Vector.operator -(Vector, Vector)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="OverloadOperatorEqualsOnOverloadingAddAndSubtract" Category="Microsoft.Design" CheckId="CA1013" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'Vector'</Item>
+               <Item>'Vector.operator -(Vector, Vector)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#x">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'Vector.x'</Item>
+              </Issue>
+             </Message>
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector.x'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#y">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'Vector.y'</Item>
+              </Issue>
+             </Message>
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector.y'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#z">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'Vector.z'</Item>
+              </Issue>
+             </Message>
+             <Message Id="z" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'Vector.z'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Vertex">
+          <Members>
+           <Member Name="#Type">
+            <Messages>
+             <Message TypeName="PropertyNamesShouldNotMatchGetMethods" Category="Microsoft.Naming" CheckId="CA1721" Created="2008-08-10 10:43:39Z" FixCategory="NonBreaking">
+              <Issue Name="BaseType">
+               <Item>'Vertex.Type'</Item>
+               <Item>'object.GetType()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="VertexOps">
+          <Members>
+           <Member Name="#Curvature(Matveev.Mtk.Core.Vertex)">
+            <Messages>
+             <Message TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201" Created="2008-08-10 10:43:39Z">
+              <Issue Name="TooGeneric">
+               <Item>'VertexOps.Curvature(Vertex)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ExternalCurvature(Matveev.Mtk.Core.Vertex)">
+            <Messages>
+             <Message TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201" Created="2008-08-10 10:43:39Z">
+              <Issue Name="TooGeneric">
+               <Item>'VertexOps.ExternalCurvature(Vertex)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="Body" TypeName="PreferJaggedArraysOverMultidimensional" Category="Microsoft.Performance" CheckId="CA1814" Created="2008-08-10 10:43:39Z">
+              <Issue Name="Body">
+               <Item>'VertexOps.ExternalCurvature(Vertex)'</Item>
+               <Item>'double[,]'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#LineIntersectionTest2d(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <Messages>
+             <Message Id="d" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2008-08-10 10:43:39Z">
+              <Issue Name="Member">
+               <Item>d</Item>
+               <Item>'VertexOps.LineIntersectionTest2d(double, double, double, double, double, double, double, double)'</Item>
+               <Item>D</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#OptimizePosition(Matveev.Mtk.Core.Vertex,Matveev.Mtk.Core.IImplicitSurface,System.Double)">
+            <Messages>
+             <Message Id="lambda" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'VertexOps.OptimizePosition(Vertex, IImplicitSurface, double)'</Item>
+               <Item>'lambda'</Item>
+               <Item>'double'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ProjectPointOnSurface(Matveev.Mtk.Core.Point&amp;,Matveev.Mtk.Core.IImplicitSurface,System.Double)">
+            <Messages>
+             <Message Id="0#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-08-10 10:43:39Z">
+              <Issue Certainty="50">
+               <Item>'p'</Item>
+              </Issue>
+             </Message>
+             <Message Id="p" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'VertexOps.ProjectPointOnSurface(ref Point, IImplicitSurface, double)'</Item>
+               <Item>'p'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ProjectPointOnSurface(Matveev.Mtk.Core.Point&amp;,Matveev.Mtk.Core.IImplicitSurface,System.Double,Matveev.Mtk.Core.Vector)">
+            <Messages>
+             <Message Id="0#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-08-10 10:43:39Z">
+              <Issue Certainty="50">
+               <Item>'p'</Item>
+              </Issue>
+             </Message>
+             <Message Id="a" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'VertexOps.ProjectPointOnSurface(ref Point, IImplicitSurface, double, Vector)'</Item>
+               <Item>'a'</Item>
+              </Issue>
+             </Message>
+             <Message Id="p" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'VertexOps.ProjectPointOnSurface(ref Point, IImplicitSurface, double, Vector)'</Item>
+               <Item>'p'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ProjectPointOnSurface(Matveev.Mtk.Core.Point&amp;,Matveev.Mtk.Core.IImplicitSurface,System.Double,Matveev.Mtk.Core.Vector,Matveev.Mtk.Core.Vector)">
+            <Messages>
+             <Message Id="0#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-08-10 10:43:39Z">
+              <Issue Certainty="50">
+               <Item>'p'</Item>
+              </Issue>
+             </Message>
+             <Message Id="a" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'VertexOps.ProjectPointOnSurface(ref Point, IImplicitSurface, double, Vector, Vector)'</Item>
+               <Item>'a'</Item>
+              </Issue>
+             </Message>
+             <Message Id="b" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'VertexOps.ProjectPointOnSurface(ref Point, IImplicitSurface, double, Vector, Vector)'</Item>
+               <Item>'b'</Item>
+              </Issue>
+             </Message>
+             <Message Id="p" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'VertexOps.ProjectPointOnSurface(ref Point, IImplicitSurface, double, Vector, Vector)'</Item>
+               <Item>'p'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
+     </Module>
+    </Modules>
+   </Target>
+   <Target Name="$(ProjectDir)/UI/bin/Debug/Matveev.Mtk.Library.dll">
+    <Modules>
+     <Module Name="matveev.mtk.library.dll">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2008-08-10 10:43:39Z">
+        <Issue Name="NoStrongName">
+         <Item>'Matveev.Mtk.Library.dll'</Item>
+        </Issue>
+       </Message>
+       <Message TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014" Created="2008-08-10 10:43:39Z">
+        <Issue>
+         <Item>'Matveev.Mtk.Library.dll'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+      <Namespaces>
+       <Namespace Name="Matveev.Mtk.Library">
+        <Types>
+         <Type Name="Bloomenthal">
+          <Messages>
+           <Message TypeName="StaticHolderTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1053" Created="2008-08-10 10:43:39Z">
+            <Issue>
+             <Item>'Bloomenthal'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#Create(Matveev.Mtk.Core.IImplicitSurface,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Int32,System.Int32,System.Int32)">
+            <Messages>
+             <Message Id="l" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Bloomenthal.Create(IImplicitSurface, double, double, double, double, double, double, int, int, int)'</Item>
+               <Item>'l'</Item>
+              </Issue>
+             </Message>
+             <Message Id="m" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Bloomenthal.Create(IImplicitSurface, double, double, double, double, double, double, int, int, int)'</Item>
+               <Item>'m'</Item>
+              </Issue>
+             </Message>
+             <Message Id="n" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Bloomenthal.Create(IImplicitSurface, double, double, double, double, double, double, int, int, int)'</Item>
+               <Item>'n'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Interpolate(Matveev.Mtk.Core.Point,System.Double,Matveev.Mtk.Core.Point,System.Double)">
+            <Messages>
+             <Message TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201" Created="2008-08-10 10:43:39Z">
+              <Issue Name="TooGeneric">
+               <Item>'Bloomenthal.Interpolate(Point, double, Point, double)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ConjugateGradients">
+          <Members>
+           <Member Name="#CG(System.Int32,System.Int32[],System.Int32[],System.Double[],System.Double[],System.Double[],System.Double[],System.Int32,System.Double)">
+            <Messages>
+             <Message Id="d" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'ConjugateGradients.CG(int, int[], int[], double[], double[], double[], double[], int, double)'</Item>
+               <Item>'d'</Item>
+              </Issue>
+             </Message>
+             <Message Id="f" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'ConjugateGradients.CG(int, int[], int[], double[], double[], double[], double[], int, double)'</Item>
+               <Item>'f'</Item>
+              </Issue>
+             </Message>
+             <Message Id="n" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'ConjugateGradients.CG(int, int[], int[], double[], double[], double[], double[], int, double)'</Item>
+               <Item>'n'</Item>
+              </Issue>
+             </Message>
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'ConjugateGradients.CG(int, int[], int[], double[], double[], double[], double[], int, double)'</Item>
+               <Item>'x'</Item>
+              </Issue>
+             </Message>
+             <Message Id="n" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-08-10 10:43:39Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'n'</Item>
+               <Item>'ConjugateGradients.CG(int, int[], int[], double[], double[], double[], double[], int, double)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#factor(System.Int32[],System.Int32[],System.Double[],System.Double[],System.Double[],System.Double[])">
+            <Messages>
+             <Message Id="kol" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'ConjugateGradients.factor(int[], int[], double[], double[], double[], double[])'</Item>
+               <Item>'kol'</Item>
+               <Item>'int'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#search(System.Int32[],System.Int32[],System.Int32,System.Int32,System.Int32)">
+            <Messages>
+             <Message Id="ita" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-08-10 10:43:39Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'ita'</Item>
+               <Item>'ConjugateGradients.search(int[], int[], int, int, int)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="EdgeCollapse">
+          <Members>
+           <Member Name="#.ctor(System.Double)">
+            <Messages>
+             <Message Id="t" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'EdgeCollapse.EdgeCollapse(double)'</Item>
+               <Item>'t'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Execute(Matveev.Mtk.Core.Edge)">
+            <Messages>
+             <Message TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201" Created="2008-08-10 10:43:39Z">
+              <Issue Name="TooGeneric">
+               <Item>'EdgeCollapse.Execute(Edge)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="EdgeSplit">
+          <Members>
+           <Member Name="#.ctor(System.Double)">
+            <Messages>
+             <Message Id="t" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'EdgeSplit.EdgeSplit(double)'</Item>
+               <Item>'t'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Execute(Matveev.Mtk.Core.Edge)">
+            <Messages>
+             <Message Id="face" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'EdgeSplit.Execute(Edge)'</Item>
+               <Item>'face'</Item>
+               <Item>'Face'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="EdgeSwap">
+          <Members>
+           <Member Name="#IsPossible(Matveev.Mtk.Core.Edge)">
+            <Messages>
+             <Message Id="acos" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'EdgeSwap.IsPossible(Edge)'</Item>
+               <Item>'acos'</Item>
+               <Item>'double'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="FacePointProjection">
+          <Members>
+           <Member Name="#.ctor(Matveev.Mtk.Core.Point,Matveev.Mtk.Core.Face,System.Double,System.Double)">
+            <Messages>
+             <Message Id="u" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'FacePointProjection.FacePointProjection(Point, Face, double, double)'</Item>
+               <Item>'u'</Item>
+              </Issue>
+             </Message>
+             <Message Id="v" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'FacePointProjection.FacePointProjection(Point, Face, double, double)'</Item>
+               <Item>'v'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetMatrixAndVector(System.Double[,]&amp;,System.Double[]&amp;,Matveev.Mtk.Core.Vertex[]&amp;)">
+            <Messages>
+             <Message Id="Body" TypeName="PreferJaggedArraysOverMultidimensional" Category="Microsoft.Performance" CheckId="CA1814" Created="2008-08-10 10:43:39Z">
+              <Issue Name="Body">
+               <Item>'FacePointProjection.GetMatrixAndVector(out double[,], out double[], out Vertex[])'</Item>
+               <Item>'double[,]'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="FieldFunction">
+          <Members>
+           <Member Name="#grad">
+            <Messages>
+             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'FieldFunction.grad'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#value">
+            <Messages>
+             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'FieldFunction.value'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="FieldFunction+ScalarFunc">
+          <Messages>
+           <Message Id="p" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+            <Issue Name="DelegateParameterMoreMeaningfulName">
+             <Item>'FieldFunction.ScalarFunc'</Item>
+             <Item>'p'</Item>
+            </Issue>
+           </Message>
+           <Message TypeName="NestedTypesShouldNotBeVisible" Category="Microsoft.Design" CheckId="CA1034" Created="2008-08-10 10:43:39Z">
+            <Issue>
+             <Item>'FieldFunction.ScalarFunc'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="FieldFunction+VectorFunc">
+          <Messages>
+           <Message Id="p" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+            <Issue Name="DelegateParameterMoreMeaningfulName">
+             <Item>'FieldFunction.VectorFunc'</Item>
+             <Item>'p'</Item>
+            </Issue>
+           </Message>
+           <Message TypeName="NestedTypesShouldNotBeVisible" Category="Microsoft.Design" CheckId="CA1034" Created="2008-08-10 10:43:39Z">
+            <Issue>
+             <Item>'FieldFunction.VectorFunc'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="FunctionOptimization">
+          <Members>
+           <Member Name="#GradientDescent(Matveev.Mtk.Library.IFunctionWithGradient,System.Double)">
+            <Messages>
+             <Message Id="f" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'FunctionOptimization.GradientDescent(IFunctionWithGradient, double)'</Item>
+               <Item>'f'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GradientDescent(System.Func`2&lt;System.Double[],System.Double&gt;,System.Func`2&lt;System.Double[],System.Double[]&gt;,System.Double[],System.Double)">
+            <Messages>
+             <Message Id="f" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'FunctionOptimization.GradientDescent(Func&lt;double[], double&gt;, Func&lt;double[], double[]&gt;, double[], double)'</Item>
+               <Item>'f'</Item>
+              </Issue>
+             </Message>
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'FunctionOptimization.GradientDescent(Func&lt;double[], double&gt;, Func&lt;double[], double[]&gt;, double[], double)'</Item>
+               <Item>'x'</Item>
+              </Issue>
+             </Message>
+             <Message Id="eps" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-08-10 10:43:39Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'eps'</Item>
+               <Item>'FunctionOptimization.GradientDescent(Func&lt;double[], double&gt;, Func&lt;double[], double[]&gt;, double[], double)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="f" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-08-10 10:43:39Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'f'</Item>
+               <Item>'FunctionOptimization.GradientDescent(Func&lt;double[], double&gt;, Func&lt;double[], double[]&gt;, double[], double)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="grad" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-08-10 10:43:39Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'grad'</Item>
+               <Item>'FunctionOptimization.GradientDescent(Func&lt;double[], double&gt;, Func&lt;double[], double[]&gt;, double[], double)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="x" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-08-10 10:43:39Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'x'</Item>
+               <Item>'FunctionOptimization.GradientDescent(Func&lt;double[], double&gt;, Func&lt;double[], double[]&gt;, double[], double)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="HeaMesh">
+          <Members>
+           <Member Name="#_a">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'HeaMesh._a'</Item>
+              </Issue>
+             </Message>
+             <Message Id="a" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'HeaMesh._a'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="HEEdge">
+          <Members>
+           <Member Name="#.ctor(Matveev.Mtk.Core.Mesh)">
+            <Messages>
+             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'HEEdge.HEEdge(Mesh)'</Item>
+               <Item>'HEEdge.end'</Item>
+               <Item>'HEVertexBase'</Item>
+               <Item>null</Item>
+              </Issue>
+              <Issue>
+               <Item>'HEEdge.HEEdge(Mesh)'</Item>
+               <Item>'HEEdge.face'</Item>
+               <Item>'HEFace'</Item>
+               <Item>null</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Dispose()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2008-08-10 10:43:39Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'HEEdge.Dispose()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetVertices(System.Int32)">
+            <Messages>
+             <Message TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201" Created="2008-08-10 10:43:39Z">
+              <Issue Name="TooGeneric">
+               <Item>'HEEdge.GetVertices(int)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="HEFace">
+          <Members>
+           <Member Name="#.ctor()">
+            <Messages>
+             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'HEFace.HEFace()'</Item>
+               <Item>'HEFace.mainEdge'</Item>
+               <Item>'HEEdge'</Item>
+               <Item>null</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="HEMesh">
+          <Members>
+           <Member Name="#_vertices">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'HEMesh._vertices'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotExposeGenericLists" Category="Microsoft.Design" CheckId="CA1002" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'List&lt;Vertex&gt;'</Item>
+               <Item>'HEMesh._vertices'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#CloneSub(System.Collections.Generic.IEnumerable`1&lt;Matveev.Mtk.Core.Face&gt;,System.Collections.Generic.IDictionary`2&lt;Matveev.Mtk.Core.Vertex,Matveev.Mtk.Core.Vertex&gt;,System.Collections.Generic.IDictionary`2&lt;Matveev.Mtk.Core.Edge,Matveev.Mtk.Core.Edge&gt;,System.Collections.Generic.IDictionary`2&lt;Matveev.Mtk.Core.Face,Matveev.Mtk.Core.Face&gt;)">
+            <Messages>
+             <Message TypeName="RethrowToPreserveStackDetails" Category="Microsoft.Usage" CheckId="CA2200" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'HEMesh.CloneSub(IEnumerable&lt;Face&gt;, IDictionary&lt;Vertex, Vertex&gt;, IDictionary&lt;Edge, Edge&gt;, IDictionary&lt;Face, Face&gt;)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#CreateFace(Matveev.Mtk.Core.Vertex,Matveev.Mtk.Core.Vertex,Matveev.Mtk.Core.Vertex)">
+            <Messages>
+             <Message TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201" Created="2008-08-10 10:43:39Z">
+              <Issue Name="TooGeneric">
+               <Item>'HEMesh.CreateFace(Vertex, Vertex, Vertex)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#DeleteFace(Matveev.Mtk.Core.Face)">
+            <Messages>
+             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Created="2008-08-10 10:43:39Z">
+              <Issue Name="Parameter">
+               <Item>'face'</Item>
+               <Item>'HEFace'</Item>
+               <Item>'HEMesh.DeleteFace(Face)'</Item>
+               <Item>castclass</Item>
+              </Issue>
+              <Issue Name="Parameter">
+               <Item>'face'</Item>
+               <Item>'HEFace'</Item>
+               <Item>'HEMesh.DeleteFace(Face)'</Item>
+               <Item>castclass</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="HEVertexBase">
+          <Members>
+           <Member Name="#.ctor(Matveev.Mtk.Core.Mesh)">
+            <Messages>
+             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'HEVertexBase.HEVertexBase(Mesh)'</Item>
+               <Item>'HEVertexBase.outEdge'</Item>
+               <Item>'HEEdge'</Item>
+               <Item>null</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetVertices(System.Int32)">
+            <Messages>
+             <Message TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201" Created="2008-08-10 10:43:39Z">
+              <Issue Name="TooGeneric">
+               <Item>'HEVertexBase.GetVertices(int)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="HoppeOptimization">
+          <Messages>
+           <Message TypeName="StaticHolderTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1053" Created="2008-08-10 10:43:39Z">
+            <Issue>
+             <Item>'HoppeOptimization'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#ImproveVertexPositions(Matveev.Mtk.Core.Mesh,System.Collections.Generic.IEnumerable`1&lt;Matveev.Mtk.Core.Point&gt;)">
+            <Messages>
+             <Message Id="Body" TypeName="PreferJaggedArraysOverMultidimensional" Category="Microsoft.Performance" CheckId="CA1814" Created="2008-08-10 10:43:39Z">
+              <Issue Name="Body">
+               <Item>'HoppeOptimization.ImproveVertexPositions(Mesh, IEnumerable&lt;Point&gt;)'</Item>
+               <Item>'double[,]'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Project(Matveev.Mtk.Core.Point,Matveev.Mtk.Core.Mesh)">
+            <Messages>
+             <Message Id="edge" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'HoppeOptimization.Project(Point, Mesh)'</Item>
+               <Item>'edge'</Item>
+               <Item>'Edge'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="IFunction">
+          <Members>
+           <Member Name="#X">
+            <Messages>
+             <Message Id="X" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberMoreMeaningfulName">
+               <Item>'IFunction.X'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="PropertiesShouldNotReturnArrays" Category="Microsoft.Performance" CheckId="CA1819" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'IFunction.X'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="IImplicitSurfacePolygonizer">
+          <Members>
+           <Member Name="#Create(Matveev.Mtk.Core.IImplicitSurface,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Int32,System.Int32,System.Int32)">
+            <Messages>
+             <Message Id="l" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'IImplicitSurfacePolygonizer.Create(IImplicitSurface, double, double, double, double, double, double, int, int, int)'</Item>
+               <Item>'l'</Item>
+              </Issue>
+             </Message>
+             <Message Id="m" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'IImplicitSurfacePolygonizer.Create(IImplicitSurface, double, double, double, double, double, double, int, int, int)'</Item>
+               <Item>'m'</Item>
+              </Issue>
+             </Message>
+             <Message Id="n" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'IImplicitSurfacePolygonizer.Create(IImplicitSurface, double, double, double, double, double, double, int, int, int)'</Item>
+               <Item>'n'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="MatrixBuilder">
+          <Members>
+           <Member Name="#.ctor(System.Int32)">
+            <Messages>
+             <Message Id="n" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'MatrixBuilder.MatrixBuilder(int)'</Item>
+               <Item>'n'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetMatrix(System.Int32&amp;,System.Double[]&amp;,System.Int32[]&amp;,System.Int32[]&amp;,System.Double[]&amp;)">
+            <Messages>
+             <Message Id="0#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'n'</Item>
+              </Issue>
+             </Message>
+             <Message Id="1#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'di'</Item>
+              </Issue>
+             </Message>
+             <Message Id="2#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'ig'</Item>
+              </Issue>
+             </Message>
+             <Message Id="3#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'jg'</Item>
+              </Issue>
+             </Message>
+             <Message Id="4#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'gg'</Item>
+              </Issue>
+             </Message>
+             <Message Id="n" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'MatrixBuilder.GetMatrix(out int, out double[], out int[], out int[], out double[])'</Item>
+               <Item>'n'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Item[System.Int32,System.Int32]">
+            <Messages>
+             <Message Id="i" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'MatrixBuilder.this[int, int]'</Item>
+               <Item>'i'</Item>
+              </Issue>
+             </Message>
+             <Message Id="j" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'MatrixBuilder.this[int, int]'</Item>
+               <Item>'j'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IndexersShouldNotBeMultidimensional" Category="Microsoft.Design" CheckId="CA1023" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'MatrixBuilder.this[int, int]'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="MC">
+          <Members>
+           <Member Name="#casesTable">
+            <Messages>
+             <Message Id="Member" TypeName="PreferJaggedArraysOverMultidimensional" Category="Microsoft.Performance" CheckId="CA1814" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'MC.casesTable'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#edgesTable">
+            <Messages>
+             <Message Id="Member" TypeName="PreferJaggedArraysOverMultidimensional" Category="Microsoft.Performance" CheckId="CA1814" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'MC.edgesTable'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="OptimizeMesh">
+          <Members>
+           <Member Name="#OptimizeImplicit(Matveev.Mtk.Core.Mesh,Matveev.Mtk.Core.IImplicitSurface,System.Double,System.Double)">
+            <Messages>
+             <Message Id="E1" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'E1'</Item>
+               <Item>'double'</Item>
+              </Issue>
+             </Message>
+             <Message Id="E2" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'E2'</Item>
+               <Item>'double'</Item>
+              </Issue>
+             </Message>
+             <Message Id="E3" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'E3'</Item>
+               <Item>'double'</Item>
+              </Issue>
+             </Message>
+             <Message Id="_collapseBegin" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'_collapseBegin'</Item>
+               <Item>'EdgeTransform'</Item>
+              </Issue>
+             </Message>
+             <Message Id="_collapseEnd" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'_collapseEnd'</Item>
+               <Item>'EdgeTransform'</Item>
+              </Issue>
+             </Message>
+             <Message Id="_collapseMiddle" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'_collapseMiddle'</Item>
+               <Item>'EdgeTransform'</Item>
+              </Issue>
+             </Message>
+             <Message Id="_split" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'_split'</Item>
+               <Item>'EdgeTransform'</Item>
+              </Issue>
+             </Message>
+             <Message Id="_swap" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'_swap'</Item>
+               <Item>'EdgeTransform'</Item>
+              </Issue>
+             </Message>
+             <Message Id="candidat" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'candidat'</Item>
+               <Item>'Edge'</Item>
+              </Issue>
+             </Message>
+             <Message Id="candidats" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'candidats'</Item>
+               <Item>'List&lt;Edge&gt;'</Item>
+              </Issue>
+             </Message>
+             <Message Id="edge" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'edge'</Item>
+               <Item>'Edge'</Item>
+              </Issue>
+             </Message>
+             <Message Id="edgeMap" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'edgeMap'</Item>
+               <Item>'Dictionary&lt;Edge, Edge&gt;'</Item>
+              </Issue>
+             </Message>
+             <Message Id="edgeMap2" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'edgeMap2'</Item>
+               <Item>'IDictionary&lt;Edge, Edge&gt;'</Item>
+              </Issue>
+             </Message>
+             <Message Id="energy" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'energy'</Item>
+               <Item>'Energy'</Item>
+              </Issue>
+             </Message>
+             <Message Id="face" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'face'</Item>
+               <Item>'Face'</Item>
+              </Issue>
+             </Message>
+             <Message Id="faceEnergy" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'faceEnergy'</Item>
+               <Item>'FaceFunction'</Item>
+              </Issue>
+             </Message>
+             <Message Id="rand" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'rand'</Item>
+               <Item>'Random'</Item>
+              </Issue>
+             </Message>
+             <Message Id="result" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'result'</Item>
+               <Item>'MeshPart'</Item>
+              </Issue>
+             </Message>
+             <Message Id="smCandidat" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'smCandidat'</Item>
+               <Item>'Edge'</Item>
+              </Issue>
+             </Message>
+             <Message Id="smCandidat2" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'smCandidat2'</Item>
+               <Item>'Edge'</Item>
+              </Issue>
+             </Message>
+             <Message Id="smResult" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'smResult'</Item>
+               <Item>'MeshPart'</Item>
+              </Issue>
+             </Message>
+             <Message Id="submesh" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'submesh'</Item>
+               <Item>'Mesh'</Item>
+              </Issue>
+             </Message>
+             <Message Id="submesh2" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'submesh2'</Item>
+               <Item>'Mesh'</Item>
+              </Issue>
+             </Message>
+             <Message Id="surrounding" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'surrounding'</Item>
+               <Item>'List&lt;Face&gt;'</Item>
+              </Issue>
+             </Message>
+             <Message Id="transform" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'transform'</Item>
+               <Item>'EdgeTransform'</Item>
+              </Issue>
+             </Message>
+             <Message Id="transforms" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'transforms'</Item>
+               <Item>'EdgeTransform[]'</Item>
+              </Issue>
+             </Message>
+             <Message Id="vertex" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'vertex'</Item>
+               <Item>'Vertex'</Item>
+              </Issue>
+             </Message>
+             <Message Id="alpha" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-08-10 10:43:39Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'alpha'</Item>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="epsilon" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-08-10 10:43:39Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'epsilon'</Item>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="field" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-08-10 10:43:39Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'field'</Item>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ParametrizedSurfacePolygonizer">
+          <Members>
+           <Member Name="#Create(Matveev.Mtk.Core.IParametrizedSurface,System.Int32,System.Int32)">
+            <Messages>
+             <Message Id="m" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'ParametrizedSurfacePolygonizer.Create(IParametrizedSurface, int, int)'</Item>
+               <Item>'m'</Item>
+              </Issue>
+             </Message>
+             <Message Id="n" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'ParametrizedSurfacePolygonizer.Create(IParametrizedSurface, int, int)'</Item>
+               <Item>'n'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2008-08-10 10:43:39Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'ParametrizedSurfacePolygonizer.Create(IParametrizedSurface, int, int)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="PointProjection">
+          <Members>
+           <Member Name="#GetMatrixAndVector(System.Double[,]&amp;,System.Double[]&amp;,Matveev.Mtk.Core.Vertex[]&amp;)">
+            <Messages>
+             <Message Id="0#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'matrix'</Item>
+              </Issue>
+             </Message>
+             <Message Id="1#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'vector'</Item>
+              </Issue>
+             </Message>
+             <Message Id="2#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'map'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Tools">
+          <Members>
+           <Member Name="#VertexPositionOptimizer">
+            <Messages>
+             <Message TypeName="NonConstantFieldsShouldNotBeVisible" Category="Microsoft.Usage" CheckId="CA2211" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'Tools.VertexPositionOptimizer'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="VertexEnergy">
+          <Members>
+           <Member Name="#Eval(Matveev.Mtk.Core.Mesh)">
+            <Messages>
+             <Message Id="vertex" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'VertexEnergy.Eval(Mesh)'</Item>
+               <Item>'vertex'</Item>
+               <Item>'Vertex'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="VertexPointProjection">
+          <Members>
+           <Member Name="#GetMatrixAndVector(System.Double[,]&amp;,System.Double[]&amp;,Matveev.Mtk.Core.Vertex[]&amp;)">
+            <Messages>
+             <Message Id="Body" TypeName="PreferJaggedArraysOverMultidimensional" Category="Microsoft.Performance" CheckId="CA1814" Created="2008-08-10 10:43:39Z">
+              <Issue Name="Body">
+               <Item>'VertexPointProjection.GetMatrixAndVector(out double[,], out double[], out Vertex[])'</Item>
+               <Item>'double[,]'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="Matveev.Mtk.Library.FaceFunctions">
+        <Types>
+         <Type Name="ImplicitApproximations+NumericalIntegration">
+          <Messages>
+           <Message TypeName="AvoidUninstantiatedInternalClasses" Category="Microsoft.Performance" CheckId="CA1812" Created="2008-08-10 10:43:39Z">
+            <Issue>
+             <Item>'ImplicitApproximations.NumericalIntegration'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#_n">
+            <Messages>
+             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'ImplicitApproximations.NumericalIntegration._n'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#_surface">
+            <Messages>
+             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'ImplicitApproximations.NumericalIntegration._surface'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ImplicitLinearApproximationFaceFunction">
+          <Members>
+           <Member Name="#_surface">
+            <Messages>
+             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'ImplicitLinearApproximationFaceFunction._surface'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="Matveev.Mtk.Library.Fields">
+        <Types>
+         <Type Name="Plane">
+          <Members>
+           <Member Name="#.ctor(System.Double,System.Double,System.Double,System.Double)">
+            <Messages>
+             <Message Id="a" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Plane.Plane(double, double, double, double)'</Item>
+               <Item>'a'</Item>
+              </Issue>
+             </Message>
+             <Message Id="b" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Plane.Plane(double, double, double, double)'</Item>
+               <Item>'b'</Item>
+              </Issue>
+             </Message>
+             <Message Id="c" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Plane.Plane(double, double, double, double)'</Item>
+               <Item>'c'</Item>
+              </Issue>
+             </Message>
+             <Message Id="d" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Plane.Plane(double, double, double, double)'</Item>
+               <Item>'d'</Item>
+              </Issue>
+             </Message>
+             <Message Id="a" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-08-10 10:43:39Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'a'</Item>
+               <Item>'Plane.Plane(double, double, double, double)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="b" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-08-10 10:43:39Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'b'</Item>
+               <Item>'Plane.Plane(double, double, double, double)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="c" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-08-10 10:43:39Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'c'</Item>
+               <Item>'Plane.Plane(double, double, double, double)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="d" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-08-10 10:43:39Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'d'</Item>
+               <Item>'Plane.Plane(double, double, double, double)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Sphere">
+          <Members>
+           <Member Name="#.ctor(System.Double)">
+            <Messages>
+             <Message Id="r" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Sphere.Sphere(double)'</Item>
+               <Item>'r'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Eval(Matveev.Mtk.Core.Face)">
+            <Messages>
+             <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'Sphere.Eval(Face)'</Item>
+               <Item>'f'</Item>
+               <Item>'p'</Item>
+               <Item>'IImplicitSurface.Eval(Face)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="Matveev.Mtk.Library.PositionOptimizers">
+        <Types>
+         <Type Name="TrierVertexPositionOptimizer">
+          <Members>
+           <Member Name="#OptimizeFrom(Matveev.Mtk.Core.IImplicitSurface,System.Double,System.Collections.Generic.List`1&lt;Matveev.Mtk.Core.Vertex&gt;,Matveev.Mtk.Core.Energy)">
+            <Messages>
+             <Message TypeName="DoNotExposeGenericLists" Category="Microsoft.Design" CheckId="CA1002" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'List&lt;Vertex&gt;'</Item>
+               <Item>'TrierVertexPositionOptimizer.OptimizeFrom(IImplicitSurface, double, List&lt;Vertex&gt;, Energy)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="VertexPositionOptimizer">
+          <Members>
+           <Member Name="#OptimizeFrom(Matveev.Mtk.Core.IImplicitSurface,System.Double,System.Collections.Generic.List`1&lt;Matveev.Mtk.Core.Vertex&gt;,Matveev.Mtk.Core.Energy)">
+            <Messages>
+             <Message TypeName="DoNotExposeGenericLists" Category="Microsoft.Design" CheckId="CA1002" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'List&lt;Vertex&gt;'</Item>
+               <Item>'VertexPositionOptimizer.OptimizeFrom(IImplicitSurface, double, List&lt;Vertex&gt;, Energy)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
+     </Module>
+    </Modules>
+   </Target>
+   <Target Name="$(ProjectDir)/UI/bin/Debug/OglVisualizer.dll">
+    <Modules>
+     <Module Name="oglvisualizer.dll">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2008-08-10 10:43:39Z">
+        <Issue Name="NoStrongName">
+         <Item>'OglVisualizer.dll'</Item>
+        </Issue>
+       </Message>
+       <Message TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014" Created="2008-08-10 10:43:39Z">
+        <Issue>
+         <Item>'OglVisualizer.dll'</Item>
+        </Issue>
+       </Message>
+       <Message TypeName="MarkAssembliesWithComVisible" Category="Microsoft.Design" CheckId="CA1017" Created="2008-08-10 10:43:39Z">
+        <Issue Name="NoAttribute" Level="CriticalError">
+         <Item>'OglVisualizer.dll'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+      <Namespaces>
+       <Namespace Name="OglVisualizer">
+        <Types>
+         <Type Name="Visualizer">
+          <Members>
+           <Member Name="#.ctor()">
+            <Messages>
+             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'Visualizer.Visualizer()'</Item>
+               <Item>'Visualizer._phi'</Item>
+               <Item>'double'</Item>
+               <Item>0.0</Item>
+              </Issue>
+              <Issue>
+               <Item>'Visualizer.Visualizer()'</Item>
+               <Item>'Visualizer._theta'</Item>
+               <Item>'double'</Item>
+               <Item>0.0</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#distance">
+            <Messages>
+             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'Visualizer.distance'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#MarkedVerts">
+            <Messages>
+             <Message TypeName="PropertiesShouldNotBeWriteOnly" Category="Microsoft.Design" CheckId="CA1044" Created="2008-08-10 10:43:39Z">
+              <Issue Name="AddGetter">
+               <Item>'Visualizer.MarkedVerts'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Mesh">
+            <Messages>
+             <Message TypeName="PropertiesShouldNotBeWriteOnly" Category="Microsoft.Design" CheckId="CA1044" Created="2008-08-10 10:43:39Z">
+              <Issue Name="AddGetter">
+               <Item>'Visualizer.Mesh'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#OnCreateControl()">
+            <Messages>
+             <Message Id="&lt;Module&gt;.wglMakeCurrent(HDC__*,HGLRC__*)" TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806" Created="2008-08-10 10:43:39Z">
+              <Issue Name="HResultOrErrorCode">
+               <Item>'Visualizer.OnCreateControl()'</Item>
+               <Item>'&lt;Module&gt;.wglMakeCurrent(HDC__*, HGLRC__*)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201" Created="2008-08-10 10:43:39Z">
+              <Issue Name="TooGeneric">
+               <Item>'Visualizer.OnCreateControl()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+              <Issue Name="TooGeneric">
+               <Item>'Visualizer.OnCreateControl()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+              <Issue Name="TooGeneric">
+               <Item>'Visualizer.OnCreateControl()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+              <Issue Name="TooGeneric">
+               <Item>'Visualizer.OnCreateControl()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#OnPaint(System.Windows.Forms.PaintEventArgs)">
+            <Messages>
+             <Message TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201" Created="2008-08-10 10:43:39Z">
+              <Issue Name="TooGeneric">
+               <Item>'Visualizer.OnPaint(PaintEventArgs)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RayThroughScreen(System.Int32,System.Int32)">
+            <Messages>
+             <Message Id="&lt;Module&gt;.gluUnProject(System.Double,System.Double,System.Double,optional(System.Runtime.CompilerServices.IsConst) optional(System.Runtime.CompilerServices.IsConst) System.optional(IsConst) Double*,optional(System.Runtime.CompilerServices.IsConst) optional(System.Runtime.CompilerServices.IsConst) System.optional(IsConst) Double*,optional(System.Runtime.CompilerServices.IsConst) optional(System.Runtime.CompilerServices.IsConst) System.optional(IsConst) Int32*,System.Double*,System.Double*,System.Double*)" TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806" Created="2008-08-10 10:43:39Z">
+              <Issue Name="HResultOrErrorCode">
+               <Item>'Visualizer.RayThroughScreen(int, int)'</Item>
+               <Item>'&lt;Module&gt;.gluUnProject(double, double, double, double*, double*, int*, double*, double*, double*)'</Item>
+              </Issue>
+              <Issue Name="HResultOrErrorCode">
+               <Item>'Visualizer.RayThroughScreen(int, int)'</Item>
+               <Item>'&lt;Module&gt;.gluUnProject(double, double, double, double*, double*, int*, double*, double*, double*)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Visualizer.RayThroughScreen(int, int)'</Item>
+               <Item>'x'</Item>
+              </Issue>
+             </Message>
+             <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'Visualizer.RayThroughScreen(int, int)'</Item>
+               <Item>'y'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SelectedEdge">
+            <Messages>
+             <Message TypeName="PropertiesShouldNotBeWriteOnly" Category="Microsoft.Design" CheckId="CA1044" Created="2008-08-10 10:43:39Z">
+              <Issue Name="AddGetter">
+               <Item>'Visualizer.SelectedEdge'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SelectedFace">
+            <Messages>
+             <Message TypeName="PropertiesShouldNotBeWriteOnly" Category="Microsoft.Design" CheckId="CA1044" Created="2008-08-10 10:43:39Z">
+              <Issue Name="AddGetter">
+               <Item>'Visualizer.SelectedFace'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
+     </Module>
+    </Modules>
+   </Target>
+   <Target Name="$(ProjectDir)/UI/bin/Debug/UI.exe">
+    <Modules>
+     <Module Name="ui.exe">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2008-08-10 10:43:39Z">
+        <Issue Name="NoStrongName">
+         <Item>'UI.exe'</Item>
+        </Issue>
+       </Message>
+       <Message TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014" Created="2008-08-10 10:43:39Z">
+        <Issue>
+         <Item>'UI.exe'</Item>
+        </Issue>
+       </Message>
+       <Message TypeName="MarkAssembliesWithComVisible" Category="Microsoft.Design" CheckId="CA1017" Created="2008-08-10 10:43:39Z">
+        <Issue Name="NoAttribute" Level="CriticalError">
+         <Item>'UI.exe'</Item>
+        </Issue>
+       </Message>
+       <Message TypeName="MarkAssembliesWithNeutralResourcesLanguage" Category="Microsoft.Performance" CheckId="CA1824" Created="2008-08-10 10:43:39Z">
+        <Issue>
+         <Item>'UI.exe'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+      <Namespaces>
+       <Namespace Name="UI">
+        <Types>
+         <Type Name="Application">
+          <Members>
+           <Member Name="#Main(System.String[])">
+            <Messages>
+             <Message Id="args" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-08-10 10:43:39Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'args'</Item>
+               <Item>'Application.Main(string[])'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="CtorCollectorBase`1">
+          <Members>
+           <Member Name="#Objects">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'CtorCollectorBase&lt;T&gt;.Objects'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="DoubleValueTextBox">
+          <Members>
+           <Member Name="#.ctor()">
+            <Messages>
+             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'DoubleValueTextBox.DoubleValueTextBox()'</Item>
+               <Item>'DoubleValueTextBox._minValue'</Item>
+               <Item>'double'</Item>
+               <Item>0.0</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#OnTextChanged(System.EventArgs)">
+            <Messages>
+             <Message Id="System.Double.Parse(System.String)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'double.Parse(string)'</Item>
+               <Item>'DoubleValueTextBox.OnTextChanged(EventArgs)'</Item>
+               <Item>'double.Parse(string, IFormatProvider)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="EdgeFunctionsCollector">
+          <Messages>
+           <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Created="2008-08-10 10:43:39Z">
+            <Issue>
+             <Item>'EdgeFunctionsCollector'</Item>
+             <Item> UI.CtorCollectorBase`1&lt;Matveev.Mtk.Core.EdgeFunction&gt;</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="FaceFunctionsCollector">
+          <Messages>
+           <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Created="2008-08-10 10:43:39Z">
+            <Issue>
+             <Item>'FaceFunctionsCollector'</Item>
+             <Item> UI.CtorCollectorBase`1&lt;Matveev.Mtk.Core.FaceFunction&gt;</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#GetInfo(Matveev.Mtk.Core.Face)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'FaceFunctionsCollector.GetInfo(Face)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="InstanceCollector`1">
+          <Members>
+           <Member Name="#Instances">
+            <Messages>
+             <Message TypeName="DoNotDeclareStaticMembersOnGenericTypes" Category="Microsoft.Design" CheckId="CA1000" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'InstanceCollector&lt;T&gt;.Instances'</Item>
+               <Item>'InstanceCollector&lt;T&gt;'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="UI2">
+          <Members>
+           <Member Name="#.ctor()">
+            <Messages>
+             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'UI2.UI2()'</Item>
+               <Item>'UI2._selection'</Item>
+               <Item>'object'</Item>
+               <Item>null</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ListMeshActions()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'UI2.ListMeshActions()'</Item>
+               <Item>'object'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201" Created="2008-08-10 10:43:39Z">
+              <Issue Name="TooGeneric">
+               <Item>'UI2.ListMeshActions()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.Double.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'double.ToString()'</Item>
+               <Item>'UI2.ListMeshActions()'</Item>
+               <Item>'double.ToString(IFormatProvider)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'double.ToString()'</Item>
+               <Item>'UI2.ListMeshActions()'</Item>
+               <Item>'double.ToString(IFormatProvider)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.IO.StringWriter.#ctor" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'StringWriter.StringWriter()'</Item>
+               <Item>'UI2.ListMeshActions()'</Item>
+               <Item>'StringWriter.StringWriter(IFormatProvider)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.Int32.Parse(System.String)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'int.Parse(string)'</Item>
+               <Item>'UI2.ListMeshActions()'</Item>
+               <Item>'int.Parse(string, IFormatProvider)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.Int32.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'int.ToString()'</Item>
+               <Item>'UI2.ListMeshActions()'</Item>
+               <Item>'int.ToString(IFormatProvider)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'UI2.ListMeshActions()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'UI2.ListMeshActions()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ListVertexActions()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-08-10 10:43:39Z">
+              <Issue>
+               <Item>'UI2.ListVertexActions()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
+     </Module>
+    </Modules>
+   </Target>
+  </Targets>
+  <Rules>
+   <Rule TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210">
+    <Resolution Name="NoStrongName">Sign {0} with a strong name key.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020">
+    <Resolution Name="Default">Consider merging the types defined in '{0}' with another namespace.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021">
+    <Resolution Name="Default">Consider a design that does not require that {0} be an out parameter.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811">
+    <Resolution Name="Default">{0} appears to have no upstream public or protected callers.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidUninstantiatedInternalClasses" Category="Microsoft.Performance" CheckId="CA1812">
+    <Resolution Name="Default">{0} is an internal class that is apparently never instantiated. If so, remove the code from the assembly. If this class is intended to contain only static methods, consider adding a private constructor to prevent the compiler from generating a default constructor.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823">
+    <Resolution Name="Default">It appears that field {0} is never used or is only ever assigned to. Use this field or remove it.</Resolution>
+   </Rule>
+   <Rule TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405">
+    <Resolution Name="Default">{0} is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: {1}</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800">
+    <Resolution Name="Parameter">{0}, a parameter, is cast to type {1} multiple times in method {2}. Cache the result of the 'as' operator or direct cast in order to eliminate the redundant {3} instruction.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031">
+    <Resolution Name="Default">Modify {0} to catch a more specific exception than {1} or rethrow the exception.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotDeclareStaticMembersOnGenericTypes" Category="Microsoft.Design" CheckId="CA1000">
+    <Resolution Name="Default">Remove {0} from {1} or make it an instance member.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051">
+    <Resolution Name="Default">Because field {0} is visible outside of its declaring type, change its accessibility to private and add a property, with the same accessibility as the field has currently, to provide access to it.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotExposeGenericLists" Category="Microsoft.Design" CheckId="CA1002">
+    <Resolution Name="Default">Change {0} in {1} to use Collection&lt;T&gt;, ReadOnlyCollection&lt;T&gt; or KeyedCollection&lt;K,V&gt;</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806">
+    <Resolution Name="HResultOrErrorCode">{0} calls {1} but does not use the HRESULT or error code that the method returns. This could lead to unexpected behavior in error conditions or low-resource situations. Use the result in a conditional statement, assign the result to a variable, or pass it as an argument to another method.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805">
+    <Resolution Name="Default">{0} initializes field {1} of type {2} to {3}. Remove this initialization because it will be done automatically by the runtime.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045">
+    <Resolution Name="Default">Consider a design that does not require that {0} be a reference parameter.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotRaiseExceptionsInUnexpectedLocations" Category="Microsoft.Design" CheckId="CA1065">
+    <Resolution Name="PropertyGetter">{0} creates an exception of type {1}, an exception type that should not be raised in a property. If this exception instance might be raised, use a different exception type, convert this property into a method, or change this property's logic so that it no longer raises an exception.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201">
+    <Resolution Name="TooGeneric">{0} creates an exception of type {1}, an exception type that is not sufficiently specific and should never be raised by user code. If this exception instance might be thrown, use a different exception type.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709">
+    <Resolution Name="Member">Correct the casing of '{0}' in member name {1} by changing it to '{2}'.</Resolution>
+    <Resolution Name="MemberParameter">In member {0}, correct the casing of '{1}' in parameter name {2} by changing it to '{3}'.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704">
+    <Resolution Name="DelegateParameterMoreMeaningfulName">In delegate {0}, consider providing a more meaningful name than parameter name {1}.</Resolution>
+    <Resolution Name="MemberMoreMeaningfulName">Consider providing a more meaningful name than member name {0}.</Resolution>
+    <Resolution Name="MemberParameterMoreMeaningfulName">In method {0}, consider providing a more meaningful name than parameter name {1}.</Resolution>
+    <Resolution Name="MethodTypeParameterMoreMeaningfulName">On method {0}, consider providing a more meaningful name than generic type parameter name {1}.</Resolution>
+    <Resolution Name="TypeTypeParameterMoreMeaningfulName">On type {0}, consider providing a more meaningful name than generic type parameter name {1}.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldNotMatchKeywords" Category="Microsoft.Naming" CheckId="CA1716">
+    <Resolution Name="Member">Rename virtual/interface member {0} so that it no longer conflicts with the reserved language keyword '{1}'. Using a reserved keyword as the name of a virtual/interface member makes it harder for consumers in other languages to override/implement the member.</Resolution>
+    <Resolution Name="Type">Rename type {0} so that it no longer conflicts with the reserved language keyword '{1}'. Using a reserved keyword as the name of a type makes it harder for consumers in other languages to use the type.</Resolution>
+   </Rule>
+   <Rule TypeName="IndexersShouldNotBeMultidimensional" Category="Microsoft.Design" CheckId="CA1023">
+    <Resolution Name="Default">Redesign indexer {0} to use a single string or integer value as its index.</Resolution>
+   </Rule>
+   <Rule TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208">
+    <Resolution Name="NoArguments">Call the {0} constructor that contains a message and/or paramName parameter.</Resolution>
+   </Rule>
+   <Rule TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014">
+    <Resolution Name="Default">Mark {0} with CLSCompliant(true) because it exposes externally visible types.</Resolution>
+   </Rule>
+   <Rule TypeName="MarkAssembliesWithComVisible" Category="Microsoft.Design" CheckId="CA1017">
+    <Resolution Name="NoAttribute">Because {0} exposes externally visible types, mark it with ComVisible(false) at the assembly level and then mark all types within the assembly that should be exposed to COM clients with ComVisible(true).</Resolution>
+   </Rule>
+   <Rule TypeName="MarkAssembliesWithNeutralResourcesLanguage" Category="Microsoft.Performance" CheckId="CA1824">
+    <Resolution Name="Default">Because assembly {0} contains a ResX-based resource file, mark it with the NeutralResourcesLanguage attribute, specifying the language of the resources within the assembly. This could improve lookup performance the first time a resource is retrieved.</Resolution>
+   </Rule>
+   <Rule TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822">
+    <Resolution Name="Default">The 'this' parameter (or 'Me' in Visual Basic) of {0} is never used. Mark the member as static (or Shared in Visual Basic) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Resolution>
+   </Rule>
+   <Rule TypeName="NestedTypesShouldNotBeVisible" Category="Microsoft.Design" CheckId="CA1034">
+    <Resolution Name="Default">Do not nest type {0}. Alternatively, change its accessibility so that it is not externally visible.</Resolution>
+   </Rule>
+   <Rule TypeName="NonConstantFieldsShouldNotBeVisible" Category="Microsoft.Usage" CheckId="CA2211">
+    <Resolution Name="Default">Consider making {0} non-public or a constant.</Resolution>
+   </Rule>
+   <Rule TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225">
+    <Resolution Name="Default">Provide a method named '{0}' as a friendly alternate for operator {1}.</Resolution>
+   </Rule>
+   <Rule TypeName="OverloadOperatorEqualsOnOverloadingAddAndSubtract" Category="Microsoft.Design" CheckId="CA1013">
+    <Resolution Name="Default">Consider adding an overload of the equality operator for {0} that takes the same parameters as {1}.</Resolution>
+   </Rule>
+   <Rule TypeName="OverloadOperatorEqualsOnOverridingValueTypeEquals" Category="Microsoft.Usage" CheckId="CA2231">
+    <Resolution Name="Default">Because {0} is a value type that overrides ValueType.Equals, it should also overload the equality and inequality operators (== and !=).</Resolution>
+   </Rule>
+   <Rule TypeName="OverrideEqualsAndOperatorEqualsOnValueTypes" Category="Microsoft.Performance" CheckId="CA1815">
+    <Resolution Name="Equals">{0} should override Equals.</Resolution>
+    <Resolution Name="op_Equality">{0} should override the equality (==) and inequality (!=) operators.</Resolution>
+   </Rule>
+   <Rule TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725">
+    <Resolution Name="Default">In member {0}, change parameter name {1} to {2} in order to match the identifier as it has been declared in {3}.</Resolution>
+   </Rule>
+   <Rule TypeName="PreferJaggedArraysOverMultidimensional" Category="Microsoft.Performance" CheckId="CA1814">
+    <Resolution Name="Body">{0} uses a multidimensional array of {1}. Replace it with a jagged array if possible.</Resolution>
+    <Resolution Name="Default">{0} is a multidimensional array. Replace it with a jagged array if possible.</Resolution>
+    <Resolution Name="Return">{0} returns a multidimensional array of {1}. Replace it with a jagged array if possible.</Resolution>
+   </Rule>
+   <Rule TypeName="PropertiesShouldNotBeWriteOnly" Category="Microsoft.Design" CheckId="CA1044">
+    <Resolution Name="AddGetter">Because property {0} is write-only, either add a property getter with an accessibility that is greater than or equal to its setter or convert this property into a method.</Resolution>
+   </Rule>
+   <Rule TypeName="PropertiesShouldNotReturnArrays" Category="Microsoft.Performance" CheckId="CA1819">
+    <Resolution Name="Default">Change {0} to return a collection or make it a method.</Resolution>
+   </Rule>
+   <Rule TypeName="PropertyNamesShouldNotMatchGetMethods" Category="Microsoft.Naming" CheckId="CA1721">
+    <Resolution Name="BaseType">The property name {0} is confusing given the existence of inherited method {1}. Rename or remove this property.</Resolution>
+   </Rule>
+   <Rule TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804">
+    <Resolution Name="Default">{0} declares a variable, {1}, of type {2}, which is never used or is only assigned to. Use this variable or remove it.</Resolution>
+   </Rule>
+   <Rule TypeName="RethrowToPreserveStackDetails" Category="Microsoft.Usage" CheckId="CA2200">
+    <Resolution Name="Default">{0} rethrows a caught exception and specifies it explicitly as an argument. Use 'throw' without an argument instead, in order to preserve the stack location where the exception was initially raised.</Resolution>
+   </Rule>
+   <Rule TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801">
+    <Resolution Name="Default">Parameter {0} of {1} is never used. Remove the parameter or use it in the method body.</Resolution>
+   </Rule>
+   <Rule TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305">
+    <Resolution Name="Default">Because the behavior of {0} could vary based on the current user's locale settings, replace this call in {1} with a call to {2}. If the result of {2} will be displayed to the user, specify 'CultureInfo.CurrentCulture' as the 'IFormatProvider' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify 'CultureInfo.InvariantCulture'.</Resolution>
+   </Rule>
+   <Rule TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300">
+    <Resolution Name="Default">Change {0} to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control.</Resolution>
+   </Rule>
+   <Rule TypeName="StaticHolderTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1053">
+    <Resolution Name="Default">Remove the public constructors from {0}.</Resolution>
+   </Rule>
+  </Rules>
+ </FxCopReport>
+</FxCopProject>
