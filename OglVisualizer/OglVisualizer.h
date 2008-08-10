@@ -190,7 +190,6 @@ namespace OglVisualizer
 	public:
 		Visualizer()
 		{
-            _enableLightning = false;
             _translate.X = _translate.Y = _translate.Z = 0;
 			_theta = _phi = 0;
             _lightDirection.x = 0;
@@ -220,7 +219,7 @@ namespace OglVisualizer
             return result;
         }
     private:
-        void Reshape(int w, int h)
+        static void Reshape(int w, int h)
         {
             glViewport(0,0,(GLsizei) w, (GLsizei) h);
             glMatrixMode(GL_PROJECTION);
@@ -233,7 +232,7 @@ namespace OglVisualizer
             glLoadIdentity();
         }
 
-        void polarView(GLdouble distance, GLdouble twist, GLdouble elevation, GLdouble azimuth)
+        static void PolarView(GLdouble distance, GLdouble twist, GLdouble elevation)
         {
             double centerx, centery, centerz;
             double eyex, eyey, eyez;
@@ -274,7 +273,7 @@ namespace OglVisualizer
             glLoadIdentity();
 
             //Camera setup
-            polarView(5, _phi, _theta, 0);
+            PolarView(5, _phi, _theta);
 
 			if(_mesh)
 			{                
@@ -288,7 +287,7 @@ namespace OglVisualizer
                     {
                         if(_enableLightning && _normalsType == NormalsType::VertexNormals)
                             glNormal3d(vertex->Normal.x, vertex->Normal.y, vertex->Normal.z);
-                        glVertex3d(vertex->Point);
+                        PutVertex(vertex->Point);
                     }
                 }
                 glEnd();
@@ -300,8 +299,8 @@ namespace OglVisualizer
                 {
                     if(!edge->Pair)
                     {
-                        glVertex3d(edge->Begin->Point);
-                        glVertex3d(edge->End->Point);
+                        PutVertex(edge->Begin->Point);
+                        PutVertex(edge->End->Point);
                     }
                 }
                 glEnd();
@@ -320,11 +319,11 @@ namespace OglVisualizer
 
                     for each(Matveev::Mtk::Core::Vertex ^vertex in _mesh->Vertices)
                     {
-                        glVertex3d(vertex->Point);
+                        PutVertex(vertex->Point);
                         if(_drawPoints == OglVisualizer::DrawPoints::DrawWithNormals)
                         {
                             Point p = vertex->Point + 0.2 * (vertex->Normal);
-                            glVertex3d(p);
+                            PutVertex(p);
                         }
                     }
 
@@ -350,9 +349,9 @@ namespace OglVisualizer
                             p.Y += (vert->Point.Y) / 3;
                             p.Z += (vert->Point.Z) / 3;
                         }
-                        glVertex3d(p);
+                        PutVertex(p);
                         p = p + 0.2 * (face->Normal);
-                        glVertex3d(p);
+                        PutVertex(p);
                     }
 
                     glEnd();
@@ -365,7 +364,7 @@ namespace OglVisualizer
                     glPointSize(5);
                     glBegin(GL_POINTS);
                     for each(Matveev::Mtk::Core::Vertex ^v in _vertsMarked)
-                        glVertex3d(v->Point);
+                        PutVertex(v->Point);
                     glEnd();
                 }
 
@@ -377,8 +376,8 @@ namespace OglVisualizer
                     glColor3f(1, 0, 0);
                     glLineWidth(2);
                     glBegin(GL_LINES);
-                    glVertex3d(b->Point);
-                    glVertex3d(e->Point);
+                    PutVertex(b->Point);
+                    PutVertex(e->Point);
                     glEnd();
                     glLineWidth(1);
                 }
@@ -389,7 +388,7 @@ namespace OglVisualizer
                     glPolygonMode(GL_FRONT, GL_FILL);
                     glBegin(GL_POLYGON);
                     for each(Matveev::Mtk::Core::Vertex ^vertex in _faceSelected->Vertices)
-                        glVertex3d(vertex->Point);
+                        PutVertex(vertex->Point);
                     glEnd();
                 }
 			}
@@ -398,7 +397,7 @@ namespace OglVisualizer
 				throw gcnew Exception("Couldn't swap buffers!");            
 		}
 
-		void glVertex3d(Point point)
+		static void PutVertex(Point point)
 		{
 			::glVertex3d(point.X, point.Y, point.Z);
 		}

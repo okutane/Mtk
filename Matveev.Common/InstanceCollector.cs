@@ -7,27 +7,21 @@ namespace Matveev.Common
 {
     public static class InstanceCollector<T>
     {
-        private static Dictionary<string, T> _instances;
-
         public static Dictionary<string, T> Instances
         {
             get
             {
-                if (InstanceCollector<T>._instances == null)
-                {
-                    Dictionary<string, T> instances = new Dictionary<string, T>();
+                Dictionary<string, T> instances = new Dictionary<string, T>();
 
-                    foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+                foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+                {
+                    foreach (Type type in assembly.GetTypes())
                     {
-                        foreach (Type type in assembly.GetTypes())
-                        {
-                            FindInstances(instances, type);
-                        }
+                        FindInstances(instances, type);
                     }
-                    InstanceCollector<T>._instances = instances;
                 }
 
-                return InstanceCollector<T>._instances;
+                return instances;
             }
         }
 
@@ -46,7 +40,7 @@ namespace Matveev.Common
                 if (getMethod.IsStatic == false)
                     continue;
 
-                // Это плохо
+                // TODO: Это плохо
                 Type t = typeof(T);
                 if (t.IsInterface && property.PropertyType.GetInterface(t.Name) != null)
                 {

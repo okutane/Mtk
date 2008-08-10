@@ -48,6 +48,7 @@ namespace LinAlg
                 return _n;
             }
         }
+
         public int M
         {
             get
@@ -131,6 +132,21 @@ namespace LinAlg
             _a[k] = tmp;
         }
 
+        public static Matrix Add(Matrix left, Matrix right)
+        {
+            return left + right;
+        }
+
+        public static Matrix Subtract(Matrix left, Matrix right)
+        {
+            return left - right;
+        }
+
+        public static Matrix Multiply(Matrix left, Matrix right)
+        {
+            return left * right;
+        }
+
         public static Matrix operator +(Matrix left, Matrix right)
         {
             int n1, n2, m1, m2;
@@ -164,6 +180,7 @@ namespace LinAlg
 
             return result;
         }
+
         public static Matrix operator -(Matrix left, Matrix right)
         {
             int n1, n2, m1, m2;
@@ -197,6 +214,7 @@ namespace LinAlg
 
             return result;
         }
+
         public static Matrix operator *(Matrix left, Matrix right)
         {
             int n1, n2, m1, m2;
@@ -234,6 +252,7 @@ namespace LinAlg
 
             return result;
         }
+
         public Matrix Transponed
         {
             get
@@ -245,6 +264,7 @@ namespace LinAlg
                 return result;
             }
         }
+
         public Matrix Inversed
         {
             get

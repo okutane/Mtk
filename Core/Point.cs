@@ -116,7 +116,7 @@ namespace Matveev.Mtk.Core
             t = v0 / (v0 - v1);
 
             if(t < 0 || t > 1)
-                throw new Exception("Caramba!");
+                throw new ArgumentException("The point with zero value is not between p0 and p1.");
 
             result.X = p0.X * (1 - t) + t * p1.X;
             result.Y = p0.Y * (1 - t) + t * p1.Y;
