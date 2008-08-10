@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Matveev.Common
 {
+    public delegate T2 Function<T1, T2>(T1 arg);
+
     public static class EnumerableHelpers
     {
-        public delegate T2 Function<T1, T2>(T1 arg);
-
         public static int IndexOf<T>(this IEnumerable<T> enumerable, T item)
         {
             int index = 0;
@@ -25,7 +25,7 @@ namespace Matveev.Common
         public static int Count<T>(IEnumerable<T> enumerable)
         {
             int count = 0;
-            foreach (T item in enumerable)
+            for (IEnumerator<T> counter = enumerable.GetEnumerator(); counter.MoveNext();)
             {
                 count++;
             }

@@ -51,9 +51,10 @@ namespace Matveev.Common
         private static void Serialize(TextWriter writer, object graph, int indentSize)
         {
             Type type = graph.GetType();
-            if (graph is IEnumerable)
+            IEnumerable enumerable = graph as IEnumerable;
+            if (enumerable != null)
             {
-                foreach (var item in (IEnumerable)graph)
+                foreach (var item in enumerable)
                 {
                     writer.Write("- ");
                     writer.WriteLine(item);
