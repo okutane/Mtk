@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 using Matveev.Mtk.Core;
@@ -36,38 +37,16 @@ namespace Matveev.Mtk.Library
                 List<Vertex> Vb, Ve, Vn;
                 List<Face> F;
 
-                Vb = new List<Vertex>();
-                Ve = new List<Vertex>();
+                Vb = new List<Vertex>(b.Adjacent);
+                Ve = new List<Vertex>(e.Adjacent);
                 Vn = new List<Vertex>();
-                F = new List<Face>();
+                F = new List<Face>(b.AdjacentFaces.Where(face => face != edge.Face));
+                F.AddRange(e.AdjacentFaces);
 
-                foreach (Vertex vert in b.Adjacent)
-                    Vb.Add(vert);
-                foreach (Vertex vert in e.Adjacent)
-                    Ve.Add(vert);
-                foreach (Face face in b.AdjacentFaces)
-                    if (face != edge.Face)
-                        F.Add(face);
-                foreach (Face face in e.AdjacentFaces)
-                    F.Add(face);
+                Vn.AddRange(Vb.Take(Vb.Count - 1));
+                Vn.AddRange(Ve.Skip(2));
 
-                int k1 = Vb.FindIndex(delegate(Vertex vert)
-                {
-                    return vert == e;
-                }) + 1;
-
-                int k2 = Ve.FindIndex(delegate(Vertex vert)
-                {
-                    return vert == b;
-                }) + 1;
-
-                for (int i = 0; i < Vb.Count - 1; i++)
-                    Vn.Add(Vb[i]);
-                for (int i = 2; i < Ve.Count; i++)
-                    Vn.Add(Ve[i]);
-
-                foreach (Face face in F)
-                    mesh.DeleteFace(face);
+                F.ForEach(face => mesh.DeleteFace(face));
                 mesh.RemoveVertex(b);
                 mesh.RemoveVertex(e);
 
@@ -83,7 +62,9 @@ namespace Matveev.Mtk.Library
             {
                 if ((edge.Begin.Type == VertexType.Boundary && this._t != 0)
                     || (edge.End.Type == VertexType.Boundary && this._t != 1))
+                {
                     throw new Exception("Tried to change topology");
+                }
 
                 Vertex b, e, v;
                 int k1, k2, n1, n2, n;
@@ -92,43 +73,31 @@ namespace Matveev.Mtk.Library
 
                 List<Vertex> Vb, Ve, Vn;
                 List<Face> F;
-                Vb = new List<Vertex>();
-                Ve = new List<Vertex>();
+                Vb = new List<Vertex>(b.Adjacent);
+                Ve = new List<Vertex>(e.Adjacent);
                 Vn = new List<Vertex>();
-                F = new List<Face>();
-                foreach (Vertex vert in b.Adjacent)
-                    Vb.Add(vert);
-                foreach (Vertex vert in e.Adjacent)
-                    Ve.Add(vert);
-                foreach (Face face in b.AdjacentFaces)
-                    if (face != edge.Face && face != edge.Pair.Face)
-                        F.Add(face);
-                foreach (Face face in e.AdjacentFaces)
-                    F.Add(face);
+                F = new List<Face>(b.AdjacentFaces.Where(f => f != edge.Face && f != edge.Pair.Face));
+                F.AddRange(e.AdjacentFaces);
 
-                k1 = Vb.FindIndex(delegate(Vertex vert)
-                {
-                    return vert == e;
-                }) + 1;
-
-                k2 = Ve.FindIndex(delegate(Vertex vert)
-                {
-                    return vert == b;
-                }) + 1;
+                k1 = Vb.IndexOf(e) + 1;
+                k2 = Ve.IndexOf(b) + 1;
 
                 n1 = Vb.Count;
                 n2 = Ve.Count;
                 for (int i = 0; i < n1 - 2; i++)
+                {
                     Vn.Add(Vb[(k1 + i) % n1]);
+                }
                 for (int i = 0; i < n2 - 2; i++)
+                {
                     Vn.Add(Ve[(k2 + i) % n2]);
+                }
                 n = Vn.Count;
 
                 v = mesh.AddVertex(b.Point + this._t * (e.Point - b.Point),
                     Vector.Normalize(this._t * b.Normal + (1 - this._t) * e.Normal));
 
-                foreach (Face face in F)
-                    mesh.DeleteFace(face);
+                F.ForEach(face => mesh.DeleteFace(face));
                 mesh.RemoveVertex(b);
                 mesh.RemoveVertex(e);
 
