@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 using NUnit.Framework;
 
 using Matveev.Mtk.Core;
 using Matveev.Mtk.Library;
+using Matveev.Mtk.Library.Fields;
+using Matveev.Mtk.Tests;
 
 namespace Matveev.Mtk.Library.Tests
 {
@@ -64,6 +67,18 @@ namespace Matveev.Mtk.Library.Tests
             {
                 Assert.IsFalse(this._target.IsPossible(edge));
             }
+        }
+
+        [Test]
+        public void Execute()
+        {
+            Mesh mesh = MC.Instance.Create(Plane.Sample, -1, 1, -1, 1, -1, 1, 3, 3, 3);
+            Edge edge = (from e in mesh.Edges
+                       where (Math.Abs(e.Begin.Point.X + e.End.Point.X) < 1e-4)
+                          && (Math.Abs(e.Begin.Point.Y + e.End.Point.Y) < 1e-4)
+                       select e).First();
+            new EdgeSwap().Execute(edge);
+            YamlSerializerTest.TestSerialize("EdgeSwap.yaml", mesh);
         }
     }
 }
