@@ -35,8 +35,6 @@ namespace UI
         {
             InitializeComponent();
 
-            _selection = null;
-
             meshActions = new List<Control>();
             vertActions = new List<Control>();
             edgeActions = new List<Control>();
@@ -91,9 +89,16 @@ namespace UI
                 btnEdgeTransform.Text = key;
                 btnEdgeTransform.Click += delegate(object sender, EventArgs e)
                 {
-                    if (Selection is Edge)
+                    Edge selected = Selection as Edge;
+                    if (selected != null)
                     {
-                        Selection = transforms.Objects[((Button)sender).Text].Execute((Edge)Selection);
+                        EdgeTransform transform = transforms.Objects[((Button)sender).Text];
+                        if (!transform.IsPossible(selected))
+                        {
+                            MessageBox.Show("Transform is not possible");
+                            return;
+                        }
+                        Selection = transform.Execute(selected);
                         if (Selection is Vertex)
                             this.visualizer.MarkedVerts = new Vertex[] { (Vertex)Selection };
                         else if (Selection is Edge)
