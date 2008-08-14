@@ -29,8 +29,10 @@ namespace LinAlg
         /// <param name="m">Number of columns</param>
         public Matrix(int n, int m)
         {
-            if(n < 0 || m < 0)
+            if (n < 0 || m < 0)
+            {
                 throw new System.ArgumentOutOfRangeException();
+            }
             _n = n;
             _m = m;
 
@@ -73,8 +75,10 @@ namespace LinAlg
                     i = j;
                     j = k;
                 }
-                if(i < 0 || j < 0 || i >= _n || j >= _m)
+                if (i < 0 || j < 0 || i >= _n || j >= _m)
+                {
                     throw new System.ArgumentOutOfRangeException();
+                }
 
                 return _a[i][j];
             }
@@ -86,8 +90,10 @@ namespace LinAlg
                     i = j;
                     j = k;
                 }
-                if(i < 0 || j < 0 || i >= _n || j >= _m)
+                if (i < 0 || j < 0 || i >= _n || j >= _m)
+                {
                     throw new System.ArgumentOutOfRangeException();
+                }
 
                 _a[i][j] = value;
             }
@@ -170,8 +176,10 @@ namespace LinAlg
                 n2 = right._n;
                 m2 = right._m;
             }
-            if(n1 != n2 || m1 != m2)
+            if (n1 != n2 || m1 != m2)
+            {
                 throw new System.ArgumentException("Bad array dimensions");
+            }
 
             Matrix result = new Matrix(n1, m1);
             for(int i = 0 ; i < n1 ; i++)

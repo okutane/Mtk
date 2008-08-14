@@ -42,9 +42,13 @@ namespace UI
             {
                 MethodInfo getMethod = property.GetGetMethod();
                 if (getMethod == null)
+                {
                     continue;
+                }
                 if (getMethod.IsStatic == false)
+                {
                     continue;
+                }
 
                 // Это плохо
                 Type t = typeof(T);

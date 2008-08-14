@@ -34,7 +34,9 @@ namespace UI
         protected virtual void OnValueChanged(ValueChangedEventArgs<double> e)
         {
             if (this.ValueChanged != null)
+            {
                 ValueChanged(this, e);
+            }
         }
 
         protected override void OnTextChanged(EventArgs e)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 using Matveev.Mtk.Core;
@@ -12,7 +13,9 @@ namespace Matveev.Mtk.Library
         public override bool IsPossible(Edge edge)
         {
             if (edge.Pair == null)
+            {
                 return false;
+            }
 
             Vertex v1, v2;
             FindOtherVertices(edge, out v1, out v2);
@@ -20,12 +23,13 @@ namespace Matveev.Mtk.Library
             foreach (Vertex vertex in v1.Adjacent)
             {
                 if (vertex == v2)
+                {
                     return false;
+                }
             }
 
             double acos = new DihedralAngle().Evaluate(edge);
             return true;
-
         }
 
         public override MeshPart Execute(Edge edge)
@@ -44,13 +48,7 @@ namespace Matveev.Mtk.Library
             face = mesh.CreateFace(v1, v2, v4);
             face = mesh.CreateFace(v4, v2, v3);
 
-            IEnumerator<Edge> enumerator = face.Edges.GetEnumerator();
-            do
-            {
-                enumerator.MoveNext();
-            }
-            while (enumerator.Current.End != v2);
-            return enumerator.Current;
+            return face.Edges.Where(e => e.End == v2).First();
         }
 
         private static void FindOtherVertices(Edge edge, out Vertex v2, out Vertex v4)

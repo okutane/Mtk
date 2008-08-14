@@ -15,7 +15,15 @@ namespace UI
             foreach (string key in this.Objects.Keys)
             {
                 result += key + Environment.NewLine;
-                result += this.Objects[key].Evaluate(edge) + Environment.NewLine;
+                try
+                {
+                    result += this.Objects[key].Evaluate(edge);
+                }
+                catch (Exception ex)
+                {
+                    result += ex;
+                }
+                result += Environment.NewLine;
             }
 
             return result;
