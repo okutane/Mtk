@@ -51,6 +51,7 @@
     <Compile Include="AllTestsSuite.cs" />
     <Compile Include="ConjugateGradientsTest.cs" />
     <Compile Include="DihedralEnergy.cs" />
+    <Compile Include="EdgeCollapseTest.cs" />
     <Compile Include="EdgeSwapTest.cs" />
     <Compile Include="Fields\ImplicitParametrizedTest.cs" />
     <Compile Include="Fields\SphereTest.cs" />
