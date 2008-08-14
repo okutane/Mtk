@@ -1335,30 +1335,6 @@
            </Member>
           </Members>
          </Type>
-         <Type Name="EdgeCollapse">
-          <Members>
-           <Member Name="#.ctor(System.Double)">
-            <Messages>
-             <Message Id="t" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
-              <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'EdgeCollapse.EdgeCollapse(double)'</Item>
-               <Item>'t'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#Execute(Matveev.Mtk.Core.Edge)">
-            <Messages>
-             <Message TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201" Created="2008-08-10 10:43:39Z">
-              <Issue Name="TooGeneric">
-               <Item>'EdgeCollapse.Execute(Edge)'</Item>
-               <Item>'Exception'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
          <Type Name="EdgeSplit">
           <Members>
            <Member Name="#.ctor(System.Double)">
@@ -2196,6 +2172,17 @@
              </Message>
             </Messages>
            </Member>
+           <Member Name="#Evaluate(Matveev.Mtk.Core.Face)">
+            <Messages>
+             <Message Id="points" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-14 16:44:03Z">
+              <Issue>
+               <Item>'ImplicitApproximations.NumericalIntegration.Evaluate(Face)'</Item>
+               <Item>'points'</Item>
+               <Item>'Point[]'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
           </Members>
          </Type>
          <Type Name="ImplicitLinearApproximationFaceFunction">
@@ -2586,6 +2573,18 @@
             </Issue>
            </Message>
           </Messages>
+          <Members>
+           <Member Name="#GetInfo(Matveev.Mtk.Core.Edge)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-08-14 16:44:03Z">
+              <Issue>
+               <Item>'EdgeFunctionsCollector.GetInfo(Edge)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
          </Type>
          <Type Name="FaceFunctionsCollector">
           <Messages>
