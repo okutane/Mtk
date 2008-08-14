@@ -9,15 +9,15 @@ namespace Matveev.Mtk.Library
 {
     public class EdgeCollapse : EdgeTransform
     {
-        private double _t;
+        private readonly double _weight;
 
         public EdgeCollapse() : this(0.5)
         {
         }
 
-        public EdgeCollapse(double t)
+        public EdgeCollapse(double weight)
         {
-            this._t = t;
+            this._weight = weight;
         }
 
         public override bool IsPossible(Edge edge)
@@ -50,20 +50,20 @@ namespace Matveev.Mtk.Library
                 mesh.RemoveVertex(b);
                 mesh.RemoveVertex(e);
 
-                v = mesh.AddVertex(b.Point + this._t * (e.Point - b.Point),
-                    Vector.Normalize(this._t * b.Normal + (1 - this._t) * e.Normal));
+                v = mesh.AddVertex(b.Point + this._weight * (e.Point - b.Point),
+                    Vector.Normalize(this._weight * b.Normal + (1 - this._weight) * e.Normal));
                 for (int i = 0; i < Vn.Count - 1; i++)
                 {
-                    Face face = mesh.CreateFace(v, Vn[i + 1], Vn[i]);
+                    mesh.CreateFace(v, Vn[i + 1], Vn[i]);
                 }
                 return v;
             }
             else
             {
-                if ((edge.Begin.Type == VertexType.Boundary && this._t != 0)
-                    || (edge.End.Type == VertexType.Boundary && this._t != 1))
+                if ((edge.Begin.Type == VertexType.Boundary && _weight != 0)
+                    || (edge.End.Type == VertexType.Boundary && _weight != 1))
                 {
-                    throw new Exception("Tried to change topology");
+                    throw new ArgumentException("Tried to change topology");
                 }
 
                 Vertex b, e, v;
@@ -94,8 +94,8 @@ namespace Matveev.Mtk.Library
                 }
                 n = Vn.Count;
 
-                v = mesh.AddVertex(b.Point + this._t * (e.Point - b.Point),
-                    Vector.Normalize(this._t * b.Normal + (1 - this._t) * e.Normal));
+                v = mesh.AddVertex(b.Point + this._weight * (e.Point - b.Point),
+                    Vector.Normalize(this._weight * b.Normal + (1 - this._weight) * e.Normal));
 
                 F.ForEach(face => mesh.DeleteFace(face));
                 mesh.RemoveVertex(b);
@@ -103,7 +103,7 @@ namespace Matveev.Mtk.Library
 
                 for (int i = 0; i < n; i++)
                 {
-                    Face face = mesh.CreateFace(v, Vn[(i + 1) % n], Vn[i]);
+                    mesh.CreateFace(v, Vn[(i + 1) % n], Vn[i]);
                 }
 
                 return v;
