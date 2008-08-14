@@ -34,21 +34,33 @@ namespace Matveev.Mtk.Core
         {
             get
             {
-                if(index == 0)
+                if (index == 0)
+                {
                     return X;
-                else if(index == 1)
+                }
+                else if (index == 1)
+                {
                     return Y;
+                }
                 else
+                {
                     return Z;
+                }
             }
             set
             {
-                if(index == 0)
+                if (index == 0)
+                {
                     X = value;
-                else if(index == 1)
+                }
+                else if (index == 1)
+                {
                     Y = value;
+                }
                 else
+                {
                     Z = value;
+                }
             }
         }
 	
@@ -115,8 +127,10 @@ namespace Matveev.Mtk.Core
 
             t = v0 / (v0 - v1);
 
-            if(t < 0 || t > 1)
+            if (t < 0 || t > 1)
+            {
                 throw new ArgumentException("The point with zero value is not between p0 and p1.");
+            }
 
             result.X = p0.X * (1 - t) + t * p1.X;
             result.Y = p0.Y * (1 - t) + t * p1.Y;

@@ -82,7 +82,6 @@ namespace Matveev.Mtk.Library.Fields
 
         #region IImplicitSurface Members
 
-
         public double Eval(Face p)
         {
             throw new NotImplementedException();

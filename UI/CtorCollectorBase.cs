@@ -20,6 +20,8 @@ namespace UI
                     if (type.IsSubclassOf(typeof(T)))
                     {
                         ConstructorInfo ctor = type.GetConstructor(new Type[0]);
+                        if (ctor == null)
+                            continue;
                         object o = ctor.Invoke(null);
                         this.Objects.Add(type.Name, (T)o);
                     }
