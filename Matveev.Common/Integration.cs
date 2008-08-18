@@ -13,28 +13,28 @@ namespace Matveev.Common
         double AreaTo(IPoint p1, IPoint p2);
     }
 
-    public delegate double PointFunction(IPoint p);
+    public delegate double PointFunction(IPoint point);
 
     public static class Integration
     {
-        public static double Integrate(IPoint p0, IPoint p1, PointFunction f, int n)
+        public static double Integrate(IPoint p0, IPoint p1, PointFunction function, int n)
         {
-            double sum = (f(p0) + f(p1)) / 2;
+            double sum = (function(p0) + function(p1)) / 2;
 
             double h = 1.0 / n;
             for (int i = 1; i < n; i++)
             {
                 IPoint p = p0.Interpolate(p1, i * h);
-                sum += f(p);
+                sum += function(p);
             }
             return sum * p0.DistanceTo(p1) / n;
         }
 
-        public static double Integrate(IPoint p0, IPoint p1, IPoint p2, PointFunction f, int n)
+        public static double Integrate(IPoint p0, IPoint p1, IPoint p2, PointFunction function, int n)
         {
             if (n == 1)
             {
-                double sum = (f(p0) + f(p1) + f(p2)) / 3;
+                double sum = (function(p0) + function(p1) + function(p2)) / 3;
                 return sum * p0.AreaTo(p1, p2);
             }
             throw new NotSupportedException();

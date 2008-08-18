@@ -12,9 +12,7 @@ namespace Matveev.Mtk.Core
 
         public void Trace(Face face, out double distance, out double u, out double v)
         {
-            //Point[] points = Array.ConvertAll(face.Vertices.ToArray(), vertex => vertex.Point);
-            Point[] points = (from vertex in face.Vertices
-                             select vertex.Point).ToArray();
+            Point[] points = face.Vertices.Select(vertex => vertex.Point).ToArray();
 
             Vector E1 = points[1] - points[0];
             Vector E2 = points[2] - points[0];
