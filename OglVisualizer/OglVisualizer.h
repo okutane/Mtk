@@ -38,7 +38,7 @@ namespace OglVisualizer
 
         Mesh ^_mesh;
         NormalsType _normalsType; //normals to use
-        Point _translate; //translate vector
+        Point ^_translate; //translate vector
         double _phi, _theta; //polar coords;
         double distance;
         Vector _lightDirection; //light direction
@@ -69,7 +69,7 @@ namespace OglVisualizer
 			}
 			void set(Point ^value)
 			{
-                _translate = *value;
+                _translate = value;
 				Invalidate();
 			}
 		}
@@ -190,7 +190,7 @@ namespace OglVisualizer
 	public:
 		Visualizer()
 		{
-            _translate.X = _translate.Y = _translate.Z = 0;
+			_translate = gcnew Point(0, 0, 0);
 			_theta = _phi = 0;
             _lightDirection.x = 0;
             _lightDirection.y = 0;
@@ -210,10 +210,14 @@ namespace OglVisualizer
             glGetDoublev(GL_PROJECTION_MATRIX, projMatrix);
             glGetIntegerv(GL_VIEWPORT, viewport);
 
+			double ox;
+			double oy;
+			double oz;
 			gluUnProject(x, y, 1, modelMatrix, projMatrix, viewport,
-				&result.origin.X, &result.origin.Y, &result.origin.Z);
-            Point lookAt;
-            gluUnProject(x, y, 0, modelMatrix, projMatrix, viewport, &lookAt.X, &lookAt.Y, &lookAt.Z);
+				&ox, &oy, &oz);
+			result.origin = gcnew Point(ox, oy, oz);
+			gluUnProject(x, y, 0, modelMatrix, projMatrix, viewport, &ox, &oy, &oz);
+            Point ^lookAt = gcnew Point(ox, oy, oz);
             result.direction = Vector::Normalize(lookAt - result.origin);
 
             return result;
@@ -322,7 +326,7 @@ namespace OglVisualizer
                         PutVertex(vertex->Point);
                         if(_drawPoints == OglVisualizer::DrawPoints::DrawWithNormals)
                         {
-                            Point p = vertex->Point + 0.2 * (vertex->Normal);
+                            Point ^p = vertex->Point + 0.2 * (vertex->Normal);
                             PutVertex(p);
                         }
                     }
@@ -342,13 +346,14 @@ namespace OglVisualizer
 
                     for each(Matveev::Mtk::Core::Face ^face in _mesh->Faces)
                     {
-                        Point p;
+                        double x, y, z;
                         for each(Matveev::Mtk::Core::Vertex ^vert in face->Vertices)
                         {
-                            p.X += (vert->Point.X) / 3;
-                            p.Y += (vert->Point.Y) / 3;
-                            p.Z += (vert->Point.Z) / 3;
+                            x += (vert->Point->X) / 3;
+                            y += (vert->Point->Y) / 3;
+                            z += (vert->Point->Z) / 3;
                         }
+						Point ^p = gcnew Point(x, y, z);
                         PutVertex(p);
                         p = p + 0.2 * (face->Normal);
                         PutVertex(p);
@@ -397,9 +402,9 @@ namespace OglVisualizer
 				throw gcnew Exception("Couldn't swap buffers!");            
 		}
 
-		static void PutVertex(Point point)
+		static void PutVertex(Point ^point)
 		{
-			::glVertex3d(point.X, point.Y, point.Z);
+			::glVertex3d(point->X, point->Y, point->Z);
 		}
 
 		virtual void OnPaintBackground(System::Windows::Forms::PaintEventArgs ^e) override

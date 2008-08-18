@@ -453,7 +453,7 @@ namespace UI
 
         private void btnRestartCam_Click(object sender, System.EventArgs e)
         {
-            visualizer.Translate = new Matveev.Mtk.Core.Point();
+            visualizer.Translate = new Matveev.Mtk.Core.Point(0, 0, 0);
             visualizer.Phi = visualizer.Theta = 0;
             visualizer.Invalidate();
         }
