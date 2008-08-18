@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Matveev.Mtk.Core
 {
-    public struct Point
+    public class Point
     {
         public double X;
         public double Y;
@@ -22,7 +22,6 @@ namespace Matveev.Mtk.Core
         {
             Vector v = right - left;
             return v.Norm < 0.000001;
-            //return left.x == right.x && left.y == right.y && left.z == right.z;
         }
         public static bool operator !=(Point left, Point right)
         {
@@ -75,21 +74,14 @@ namespace Matveev.Mtk.Core
 
         public static Point operator -(Point left, Vector right)
         {
-            Point result = new Point();
-            result.X = left.X - right.x;
-            result.Y = left.Y - right.y;
-            result.Z = left.Z - right.z;
-
-            return result;
+            return new Point(left.X - right.x,
+                left.Y - right.y, left.Z - right.z);
         }
 
         public static Point operator +(Point left, Vector right)
         {
-            Point result = new Point();
-            result.X = left.X + right.x;
-            result.Y = left.Y + right.y;
-            result.Z = left.Z + right.z;
-            return result;
+            return new Point(left.X + right.x,
+                left.Y + right.y, left.Z + right.z);
         }
 
         public override bool Equals(object obj)
@@ -122,21 +114,16 @@ namespace Matveev.Mtk.Core
 
         public static Point Interpolate(Point p0, double v0, Point p1, double v1)
         {
-            double t;
-            Point result = new Point();
-
-            t = v0 / (v0 - v1);
+            double t = v0 / (v0 - v1);
 
             if (t < 0 || t > 1)
             {
                 throw new ArgumentException("The point with zero value is not between p0 and p1.");
-            }
+            }            
 
-            result.X = p0.X * (1 - t) + t * p1.X;
-            result.Y = p0.Y * (1 - t) + t * p1.Y;
-            result.Z = p0.Z * (1 - t) + t * p1.Z;
-
-            return result;
+            return new Point(p0.X * (1 - t) + t * p1.X,
+                p0.Y * (1 - t) + t * p1.Y,
+                p0.Z * (1 - t) + t * p1.Z);
         }
     }
 }
