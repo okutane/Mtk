@@ -180,9 +180,9 @@ namespace Matveev.Mtk.Library
 
             if(flags[0] && !flags[1])
             {
-                Point p1 = Interpolate(p[0], v[0], p[1], v[1]);
-                Point p2 = Interpolate(p[0], v[0], p[2], v[2]);
-                Point p3 = Interpolate(p[0], v[0], p[3], v[3]);
+                Point p1 = Point.Interpolate(p[0], v[0], p[1], v[1]);
+                Point p2 = Point.Interpolate(p[0], v[0], p[2], v[2]);
+                Point p3 = Point.Interpolate(p[0], v[0], p[3], v[3]);
                 Vertex i1 = AddVertex(p1, Vector.Normalize(field.Grad(p1)));
                 Vertex i2 = AddVertex(p2, Vector.Normalize(field.Grad(p2)));
                 Vertex i3 = AddVertex(p3, Vector.Normalize(field.Grad(p3)));
@@ -193,10 +193,10 @@ namespace Matveev.Mtk.Library
             }
             else if(flags[1] && !flags[2])
             {
-                Point p1 = Interpolate(p[0], v[0], p[2], v[2]);
-                Point p2 = Interpolate(p[0], v[0], p[3], v[3]);
-                Point p3 = Interpolate(p[1], v[1], p[2], v[2]);
-                Point p4 = Interpolate(p[1], v[1], p[3], v[3]);
+                Point p1 = Point.Interpolate(p[0], v[0], p[2], v[2]);
+                Point p2 = Point.Interpolate(p[0], v[0], p[3], v[3]);
+                Point p3 = Point.Interpolate(p[1], v[1], p[2], v[2]);
+                Point p4 = Point.Interpolate(p[1], v[1], p[3], v[3]);
                 Vertex i1 = AddVertex(p1, Vector.Normalize(field.Grad(p1)));
                 Vertex i2 = AddVertex(p2, Vector.Normalize(field.Grad(p2)));
                 Vertex i3 = AddVertex(p3, Vector.Normalize(field.Grad(p3)));
@@ -215,9 +215,9 @@ namespace Matveev.Mtk.Library
             }
             else if(flags[2] && !flags[3])
             {
-                Point p1 = Interpolate(p[3], v[3], p[0], v[0]);
-                Point p2 = Interpolate(p[3], v[3], p[1], v[1]);
-                Point p3 = Interpolate(p[3], v[3], p[2], v[2]);
+                Point p1 = Point.Interpolate(p[3], v[3], p[0], v[0]);
+                Point p2 = Point.Interpolate(p[3], v[3], p[1], v[1]);
+                Point p3 = Point.Interpolate(p[3], v[3], p[2], v[2]);
                 Vertex i1 = AddVertex(p1, Vector.Normalize(field.Grad(p1)));
                 Vertex i2 = AddVertex(p2, Vector.Normalize(field.Grad(p2)));
                 Vertex i3 = AddVertex(p3, Vector.Normalize(field.Grad(p3)));
@@ -226,23 +226,6 @@ namespace Matveev.Mtk.Library
                 else
                     mesh.CreateFace(i1, i3, i2);
             }
-        }
-
-        private static Point Interpolate(Point p0, double v0, Point p1, double v1)
-        {
-            double t;
-            Point result = new Point();
-
-            t = v0 / (v0 - v1);
-#if DEBUG
-            if(t < 0 || t > 1)
-                throw new Exception("Zero value outside [p0,p1] range!");
-#endif
-            result.X = p0.X * (1 - t) + t * p1.X;
-            result.Y = p0.Y * (1 - t) + t * p1.Y;
-            result.Z = p0.Z * (1 - t) + t * p1.Z;
-
-            return result;
         }
     }
 }
