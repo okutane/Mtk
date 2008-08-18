@@ -347,13 +347,16 @@ namespace OglVisualizer
                     for each(Matveev::Mtk::Core::Face ^face in _mesh->Faces)
                     {
                         double x, y, z;
+						x = 0;
+						y = 0;
+						z = 0;
                         for each(Matveev::Mtk::Core::Vertex ^vert in face->Vertices)
                         {
-                            x += (vert->Point->X) / 3;
-                            y += (vert->Point->Y) / 3;
-                            z += (vert->Point->Z) / 3;
+                            x += vert->Point->X;
+                            y += vert->Point->Y;
+                            z += vert->Point->Z;
                         }
-						Point ^p = gcnew Point(x, y, z);
+						Point ^p = gcnew Point(x / 3, y / 3, z / 3);
                         PutVertex(p);
                         p = p + 0.2 * (face->Normal);
                         PutVertex(p);
