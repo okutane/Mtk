@@ -30,8 +30,7 @@ namespace Matveev.Mtk.Library
         {
             EdgeFunction function = new EdgeFunctions.Length();
 
-            return EnumerableHelpers.Aggregate(mesh.Edges, function.Evaluate,
-                Aggregators.Sum);
+            return mesh.Edges.Sum(edge => function.Evaluate(edge));
         }
     }
 }

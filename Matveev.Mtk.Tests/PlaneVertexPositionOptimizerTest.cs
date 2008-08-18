@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 using NUnit.Framework;
 
@@ -22,11 +23,7 @@ namespace Matveev.Mtk.Library.Tests
             Mesh mesh = ParametrizedSurfacePolygonizer.Instance.Create(Plane.Sample,
                 2, 2);
 
-            Vertex vertex = null;
-            vertex = EnumerableHelpers.Find(mesh.Vertices, delegate(Vertex item)
-            {
-                return item.Point.Equals(new Point(0, 0, 0));
-            });
+            Vertex vertex = mesh.Vertices.First(item => item.Point.Equals(new Point(0, 0, 0)));
 
             vertex.Point = new Point(0.9, 0.9, 0);
 
