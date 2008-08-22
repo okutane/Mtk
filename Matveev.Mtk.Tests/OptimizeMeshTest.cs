@@ -19,7 +19,7 @@ namespace Matveev.Mtk.Library.Tests
         {
             IImplicitSurface surface = Sphere.Sample;
 
-            Mesh mesh = new MT6().Create(surface, -1, 1, -1, 1, -1, 1, 8, 8, 8);
+            Mesh mesh = MT6.Instance.Create(surface, -1, 1, -1, 1, -1, 1, 8, 8, 8);
             OptimizeMesh.OptimizeImplicit(mesh, surface, 1e-2, 1e-3);
 
             int nonInternal = 0;

@@ -1266,16 +1266,6 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="#Interpolate(Matveev.Mtk.Core.Point,System.Double,Matveev.Mtk.Core.Point,System.Double)">
-            <Messages>
-             <Message TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201" Created="2008-08-10 10:43:39Z">
-              <Issue Name="TooGeneric">
-               <Item>'Bloomenthal.Interpolate(Point, double, Point, double)'</Item>
-               <Item>'Exception'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
           </Members>
          </Type>
          <Type Name="ConjugateGradients">
@@ -2335,15 +2325,6 @@
                <Item>'Visualizer._theta'</Item>
                <Item>'double'</Item>
                <Item>0.0</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#distance">
-            <Messages>
-             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2008-08-10 10:43:39Z">
-              <Issue>
-               <Item>'Visualizer.distance'</Item>
               </Issue>
              </Message>
             </Messages>
