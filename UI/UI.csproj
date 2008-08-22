@@ -97,6 +97,10 @@
       <Project>{3626C207-50B8-47C9-B6E2-195726D6B082}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
+    <ProjectReference Include="..\Matveev.Common\Matveev.Common.csproj">
+      <Project>{BDB6B09C-05CD-4238-830B-297AECE6EE1E}</Project>
+      <Name>Matveev.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Matveev.Mtk.Library\Matveev.Mtk.Library.csproj">
       <Project>{8757B636-6AAF-4D88-8776-5E7CC2FDAF06}</Project>
       <Name>Matveev.Mtk.Library</Name>
@@ -118,7 +122,6 @@
     </Compile>
     <Compile Include="EdgeFunctionsCollector.cs" />
     <Compile Include="FaceFunctionsCollector.cs" />
-    <Compile Include="InstanceCollector.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

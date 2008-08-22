@@ -26,7 +26,7 @@ namespace Matveev.Mtk.Library.Tests
                     return new Vector(2 * p.X, 2 * p.Y, 2 * p.Z);
                 });
 
-            Mesh mesh = new Library.MT6().Create(field, -1, 1, -1, 1, -1, 1, 2, 2, 2);
+            Mesh mesh = MT6.Instance.Create(field, -1, 1, -1, 1, -1, 1, 2, 2, 2);
 
             int nonInternal = 0;
             foreach (Vertex vertex in mesh.Vertices)

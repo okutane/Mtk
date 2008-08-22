@@ -32,7 +32,15 @@ namespace Matveev.Common
                 FindInstances(instances, nestedType);
             }
 
-            foreach (PropertyInfo property in type.GetProperties())
+            Type t = typeof(T);
+            foreach (FieldInfo field in type.GetFields(BindingFlags.Static | BindingFlags.Public))
+            {
+                if (t.IsInterface && field.FieldType.GetInterface(t.Name) != null)
+                {
+                    instances.Add(type.Name, (T)field.GetValue(null));
+                }
+            }
+            foreach (PropertyInfo property in type.GetProperties(BindingFlags.Static | BindingFlags.Public))
             {
                 MethodInfo getMethod = property.GetGetMethod();
                 if (getMethod == null)
@@ -41,7 +49,6 @@ namespace Matveev.Common
                     continue;
 
                 // TODO: Это плохо
-                Type t = typeof(T);
                 if (t.IsInterface && property.PropertyType.GetInterface(t.Name) != null)
                 {
                     instances.Add(type.Name, (T)getMethod.Invoke(null, null));

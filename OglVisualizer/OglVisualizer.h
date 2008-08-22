@@ -40,7 +40,6 @@ namespace OglVisualizer
         NormalsType _normalsType; //normals to use
         Point ^_translate; //translate vector
         double _phi, _theta; //polar coords;
-        double distance;
         Vector _lightDirection; //light direction
 
 		DrawPoints _drawPoints;

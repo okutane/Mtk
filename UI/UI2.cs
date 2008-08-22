@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+using Matveev.Common;
 using Matveev.Mtk.Core;
 using Matveev.Mtk.Library;
 using Matveev.Mtk.Library.FaceFunctions;
@@ -82,8 +83,8 @@ namespace UI
             };
             edgeActions.Add(txtEdgeInfo);
 
-            CtorCollectorBase<EdgeTransform> transforms = new CtorCollectorBase<EdgeTransform>();
-            foreach (string key in transforms.Objects.Keys)
+            Dictionary<string, EdgeTransform> transforms = InstanceCollector<EdgeTransform>.Instances;
+            foreach (string key in transforms.Keys)
             {
                 Button btnEdgeTransform = new Button();
                 btnEdgeTransform.Text = key;
@@ -92,7 +93,7 @@ namespace UI
                     Edge selected = Selection as Edge;
                     if (selected != null)
                     {
-                        EdgeTransform transform = transforms.Objects[((Button)sender).Text];
+                        EdgeTransform transform = transforms[((Button)sender).Text];
                         if (!transform.IsPossible(selected))
                         {
                             MessageBox.Show("Transform is not possible");
