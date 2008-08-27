@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Matveev.Common;
+
 using Matveev.Mtk.Core;
 using Matveev.Mtk.Library.Fields;
-using Matveev.Common;
 
 namespace Matveev.Mtk.Library.FaceFunctions
 {
@@ -13,7 +14,7 @@ namespace Matveev.Mtk.Library.FaceFunctions
     {
         public class NumericalIntegration : FaceFunction
         {
-            private PointFunction<Point> _function = Sphere.Sample.Eval;
+            private PointFunction<Point> _function = point => Sphere.Sample.Eval(point) * Sphere.Sample.Eval(point);
             private int _n = 100;
 
             public override double Evaluate(Face face)
