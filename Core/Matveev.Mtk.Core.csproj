@@ -62,6 +62,12 @@
     <Compile Include="VertexAction.cs" />
     <Compile Include="VertexOps.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Matveev.Common\Matveev.Common.csproj">
+      <Project>{BDB6B09C-05CD-4238-830B-297AECE6EE1E}</Project>
+      <Name>Matveev.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
