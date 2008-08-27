@@ -64,6 +64,7 @@
     <Compile Include="OptimizeMeshTest.cs" />
     <Compile Include="ParametrizedSurfacePolygonizerTest.cs" />
     <Compile Include="PlaneVertexPositionOptimizerTest.cs" />
+    <Compile Include="PointTest.cs" />
     <Compile Include="PolygonizationSuite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RayTest.cs" />

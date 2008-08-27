@@ -121,18 +121,17 @@ namespace Matveev.Mtk.Core
             if (t < 0 || t > 1)
             {
                 throw new ArgumentException("The point with zero value is not between p0 and p1.");
-            }            
+            }
 
-            return new Point(p0.X * (1 - t) + t * p1.X,
-                p0.Y * (1 - t) + t * p1.Y,
-                p0.Z * (1 - t) + t * p1.Z);
+            return p0.Interpolate(p1, t);
         }
 
         #region IPoint<Point> Members
 
         public Point Interpolate(Point p1, double t)
         {
-            throw new NotImplementedException();
+            double r = 1 - t;
+            return new Point(X * r + t * p1.X, Y * r + t * p1.Y, Z * r + t * p1.Z);
         }
 
         public Point Interpolate(Point p1, Point p2, double u, double v)
@@ -152,10 +151,14 @@ namespace Matveev.Mtk.Core
         {
             Vector vector1 = p1 - this;
             Vector vector2 = p2 - this;
+            Vector vector3 = p1 - p2;
 
-            return (vector1.y * vector2.z - vector2.y * vector1.z
-                - vector1.x * vector2.z + vector1.z * vector2.x
-                + vector1.x * vector2.y - vector1.y * vector2.x) / 2;
+            double a = vector1.Norm;
+            double b = vector2.Norm;
+            double c = vector3.Norm;
+            double p = (a + b + c) / 2;
+
+            return Math.Sqrt(p * (p - a) * (p - b) * (p - c));
         }
 
         #endregion
