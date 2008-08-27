@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
 
+using Matveev.Common;
+
 namespace Matveev.Mtk.Core
 {
-    public class Point
+    public class Point : IPoint<Point>
     {
         public double X;
         public double Y;
@@ -125,5 +127,37 @@ namespace Matveev.Mtk.Core
                 p0.Y * (1 - t) + t * p1.Y,
                 p0.Z * (1 - t) + t * p1.Z);
         }
+
+        #region IPoint<Point> Members
+
+        public Point Interpolate(Point p1, double t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Point Interpolate(Point p1, Point p2, double u, double v)
+        {
+            double r = 1 - u - v;
+
+            return new Point(X * r + p1.X * u + p1.X * v,
+                Y * r + p1.Y * u + p2.Y * v, Z * r + p1.Z * u + p2.Z * v);
+        }
+
+        public double DistanceTo(Point p1)
+        {
+            throw new NotImplementedException();
+        }
+
+        public double AreaTo(Point p1, Point p2)
+        {
+            Vector vector1 = p1 - this;
+            Vector vector2 = p2 - this;
+
+            return (vector1.y * vector2.z - vector2.y * vector1.z
+                - vector1.x * vector2.z + vector1.z * vector2.x
+                + vector1.x * vector2.y - vector1.y * vector2.x) / 2;
+        }
+
+        #endregion
     }
 }

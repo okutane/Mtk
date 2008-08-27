@@ -5,32 +5,32 @@ using System.Text;
 
 namespace Matveev.Common
 {
-    public interface IPoint
+    public interface IPoint<T>
     {
-        IPoint Interpolate(IPoint p1, double t);
-        IPoint Interpolate(IPoint p1, IPoint p2, double u, double v);
-        double DistanceTo(IPoint p1);
-        double AreaTo(IPoint p1, IPoint p2);
-    }
+        T Interpolate(T p1, double t);
+        T Interpolate(T p1, T p2, double u, double v);
+        double DistanceTo(T p1);
+        double AreaTo(T p1, T p2);
+}
 
-    public delegate double PointFunction(IPoint point);
+    public delegate double PointFunction<T>(T point);
 
     public static class Integration
     {
-        public static double Integrate(IPoint p0, IPoint p1, PointFunction function, int n)
+        public static double Integrate<T>(T p0, T p1, PointFunction<T> function, int n) where T:IPoint<T>
         {
             double sum = (function(p0) + function(p1)) / 2;
 
             double h = 1.0 / n;
             for (int i = 1; i < n; i++)
             {
-                IPoint p = p0.Interpolate(p1, i * h);
+                T p = p0.Interpolate(p1, i * h);
                 sum += function(p);
             }
             return sum * p0.DistanceTo(p1) / n;
         }
 
-        public static double Integrate(IPoint p0, IPoint p1, IPoint p2, PointFunction function, int n)
+        public static double Integrate<T>(T p0, T p1, T p2, PointFunction<T> function, int n) where T:IPoint<T>
         {
             double sum;
             if (n == 1)
