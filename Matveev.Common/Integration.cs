@@ -32,12 +32,23 @@ namespace Matveev.Common
 
         public static double Integrate(IPoint p0, IPoint p1, IPoint p2, PointFunction function, int n)
         {
+            double sum;
             if (n == 1)
             {
-                double sum = (function(p0) + function(p1) + function(p2)) / 3;
-                return sum * p0.AreaTo(p1, p2);
+                sum = (function(p0) + function(p1) + function(p2)) / 3;
             }
-            throw new NotSupportedException();
+            else
+            {
+                sum = 0;
+                Random rand = new Random(0);
+                for (int i = 0; i < n; i++)
+                {
+                    double u = rand.NextDouble();
+                    double v = rand.NextDouble() * (1 - u);
+                    sum += function(p0.Interpolate(p1, p2, u, v));
+                }
+            }
+            return sum * p0.AreaTo(p1, p2);
         }
     }
 }

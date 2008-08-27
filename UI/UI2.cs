@@ -308,6 +308,7 @@ namespace UI
 
                     verts++;
                 }
+                E = _mesh.Faces.Sum(face => new ImplicitApproximations.NumericalIntegration().Evaluate(face));
                 faces = _mesh.Faces.Count();
 
                 StringWriter writer = new StringWriter();

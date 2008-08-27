@@ -11,10 +11,10 @@ namespace Matveev.Mtk.Library.FaceFunctions
 {
     public static class ImplicitApproximations
     {
-        private class NumericalIntegration : FaceFunction
+        public class NumericalIntegration : FaceFunction
         {
             private PointFunction _function = new SurfaceAdapter(Sphere.Sample).Evaluate;
-            private int _n = 1;
+            private int _n = 100;
 
             public override double Evaluate(Face face)
             {
@@ -62,7 +62,15 @@ namespace Matveev.Mtk.Library.FaceFunctions
 
             public double AreaTo(IPoint p1, IPoint p2)
             {
-                return 1;
+                Point point1 = ((PointAdapter)p1).Point;
+                Point point2 = ((PointAdapter)p2).Point;
+
+                Vector vector1 = point1 - Point;
+                Vector vector2 = point2 - Point;
+
+                return (vector1.y * vector2.z - vector2.y * vector1.z
+                    - vector1.x * vector2.z + vector1.z * vector2.x
+                    + vector1.x * vector2.y - vector1.y * vector2.x) / 2;
             }
 
             #endregion
