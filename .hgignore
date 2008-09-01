@@ -1,4 +1,6 @@
 syntax: glob
+UI\bin\Release/*.config
+build.force
 Coverage.Log
 Matveev.Mtk.Tests\bin\Debug\YamlActual/*.yaml
 UI\obj\Debug/*.resources
