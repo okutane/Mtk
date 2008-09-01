@@ -47,6 +47,7 @@ namespace Matveev.Common
                     double v = rand.NextDouble() * (1 - u);
                     sum += function(p0.Interpolate(p1, p2, u, v));
                 }
+                sum /= n;
             }
             return sum * p0.AreaTo(p1, p2);
         }
