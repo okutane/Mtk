@@ -49,7 +49,6 @@
     <Compile Include="FaceFunction.cs" />
     <Compile Include="IImplicitSurface.cs" />
     <Compile Include="IParametrizedSurface.cs" />
-    <Compile Include="LinAlg.cs" />
     <Compile Include="Abstract Mesh\Edge.cs" />
     <Compile Include="Abstract Mesh\Face.cs" />
     <Compile Include="Abstract Mesh\Mesh.cs" />

@@ -49,6 +49,7 @@
     <Compile Include="EnumerableHelpers.cs" />
     <Compile Include="InstanceCollector.cs" />
     <Compile Include="Integration.cs" />
+    <Compile Include="LinAlg.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="YamlFormatter.cs" />
   </ItemGroup>

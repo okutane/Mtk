@@ -4,7 +4,6 @@ using System.Linq;
 
 using Matveev.Common;
 using Matveev.Mtk.Core;
-using LinAlg;
 
 namespace Matveev.Mtk.Library
 {

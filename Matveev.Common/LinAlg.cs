@@ -1,5 +1,6 @@
 using System;
-namespace LinAlg
+
+namespace Matveev.Common
 {
     public class Matrix
     {
