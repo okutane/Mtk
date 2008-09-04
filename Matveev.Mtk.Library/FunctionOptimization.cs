@@ -23,7 +23,32 @@ namespace Matveev.Mtk.Library
     public static class FunctionOptimization
     {
         public static void GradientDescent(Func<double[], double> f, Func<double[], double[]> grad, double[] x,
-            double eps){}
+            double eps)
+        {
+            int n = x.Length;
+            double[] x0 = new double[n];
+            x.CopyTo(x0, 0);
+            double f0 = f(x);
+            int k = 0;
+            while (Math.Abs(f0) > eps && k++ < 100)
+            {
+                double[] grad0 = grad(x);
+                double ngrad2 = SquareNorm(grad0, n);
+                double t = -f0 / ngrad2;
+
+            calc:
+                AddVector(x, x0, grad0, t, n);
+
+                double f1 = f(x);
+                if (Math.Abs(f1) > Math.Abs(f0))
+                {
+                    t /= 2;
+                    goto calc;
+                }
+                f0 = f1;
+                x.CopyTo(x0, 0);
+            }
+        }
 
         public static void GradientDescent(IFunctionWithGradient f, double eps)
         {
