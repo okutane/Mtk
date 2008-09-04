@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using Matveev.Mtk.Core;
@@ -8,20 +9,122 @@ namespace Matveev.Mtk.Library
 {
     public static class OptimizeMesh
     {
-        public static void ImproveVertexPositions(Mesh mesh)
+        public static void ImproveVertexPositions(Mesh mesh, IImplicitSurface surface)
         {
-            HeaMesh hea = mesh as HeaMesh;
-            if (hea == null)
-                return;
+            Vertex[] vertices = mesh.Vertices.ToArray();
+            double[] x = new double[3 * vertices.Length];
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                Point point = vertices[i].Point;
+                x[3 * i] = point.X;
+                x[3 * i + 1] = point.Y;
+                x[3 * i + 2] = point.Z;
+            }
 
-            IFunctionWithGradient f = new MeshFunction(hea, new ImplicitLinearApproximationFaceFunction());
+            Func<Vertex, int> indexSelector = vertex => Array.IndexOf(vertices, vertex);
+            List<int[]> indices =               
+                new List<int[]>(mesh.Faces.Select(face => face.Vertices.Select(indexSelector).ToArray()));
 
-            FunctionOptimization.GradientDescent(f, 1e-7);
+            Func<Point[], double> localEnergy = delegate(Point[] points)
+            {
+                double mean = 0;
+                for (int i = 0; i < points.Length; i++)
+                {
+                    mean += Math.Pow(surface.Eval(points[i]), 2); // TODO: mean / 3 below should be points.Average
+                }
+                return (mean / 3) * points[0].AreaTo(points[1], points[2]);
+            };
+
+            Func<double[], double> globalEnergy = delegate(double[] globalX)
+            {
+                double energy = 0;
+
+                foreach (int[] face in indices)
+                {
+                    // TODO: Refactor, extract converting methods.
+                    Point[] points = new Point[3];
+                    for (int i = 0; i < points.Length; i++)
+                    {
+                        int index = face[i];
+                        points[i] = new Point(x[3 * index], x[3 * index + 1], x[3 * index + 2]);
+                    }
+                    energy += localEnergy(points);
+                }
+
+                return energy;
+            };
+
+            Func<Point[], Vector[]> localGradient = delegate(Point[] points)
+            {
+                const double h = 1e-2;
+                Vector[] result = new Vector[points.Length];
+                //double centerEnergy = localEnergy(points);
+                for (int i = 0; i < 3; i++)
+                {
+                    // TODO: Refactor me.
+                    double oldCoordinate = points[i].X;
+                    points[i].X = oldCoordinate + h;
+                    double energyNext = localEnergy(points);
+                    points[i].X = oldCoordinate - h;
+                    double energyPrev = localEnergy(points);
+                    points[i].X = oldCoordinate;
+                    result[i].x = (energyNext - energyPrev) / (2 * h);
+                    oldCoordinate = points[i].Y;
+                    points[i].Y = oldCoordinate + h;
+                    energyNext = localEnergy(points);
+                    points[i].Y = oldCoordinate - h;
+                    energyPrev = localEnergy(points);
+                    points[i].Y = oldCoordinate;
+                    result[i].y = (energyNext - energyPrev) / (2 * h);
+                    oldCoordinate = points[i].Z;
+                    points[i].Z = oldCoordinate + h;
+                    energyNext = localEnergy(points);
+                    points[i].Z = oldCoordinate - h;
+                    energyPrev = localEnergy(points);
+                    points[i].Z = oldCoordinate;
+                    result[i].z = (energyNext - energyPrev) / (2 * h);
+                }
+
+                return result;
+            };
+
+            Func<double[], double[]> globalGradient = delegate(double[] globalX)
+            {
+                double[] result = new double[globalX.Length];
+
+                foreach (int[] face in indices)
+                {
+                    // TODO: Refactor, extract converting methods.
+                    Point[] points = new Point[3];
+                    for (int i = 0; i < face.Length; i++)
+                    {
+                        int index = face[i];
+                        points[i] = new Point(x[3 * index], x[3 * index + 1], x[3 * index + 2]);
+                    }
+                    Vector[] localGradValue = localGradient(points);
+                    for (int i = 0; i < face.Length; i++)
+                    {
+                        int index = face[i];
+                        result[3 * index] += localGradValue[i].x;
+                        result[3 * index + 1] += localGradValue[i].y;
+                        result[3 * index + 2] += localGradValue[i].z;
+                    }
+                }
+
+                return result;
+            };
+
+            FunctionOptimization.GradientDescent(globalEnergy, globalGradient, x, 1e-4);
+
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                vertices[i].Point = new Point(x[3 * i], x[3 * i + 1], x[3 * i + 2]);
+            }
         }
 
         public static void OptimizeImplicit(Mesh mesh, IImplicitSurface field, double epsilon, double alpha)
         {
-            ImproveVertexPositions(mesh);
+            ImproveVertexPositions(mesh, field);
             return;
 
             EdgeTransform _split = new EdgeSplit(0.5);
