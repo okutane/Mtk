@@ -108,15 +108,6 @@
  </Rules>
  <FxCopReport Version="1.36">
   <Namespaces>
-   <Namespace Name="LinAlg">
-    <Messages>
-     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2008-08-10 10:43:39Z">
-      <Issue>
-       <Item>LinAlg</Item>
-      </Issue>
-     </Message>
-    </Messages>
-   </Namespace>
    <Namespace Name="Matveev.Mtk.Library.EdgeFunctions">
     <Messages>
      <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2008-08-10 10:43:39Z">
@@ -217,60 +208,6 @@
            </Member>
           </Members>
          </Type>
-         <Type Name="Integration">
-          <Members>
-           <Member Name="#Integrate(Matveev.Common.IPoint,Matveev.Common.IPoint,Matveev.Common.IPoint,Matveev.Common.PointFunction,System.Int32)">
-            <Messages>
-             <Message Id="n" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
-              <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'Integration.Integrate(IPoint, IPoint, IPoint, PointFunction, int)'</Item>
-               <Item>'n'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#Integrate(Matveev.Common.IPoint,Matveev.Common.IPoint,Matveev.Common.PointFunction,System.Int32)">
-            <Messages>
-             <Message Id="n" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
-              <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'Integration.Integrate(IPoint, IPoint, PointFunction, int)'</Item>
-               <Item>'n'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="IPoint">
-          <Members>
-           <Member Name="#Interpolate(Matveev.Common.IPoint,Matveev.Common.IPoint,System.Double,System.Double)">
-            <Messages>
-             <Message Id="u" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
-              <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'IPoint.Interpolate(IPoint, IPoint, double, double)'</Item>
-               <Item>'u'</Item>
-              </Issue>
-             </Message>
-             <Message Id="v" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
-              <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'IPoint.Interpolate(IPoint, IPoint, double, double)'</Item>
-               <Item>'v'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#Interpolate(Matveev.Common.IPoint,System.Double)">
-            <Messages>
-             <Message Id="t" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
-              <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'IPoint.Interpolate(IPoint, double)'</Item>
-               <Item>'t'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
          <Type Name="YamlFormatter">
           <Members>
            <Member Name="#Binder">
@@ -327,248 +264,6 @@
     <Modules>
      <Module Name="matveev.mtk.core.dll">
       <Namespaces>
-       <Namespace Name="LinAlg">
-        <Types>
-         <Type Name="LinSolve">
-          <Members>
-           <Member Name="#Gauss(LinAlg.Matrix,LinAlg.Matrix)">
-            <Messages>
-             <Message TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201" Created="2008-08-10 10:43:39Z">
-              <Issue Name="TooGeneric">
-               <Item>'LinSolve.Gauss(Matrix, Matrix)'</Item>
-               <Item>'Exception'</Item>
-              </Issue>
-             </Message>
-             <Message Id="A" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2008-08-10 10:43:39Z">
-              <Issue Name="MemberParameter">
-               <Item>'LinSolve.Gauss(Matrix, Matrix)'</Item>
-               <Item>A</Item>
-               <Item>'A'</Item>
-               <Item>a</Item>
-              </Issue>
-             </Message>
-             <Message Id="A" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
-              <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'LinSolve.Gauss(Matrix, Matrix)'</Item>
-               <Item>'A'</Item>
-              </Issue>
-             </Message>
-             <Message Id="f" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
-              <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'LinSolve.Gauss(Matrix, Matrix)'</Item>
-               <Item>'f'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="Matrix">
-          <Members>
-           <Member Name="#.ctor(System.Int32,System.Int32)">
-            <Messages>
-             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2008-08-10 10:43:39Z">
-              <Issue>
-               <Item>'Matrix.Matrix(int, int)'</Item>
-               <Item>'Matrix._isTransponed'</Item>
-               <Item>'bool'</Item>
-               <Item>false</Item>
-              </Issue>
-             </Message>
-             <Message Id="m" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
-              <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'Matrix.Matrix(int, int)'</Item>
-               <Item>'m'</Item>
-              </Issue>
-             </Message>
-             <Message Id="n" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
-              <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'Matrix.Matrix(int, int)'</Item>
-               <Item>'n'</Item>
-              </Issue>
-             </Message>
-             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2008-08-10 10:43:39Z">
-              <Issue Name="NoArguments">
-               <Item>'ArgumentOutOfRangeException'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#Inversed">
-            <Accessors>
-             <Accessor Name="#get_Inversed()">
-              <Messages>
-               <Message TypeName="DoNotRaiseExceptionsInUnexpectedLocations" Category="Microsoft.Design" CheckId="CA1065" Created="2008-08-10 10:43:39Z" FixCategory="Breaking">
-                <Issue Name="PropertyGetter" Level="Warning">
-                 <Item>'Matrix.Inversed.get()'</Item>
-                 <Item>'Exception'</Item>
-                </Issue>
-                <Issue Name="PropertyGetter" Level="Warning">
-                 <Item>'Matrix.Inversed.get()'</Item>
-                 <Item>'Exception'</Item>
-                </Issue>
-               </Message>
-               <Message TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201" Created="2008-08-10 10:43:39Z">
-                <Issue Name="TooGeneric">
-                 <Item>'Matrix.Inversed.get()'</Item>
-                 <Item>'Exception'</Item>
-                </Issue>
-                <Issue Name="TooGeneric">
-                 <Item>'Matrix.Inversed.get()'</Item>
-                 <Item>'Exception'</Item>
-                </Issue>
-               </Message>
-              </Messages>
-             </Accessor>
-            </Accessors>
-           </Member>
-           <Member Name="#Item[LinAlg.Matrix+Access,System.Int32]">
-            <Messages>
-             <Message Id="k" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
-              <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'Matrix.this[Matrix.Access, int]'</Item>
-               <Item>'k'</Item>
-              </Issue>
-             </Message>
-             <Message TypeName="IndexersShouldNotBeMultidimensional" Category="Microsoft.Design" CheckId="CA1023" Created="2008-08-10 10:43:39Z">
-              <Issue>
-               <Item>'Matrix.this[Matrix.Access, int]'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-            <Accessors>
-             <Accessor Name="#set_Item(LinAlg.Matrix+Access,System.Int32,LinAlg.Matrix)">
-              <Messages>
-               <Message Id="access" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-08-10 10:43:39Z" FixCategory="DependsOnFix">
-                <Issue>
-                 <Item>'access'</Item>
-                 <Item>'Matrix.this.set(Matrix.Access, int, Matrix)'</Item>
-                </Issue>
-               </Message>
-               <Message Id="k" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-08-10 10:43:39Z" FixCategory="DependsOnFix">
-                <Issue>
-                 <Item>'k'</Item>
-                 <Item>'Matrix.this.set(Matrix.Access, int, Matrix)'</Item>
-                </Issue>
-               </Message>
-               <Message Id="value" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-08-10 10:43:39Z" FixCategory="DependsOnFix">
-                <Issue>
-                 <Item>'value'</Item>
-                 <Item>'Matrix.this.set(Matrix.Access, int, Matrix)'</Item>
-                </Issue>
-               </Message>
-              </Messages>
-             </Accessor>
-            </Accessors>
-           </Member>
-           <Member Name="#Item[System.Int32,System.Int32]">
-            <Messages>
-             <Message Id="i" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
-              <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'Matrix.this[int, int]'</Item>
-               <Item>'i'</Item>
-              </Issue>
-             </Message>
-             <Message Id="j" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
-              <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'Matrix.this[int, int]'</Item>
-               <Item>'j'</Item>
-              </Issue>
-             </Message>
-             <Message TypeName="IndexersShouldNotBeMultidimensional" Category="Microsoft.Design" CheckId="CA1023" Created="2008-08-10 10:43:39Z">
-              <Issue>
-               <Item>'Matrix.this[int, int]'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-            <Accessors>
-             <Accessor Name="#get_Item(System.Int32,System.Int32)">
-              <Messages>
-               <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2008-08-10 10:43:39Z">
-                <Issue Name="NoArguments">
-                 <Item>'ArgumentOutOfRangeException'</Item>
-                </Issue>
-               </Message>
-              </Messages>
-             </Accessor>
-             <Accessor Name="#set_Item(System.Int32,System.Int32,System.Double)">
-              <Messages>
-               <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2008-08-10 10:43:39Z">
-                <Issue Name="NoArguments">
-                 <Item>'ArgumentOutOfRangeException'</Item>
-                </Issue>
-               </Message>
-              </Messages>
-             </Accessor>
-            </Accessors>
-           </Member>
-           <Member Name="#M">
-            <Messages>
-             <Message Id="M" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
-              <Issue Name="MemberMoreMeaningfulName">
-               <Item>'Matrix.M'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#N">
-            <Messages>
-             <Message Id="N" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
-              <Issue Name="MemberMoreMeaningfulName">
-               <Item>'Matrix.N'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#op_Addition(LinAlg.Matrix,LinAlg.Matrix)">
-            <Messages>
-             <Message TypeName="OverloadOperatorEqualsOnOverloadingAddAndSubtract" Category="Microsoft.Design" CheckId="CA1013" Created="2008-08-10 10:43:39Z">
-              <Issue>
-               <Item>'Matrix'</Item>
-               <Item>'Matrix.operator +(Matrix, Matrix)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#op_Subtraction(LinAlg.Matrix,LinAlg.Matrix)">
-            <Messages>
-             <Message TypeName="OverloadOperatorEqualsOnOverloadingAddAndSubtract" Category="Microsoft.Design" CheckId="CA1013" Created="2008-08-10 10:43:39Z">
-              <Issue>
-               <Item>'Matrix'</Item>
-               <Item>'Matrix.operator -(Matrix, Matrix)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#SwapRows(System.Int32,System.Int32)">
-            <Messages>
-             <Message Id="i" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
-              <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'Matrix.SwapRows(int, int)'</Item>
-               <Item>'i'</Item>
-              </Issue>
-             </Message>
-             <Message Id="k" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
-              <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'Matrix.SwapRows(int, int)'</Item>
-               <Item>'k'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="Matrix+Access">
-          <Messages>
-           <Message TypeName="NestedTypesShouldNotBeVisible" Category="Microsoft.Design" CheckId="CA1034" Created="2008-08-10 10:43:39Z">
-            <Issue>
-             <Item>'Matrix.Access'</Item>
-            </Issue>
-           </Message>
-          </Messages>
-         </Type>
-        </Types>
-       </Namespace>
        <Namespace Name="Matveev.Mtk.Core">
         <Types>
          <Type Name="Edge">
@@ -1243,30 +938,6 @@
             </Issue>
            </Message>
           </Messages>
-          <Members>
-           <Member Name="#Create(Matveev.Mtk.Core.IImplicitSurface,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Int32,System.Int32,System.Int32)">
-            <Messages>
-             <Message Id="l" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
-              <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'Bloomenthal.Create(IImplicitSurface, double, double, double, double, double, double, int, int, int)'</Item>
-               <Item>'l'</Item>
-              </Issue>
-             </Message>
-             <Message Id="m" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
-              <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'Bloomenthal.Create(IImplicitSurface, double, double, double, double, double, double, int, int, int)'</Item>
-               <Item>'m'</Item>
-              </Issue>
-             </Message>
-             <Message Id="n" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
-              <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'Bloomenthal.Create(IImplicitSurface, double, double, double, double, double, double, int, int, int)'</Item>
-               <Item>'n'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
          </Type>
          <Type Name="ConjugateGradients">
           <Members>
@@ -2146,19 +1817,6 @@
            </Message>
           </Messages>
          </Type>
-         <Type Name="ImplicitApproximations+SurfaceAdapter">
-          <Members>
-           <Member Name="#.ctor(Matveev.Mtk.Core.IImplicitSurface)">
-            <Messages>
-             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2008-08-16 07:51:00Z">
-              <Issue>
-               <Item>'ImplicitApproximations.SurfaceAdapter.SurfaceAdapter(IImplicitSurface)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
          <Type Name="ImplicitLinearApproximationFaceFunction">
           <Members>
            <Member Name="#_surface">
@@ -2539,20 +2197,6 @@
            </Member>
           </Members>
          </Type>
-         <Type Name="InstanceCollector`1">
-          <Members>
-           <Member Name="#Instances">
-            <Messages>
-             <Message TypeName="DoNotDeclareStaticMembersOnGenericTypes" Category="Microsoft.Design" CheckId="CA1000" Created="2008-08-10 10:43:39Z">
-              <Issue>
-               <Item>'InstanceCollector&lt;T&gt;.Instances'</Item>
-               <Item>'InstanceCollector&lt;T&gt;'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
          <Type Name="UI2">
           <Members>
            <Member Name="#ListEdgeActions()">
@@ -2691,7 +2335,6 @@
    </Rule>
    <Rule TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709">
     <Resolution Name="Member">Correct the casing of '{0}' in member name {1} by changing it to '{2}'.</Resolution>
-    <Resolution Name="MemberParameter">In member {0}, correct the casing of '{1}' in parameter name {2} by changing it to '{3}'.</Resolution>
    </Rule>
    <Rule TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704">
     <Resolution Name="DelegateParameterMoreMeaningfulName">In delegate {0}, consider providing a more meaningful name than parameter name {1}.</Resolution>
@@ -2706,9 +2349,6 @@
    </Rule>
    <Rule TypeName="IndexersShouldNotBeMultidimensional" Category="Microsoft.Design" CheckId="CA1023">
     <Resolution Name="Default">Redesign indexer {0} to use a single string or integer value as its index.</Resolution>
-   </Rule>
-   <Rule TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208">
-    <Resolution Name="NoArguments">Call the {0} constructor that contains a message and/or paramName parameter.</Resolution>
    </Rule>
    <Rule TypeName="MarkAssembliesWithComVisible" Category="Microsoft.Design" CheckId="CA1017">
     <Resolution Name="NoAttribute">Because {0} exposes externally visible types, mark it with ComVisible(false) at the assembly level and then mark all types within the assembly that should be exposed to COM clients with ComVisible(true).</Resolution>
