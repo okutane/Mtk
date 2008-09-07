@@ -6,25 +6,26 @@ using Matveev.Mtk.Core;
 
 namespace UI
 {
+    // TODO: Make generic class, move to Matveev.Common
     public class FaceFunctionsCollector : CtorCollectorBase<FaceFunction>
     {
         public string GetInfo(Face face)
         {
-            string result = string.Empty;
-            foreach (string key in this.Objects.Keys)
+            StringBuilder resultBuilder = new StringBuilder();
+            foreach (var item in Objects)
             {
-                result += key + Environment.NewLine;
+                resultBuilder.AppendLine(item.Key);
                 try
                 {
-                    result += this.Objects[key].Evaluate(face) + Environment.NewLine;
+                    resultBuilder.AppendLine(item.Value.Evaluate(face).ToString());
                 }
                 catch (Exception ex)
                 {
-                    result += ex.Message;
+                    resultBuilder.AppendLine(ex.Message);
                 }
             }
 
-            return result;
+            return resultBuilder.ToString();
         }
     }
 }
