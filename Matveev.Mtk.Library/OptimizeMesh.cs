@@ -20,20 +20,11 @@ namespace Matveev.Mtk.Library
                 x[3 * i + 1] = point.Y;
                 x[3 * i + 2] = point.Z;
             }
-
             Func<Vertex, int> indexSelector = vertex => Array.IndexOf(vertices, vertex);
             List<int[]> indices =               
                 new List<int[]>(mesh.Faces.Select(face => face.Vertices.Select(indexSelector).ToArray()));
 
-            Func<Point[], double> localEnergy = delegate(Point[] points)
-            {
-                double mean = 0;
-                for (int i = 0; i < points.Length; i++)
-                {
-                    mean += Math.Pow(surface.Eval(points[i]), 2); // TODO: mean / 3 below should be points.Average
-                }
-                return (mean / 3) * points[0].AreaTo(points[1], points[2]);
-            };
+            Func<Point[], double> localEnergy = TriangleImplicitApproximations.GetSquareApproximation(surface.Eval);
 
             Func<double[], double> globalEnergy = delegate(double[] globalX)
             {
@@ -56,7 +47,7 @@ namespace Matveev.Mtk.Library
 
             Func<Point[], Vector[]> localGradient = delegate(Point[] points)
             {
-                const double h = 1e-2;
+                const double h = 1e-3;
                 Vector[] result = new Vector[points.Length];
                 //double centerEnergy = localEnergy(points);
                 for (int i = 0; i < 3; i++)
@@ -114,7 +105,7 @@ namespace Matveev.Mtk.Library
                 return result;
             };
 
-            FunctionOptimization.GradientDescent(globalEnergy, globalGradient, x, 1e-4);
+            FunctionOptimization.GradientDescent(globalEnergy, globalGradient, x, 1e-8);
 
             for (int i = 0; i < vertices.Length; i++)
             {

@@ -104,6 +104,7 @@
     <Compile Include="SquareEdgeLength.cs" />
     <Compile Include="TetrahedronPolygonizer.cs" />
     <Compile Include="Tools.cs" />
+    <Compile Include="TriangleImplicitApproximations.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="VertexEnergy.cs" />
     <Compile Include="VertexPointProjection.cs" />
