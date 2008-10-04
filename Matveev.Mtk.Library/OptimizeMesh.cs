@@ -46,39 +46,7 @@ namespace Matveev.Mtk.Library
                 return energy;
             };
 
-            Func<Point[], Vector[]> localGradient = delegate(Point[] points)
-            {
-                const double h = 1e-3;
-                Vector[] result = new Vector[points.Length];
-                //double centerEnergy = localEnergy(points);
-                for (int i = 0; i < 3; i++)
-                {
-                    // TODO: Refactor me.
-                    double oldCoordinate = points[i].X;
-                    points[i].X = oldCoordinate + h;
-                    double energyNext = localEnergy(points);
-                    points[i].X = oldCoordinate - h;
-                    double energyPrev = localEnergy(points);
-                    points[i].X = oldCoordinate;
-                    result[i].x = (energyNext - energyPrev) / (2 * h);
-                    oldCoordinate = points[i].Y;
-                    points[i].Y = oldCoordinate + h;
-                    energyNext = localEnergy(points);
-                    points[i].Y = oldCoordinate - h;
-                    energyPrev = localEnergy(points);
-                    points[i].Y = oldCoordinate;
-                    result[i].y = (energyNext - energyPrev) / (2 * h);
-                    oldCoordinate = points[i].Z;
-                    points[i].Z = oldCoordinate + h;
-                    energyNext = localEnergy(points);
-                    points[i].Z = oldCoordinate - h;
-                    energyPrev = localEnergy(points);
-                    points[i].Z = oldCoordinate;
-                    result[i].z = (energyNext - energyPrev) / (2 * h);
-                }
-
-                return result;
-            };
+            Func<Point[], Vector[]> localGradient = LocalGradientProvider.GetNumericalGradient(localEnergy);
 
             Func<double[], double[]> globalGradient = delegate(double[] globalX)
             {

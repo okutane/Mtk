@@ -89,6 +89,7 @@
     <Compile Include="HEVertexBase.cs" />
     <Compile Include="HoppeOptimization.cs" />
     <Compile Include="IImplicitSurfacePolygonizer.cs" />
+    <Compile Include="LocalGradientProvider.cs" />
     <Compile Include="MatrixBuilder.cs" />
     <Compile Include="MC.cs" />
     <Compile Include="MeshFunction.cs" />
