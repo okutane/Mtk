@@ -175,7 +175,7 @@ namespace UI
             btnCreateParametrized.Click += delegate(object sender, EventArgs e)
             {
                 IParametrizedSurface surface;
-                if(parametrizedSurfaces.TryGetValue(cbxSurface.SelectedItem.ToString(), out surface))
+                if (parametrizedSurfaces.TryGetValue(cbxSurface.SelectedItem.ToString(), out surface))
                 {
                     _mesh = ParametrizedSurfacePolygonizer.Instance.Create(surface, 32, 32);
                     visualizer.Mesh = _mesh;
@@ -240,8 +240,8 @@ namespace UI
             btnProjectAll.Click += delegate(object sender, EventArgs e)
             {
                 OptimizeMesh.ProjectAll(_mesh, _field, epsilon);
-                MessageBox.Show("Done");
                 this.Invalidate();
+                MessageBox.Show("Done");
             };
             meshActions.Add(btnProjectAll);
             Button btnOptimizeAll = new Button();
@@ -249,8 +249,8 @@ namespace UI
             btnOptimizeAll.Click += delegate(object sender, EventArgs e)
             {
                 OptimizeMesh.OptimizeImplicit(_mesh, _field, epsilon, alpha);
-                MessageBox.Show("Done");
                 this.Invalidate();
+                MessageBox.Show("Done");
             };
             meshActions.Add(btnOptimizeAll);
 
@@ -291,7 +291,9 @@ namespace UI
             txtMeshInfo.ParentChanged += delegate(object sender, EventArgs e)
             {
                 if (_mesh == null)
+                {
                     return;
+                }
 
                 double index = 0;
                 int verts = 0, faces = 0;
@@ -300,8 +302,7 @@ namespace UI
                 {
                     if (vert.Type == VertexType.Internal)
                     {
-                        double regularity = VertexOps.ExternalCurvature(vert);
-                        index += regularity;
+                        index += VertexOps.ExternalCurvature(vert);
                     }
 
                     E += Math.Pow(_field.Eval(vert.Point), 2);
@@ -316,8 +317,6 @@ namespace UI
                 writer.WriteLine("Faces: " + faces);
                 writer.WriteLine("Index: " + index);
                 writer.WriteLine("Energy: " + E);
-                //writer.WriteLine("Sphere: "
-                //    + _mesh.Faces.Sum(f => ImplicitLinearApproximationFaceFunction.Instance.Evaluate(f)));
 
                 txtMeshInfo.Text = writer.ToString();
             };
@@ -334,13 +333,13 @@ namespace UI
             {
                 panelActions.Controls.Clear();
                 _selection = value;
-                if(_selection == null)
+                if (_selection == null)
                     panelActions.Controls.AddRange(meshActions.ToArray());
-                else if(_selection is Vertex)
+                else if (_selection is Vertex)
                     panelActions.Controls.AddRange(vertActions.ToArray());
-                else if(_selection is Edge)
+                else if (_selection is Edge)
                     panelActions.Controls.AddRange(edgeActions.ToArray());
-                else if(_selection is Face)
+                else if (_selection is Face)
                     panelActions.Controls.AddRange(faceActions.ToArray());
             }
         }
@@ -355,7 +354,7 @@ namespace UI
 
         private void visualizer_MouseDown(object sender, MouseEventArgs e)
         {
-            if(rotating == false && e.Button == System.Windows.Forms.MouseButtons.Right)
+            if (rotating == false && e.Button == System.Windows.Forms.MouseButtons.Right)
             {
                 _x0 = e.X;
                 _y0 = e.Y;
@@ -363,21 +362,25 @@ namespace UI
                 _theta0 = visualizer.Theta;
                 rotating = true;
             }
-            if(rotating == false && e.Button == System.Windows.Forms.MouseButtons.Left)
+            if (rotating == false && e.Button == System.Windows.Forms.MouseButtons.Left)
             {
                 Ray ray = visualizer.RayThroughScreen(e.X, e.Y);
-                if(btnPoints.Checked)
+                if (btnPoints.Checked)
                 {
                     Vertex newSelection = null;
                     double min = 15;
                     double minRho = 0.1;
-                    foreach(Vertex v in _mesh.Vertices)
+                    foreach (Vertex v in _mesh.Vertices)
                     {
-                        double t = (v.Point.X - ray.origin.X) * ray.direction.x + (v.Point.Y - ray.origin.Y) * ray.direction.y + (v.Point.Z - ray.origin.Z) * ray.direction.z;
-                        if(t < 0)
+                        double t = (v.Point.X - ray.origin.X) * ray.direction.x
+                            + (v.Point.Y - ray.origin.Y) * ray.direction.y
+                            + (v.Point.Z - ray.origin.Z) * ray.direction.z;
+                        if (t < 0)
+                        {
                             t = 0;
+                        }
                         double rho = Math.Sqrt((v.Point - (ray.origin + t * ray.direction)).Norm);
-                        if(rho < minRho && t < min)
+                        if (rho < minRho && t < min)
                         {
                             newSelection = v;
                             min = t;
@@ -385,25 +388,29 @@ namespace UI
                     }
 
                     Selection = newSelection;
-                    if(newSelection != null)
+                    if (newSelection != null)
+                    {
                         visualizer.MarkedVerts = new Vertex[] { newSelection };
+                    }
                     else
+                    {
                         visualizer.MarkedVerts = null;
+                    }
                 }
-                if(btnEdges.Checked || btnFaces.Checked)
+                if (btnEdges.Checked || btnFaces.Checked)
                 {
                     Face faceSelection = null;
                     double mint = 45;
-                    foreach(Face f in _mesh.Faces)
+                    foreach (Face f in _mesh.Faces)
                     {
                         double t = ray.Trace(f);
-                        if(t > 0 && t < mint)
+                        if (t > 0 && t < mint)
                         {
                             faceSelection = f;
                             mint = t;
                         }
                     }
-                    if(btnFaces.Checked)
+                    if (btnFaces.Checked)
                     {
                         Selection = faceSelection;
                         visualizer.SelectedFace = faceSelection;
@@ -439,13 +446,15 @@ namespace UI
 
         private void visualizer_MouseUp(object sender, MouseEventArgs e)
         {
-            if(e.Button == MouseButtons.Right)
+            if (e.Button == MouseButtons.Right)
+            {
                 rotating = false;
+            }
         }
 
         private void visualizer_MouseMove(object sender, MouseEventArgs e)
         {
-            if(rotating)
+            if (rotating)
             {
                 visualizer.Phi = _phi0 + (_x0 - e.X) * 0.01;
                 visualizer.Theta = _theta0 + (_y0 - e.Y) * 0.01;
@@ -484,10 +493,12 @@ namespace UI
 
         private void enableLightingToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            visualizer.EnableLightning = enableLightingToolStripMenuItem.Checked = !enableLightingToolStripMenuItem.Checked;
+            visualizer.EnableLightning =
+                enableLightingToolStripMenuItem.Checked = !enableLightingToolStripMenuItem.Checked;
         }
 
         #region Draw points menu handlers
+
         private void drawWithNormalsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             doNotDrawToolStripMenuItem.Checked = drawToolStripMenuItem.Checked = false;
@@ -508,9 +519,11 @@ namespace UI
             doNotDrawToolStripMenuItem.Checked = true;
             visualizer.DrawPoints = OglVisualizer.DrawPoints.DoNotDraw;
         }
+
         #endregion
 
         #region Normal selection menu handlers
+
         private void useVertexNormalsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             useFaceNormalsToolStripMenuItem.Checked = false;
@@ -524,6 +537,7 @@ namespace UI
             useVertexNormalsToolStripMenuItem.Checked = false;
             visualizer.NormalsToUse = OglVisualizer.NormalsType.FaceNormals;
         }
+
         #endregion
 
         private void drawFaceNormalsToolStripMenuItem_Click(object sender, EventArgs e)

@@ -24,7 +24,8 @@ namespace Matveev.Mtk.Library
             List<int[]> indices =               
                 new List<int[]>(mesh.Faces.Select(face => face.Vertices.Select(indexSelector).ToArray()));
 
-            Func<Point[], double> localEnergy = TriangleImplicitApproximations.GetSquareApproximation(surface.Eval);
+            Func<Point[], double> localEnergy =
+                TriangleImplicitApproximations.GetApproximation(surface.Eval, "square");
 
             Func<double[], double> globalEnergy = delegate(double[] globalX)
             {
