@@ -6,7 +6,5 @@ namespace Matveev.Mtk.Core
     {
         double Eval(Point p);
         Vector Grad(Point p);
-
-        double Eval(Face p);
     }
 }

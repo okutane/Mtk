@@ -89,9 +89,6 @@
     <Reference Include="System.Windows.Forms">
       <Name>System.Windows.Forms</Name>
     </Reference>
-    <Reference Include="System.Xml">
-      <Name>System.XML</Name>
-    </Reference>
     <ProjectReference Include="..\Core\Matveev.Mtk.Core.csproj">
       <Name>Matveev.Mtk.Core</Name>
       <Project>{3626C207-50B8-47C9-B6E2-195726D6B082}</Project>

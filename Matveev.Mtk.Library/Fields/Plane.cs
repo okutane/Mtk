@@ -79,14 +79,5 @@ namespace Matveev.Mtk.Library.Fields
         }
 
         #endregion
-
-        #region IImplicitSurface Members
-
-        public double Eval(Face p)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
     }
 }

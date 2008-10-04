@@ -197,7 +197,8 @@ namespace Matveev.Mtk.Library
             return CloneSub(faces.ToArray(), null, edgeMap, null);
         }
 
-        public override Mesh CloneSub(IEnumerable<Face> faces, IDictionary<Vertex, Vertex> vertMap, IDictionary<Edge, Edge> edgeMap, IDictionary<Face, Face> faceMap)
+        public override Mesh CloneSub(IEnumerable<Face> faces, IDictionary<Vertex, Vertex> vertMap,
+            IDictionary<Edge, Edge> edgeMap, IDictionary<Face, Face> faceMap)
         {
             try
             {

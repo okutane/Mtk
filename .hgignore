@@ -1,4 +1,5 @@
 syntax: glob
+*.orig
 UI\bin\Release/*.config
 build.force
 Coverage.Log

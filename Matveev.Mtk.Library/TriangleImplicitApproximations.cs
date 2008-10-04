@@ -9,7 +9,32 @@ namespace Matveev.Mtk.Library
 {
     public static class TriangleImplicitApproximations
     {
-        public static Func<Point[], double> GetLinearApproximation(Func<Point, double> function)
+        private delegate Func<Point[], double> FactoryMethod(Func<Point, double> decorated);
+
+        private static readonly IDictionary<string, FactoryMethod> _FACTORY
+            = new Dictionary<string, FactoryMethod>();
+
+        static TriangleImplicitApproximations()
+        {
+            _FACTORY.Add("linear", GetLinearApproximation);
+            _FACTORY.Add("square", GetSquareApproximation);
+            _FACTORY.Add("cubic", GetCubicApproximation);
+        }
+
+        public static string[] AvailableApproximations
+        {
+            get
+            {
+                return _FACTORY.Keys.ToArray();
+            }
+        }
+
+        public static Func<Point[], double> GetApproximation(Func<Point, double> function, string approximationName)
+        {
+            return _FACTORY[approximationName](function);
+        }
+
+        private static Func<Point[], double> GetLinearApproximation(Func<Point, double> function)
         {
             return delegate(Point[] points)
             {
@@ -21,7 +46,7 @@ namespace Matveev.Mtk.Library
             };
         }
 
-        public static Func<Point[], double> GetSquareApproximation(Func<Point, double> function)
+        private static Func<Point[], double> GetSquareApproximation(Func<Point, double> function)
         {
             return delegate(Point[] points)
             {
@@ -41,8 +66,9 @@ namespace Matveev.Mtk.Library
             };
         }
 
-        public static Func<Point[], double> GetCubicApproximation(Func<Point, double> function)
+        private static Func<Point[], double> GetCubicApproximation(Func<Point, double> function)
         {
+            // TODO: Test.
             return delegate(Point[] points)
             {
                 double[] f = new double[10];

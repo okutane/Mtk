@@ -31,11 +31,6 @@ namespace Matveev.Mtk.Library
             throw new NotImplementedException();
         }
 
-        public double Eval(Face p)
-        {
-            throw new NotImplementedException();
-        }
-
         #endregion
     }
 }

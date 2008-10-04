@@ -102,21 +102,6 @@ namespace Matveev.Mtk.Library.Fields
 
         #endregion
 
-        public static Torus Sample
-        {
-            get
-            {
-                return new Torus(0.5, 0.1);
-            }
-        }
-
-        #region IImplicitSurface Members
-
-        public double Eval(Face p)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
+        public static readonly Torus Sample = new Torus(0.5, 0.1);
     }
 }
