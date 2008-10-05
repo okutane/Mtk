@@ -23,14 +23,14 @@ namespace Matveev.Mtk.Library
     public static class FunctionOptimization
     {
         public static void GradientDescent(Func<double[], double> f, Func<double[], double[]> grad, double[] x,
-            double eps)
+            double eps, int maxIterations)
         {
             int n = x.Length;
             double[] x0 = new double[n];
             x.CopyTo(x0, 0);
             double f0 = f(x);
             int k = 0;
-            while (Math.Abs(f0) > eps && k++ < 100)
+            while (Math.Abs(f0) > eps && k++ < maxIterations)
             {
                 double[] grad0 = grad(x);
                 double ngrad2 = SquareNorm(grad0, n);
@@ -48,6 +48,11 @@ namespace Matveev.Mtk.Library
                 f0 = f1;
                 x.CopyTo(x0, 0);
             }
+        }
+
+        public static void NewtonMethod(Func<double, double> f, Func<double[], double[]> grad,
+            Func<double[], double[,]> hessian, double eps, int maxIterations)
+        {
         }
 
         public static void GradientDescent(IFunctionWithGradient f, double eps)

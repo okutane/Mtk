@@ -16,7 +16,7 @@ namespace Matveev.Mtk.Library.Tests
             Func<double[], double> f = a => Math.Pow(a[0] - 1, 2);
             Func<double[], double[]> grad = a => new double[] { 2 * (a[0] - 1) };
 
-            FunctionOptimization.GradientDescent(f, grad, x, 1e-9);
+            FunctionOptimization.GradientDescent(f, grad, x, 1e-9, 100);
             Assert.AreEqual(1, x[0], 1e-4);
         }
 
@@ -29,7 +29,7 @@ namespace Matveev.Mtk.Library.Tests
             Func<double[], double[]> grad = a => new double[] { 2 * a[0] * implicitCircle(a),
                 2 * a[1] * implicitCircle(a) };
 
-            FunctionOptimization.GradientDescent(f, grad, x, 1e-4);
+            FunctionOptimization.GradientDescent(f, grad, x, 1e-4, 100);
             Assert.AreEqual(0, f(x), 1e-4);
         }
     }

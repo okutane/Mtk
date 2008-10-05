@@ -12,6 +12,7 @@ namespace Matveev.Mtk.Library
         public static void ImproveVertexPositions(Mesh mesh, IImplicitSurface surface)
         {
             Vertex[] vertices = mesh.Vertices.ToArray();
+            List<int> fixedPoints = new List<int>();
             double[] x = new double[3 * vertices.Length];
             for (int i = 0; i < vertices.Length; i++)
             {
@@ -19,19 +20,23 @@ namespace Matveev.Mtk.Library
                 x[3 * i] = point.X;
                 x[3 * i + 1] = point.Y;
                 x[3 * i + 2] = point.Z;
+                if (vertices[i].Type != VertexType.Internal)
+                {
+                    fixedPoints.Add(i);
+                }
             }
             Func<Vertex, int> indexSelector = vertex => Array.IndexOf(vertices, vertex);
-            List<int[]> indices =               
+            List<int[]> faces =               
                 new List<int[]>(mesh.Faces.Select(face => face.Vertices.Select(indexSelector).ToArray()));
 
-            Func<Point[], double> localEnergy =
+            Func<Point[], double> faceEnergy =
                 TriangleImplicitApproximations.GetApproximation(surface.Eval, "square");
 
             Func<double[], double> globalEnergy = delegate(double[] globalX)
             {
                 double energy = 0;
 
-                foreach (int[] face in indices)
+                foreach (int[] face in faces)
                 {
                     // TODO: Refactor, extract converting methods.
                     Point[] points = new Point[3];
@@ -40,19 +45,19 @@ namespace Matveev.Mtk.Library
                         int index = face[i];
                         points[i] = new Point(x[3 * index], x[3 * index + 1], x[3 * index + 2]);
                     }
-                    energy += localEnergy(points);
+                    energy += faceEnergy(points);
                 }
 
                 return energy;
             };
 
-            Func<Point[], Vector[]> localGradient = LocalGradientProvider.GetNumericalGradient(localEnergy);
+            Func<Point[], Vector[]> localGradient = LocalGradientProvider.GetNumericalGradient2(faceEnergy, 1e-5);
 
             Func<double[], double[]> globalGradient = delegate(double[] globalX)
             {
                 double[] result = new double[globalX.Length];
 
-                foreach (int[] face in indices)
+                foreach (int[] face in faces)
                 {
                     // TODO: Refactor, extract converting methods.
                     Point[] points = new Point[3];
@@ -70,11 +75,18 @@ namespace Matveev.Mtk.Library
                         result[3 * index + 2] += localGradValue[i].z;
                     }
                 }
+                foreach (int fixedPoint in fixedPoints)
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        result[3 * fixedPoint + i] = 0;
+                    }
+                }
 
                 return result;
             };
 
-            FunctionOptimization.GradientDescent(globalEnergy, globalGradient, x, 1e-8);
+            FunctionOptimization.GradientDescent(globalEnergy, globalGradient, x, 1e-8, 300);
 
             for (int i = 0; i < vertices.Length; i++)
             {
