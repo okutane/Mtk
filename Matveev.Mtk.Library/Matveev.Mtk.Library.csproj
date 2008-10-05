@@ -77,6 +77,7 @@
     <Compile Include="FacePointProjection.cs" />
     <Compile Include="FieldFunction.cs" />
     <Compile Include="Fields\Plane.cs" />
+    <Compile Include="Fields\QuadraticForm.cs" />
     <Compile Include="Fields\Sphere.cs" />
     <Compile Include="Fields\Torus.cs" />
     <Compile Include="FunctionOptimization.cs" />

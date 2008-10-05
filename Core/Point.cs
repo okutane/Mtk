@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -106,7 +107,7 @@ namespace Matveev.Mtk.Core
 
         public override string ToString()
         {
-            return "(" + X + "," + Y + "," + Z + ")";
+            return string.Format(NumberFormatInfo.InvariantInfo, "({0},{1},{2})", X, Y, Z);
         }
 
         public static explicit operator Vector(Point p)
