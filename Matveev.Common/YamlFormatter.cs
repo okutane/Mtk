@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Collections;
+using System.Globalization;
 
 namespace Matveev.Common
 {
@@ -69,13 +70,14 @@ namespace Matveev.Common
                 foreach (var property in type.GetProperties())
                 {
                     object value = property.GetValue(graph, null);
-                    if (value is IEnumerable)
+                    if (value is IEnumerable && !(value is string))
                     {
                         writer.WriteLine("{0} :", property.Name);
                         Serialize(writer, value, indentSize + 2);
                         continue;
                     }
-                    writer.WriteLine("{0}: {1}", property.Name, value);
+                    string formattedValue = string.Format(NumberFormatInfo.InvariantInfo, "{0}", value);
+                    writer.WriteLine("{0}: {1}", property.Name, formattedValue);
                 }
             }
         }

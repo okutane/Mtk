@@ -1,4 +1,9 @@
 ---
 ScalarString: test string
 ScalarDouble: 1.5
-IntegerArray: System.Int32[]
+IntegerArray :
+- 3
+- 2
+- 1
+- 6
+- 7
