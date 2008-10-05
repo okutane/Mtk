@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 using Matveev.Mtk.Core;
 
@@ -7,28 +6,25 @@ namespace Matveev.Mtk.Library
 {
     public class FieldFunction : IImplicitSurface
     {
-        public delegate double ScalarFunc(Point p);
-        public delegate Vector VectorFunc(Point p);
+        Func<Point, double> _value;
+        Func<Point, Vector> _grad;
 
-        ScalarFunc value;
-        VectorFunc grad;
-
-        public FieldFunction(ScalarFunc value, VectorFunc grad)
+        public FieldFunction(Func<Point, double> value, Func<Point, Vector> grad)
         {
-            this.value = value;
-            this.grad = grad;
+            this._value = value;
+            this._grad = grad;
         }
 
         #region IImplicitSurface Members
 
         public double Eval(Point p)
         {
-            throw new NotImplementedException();
+            return _value(p);
         }
 
         public Vector Grad(Point p)
         {
-            throw new NotImplementedException();
+            return _grad(p);
         }
 
         #endregion
