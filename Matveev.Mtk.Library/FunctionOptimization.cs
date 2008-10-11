@@ -3,25 +3,42 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Matveev.Common;
+
 namespace Matveev.Mtk.Library
 {
-    public interface IFunction
-    {
-        double[] X
-        {
-            get;
-        }
-
-        double Evaluate();
-    }
-
-    public interface IFunctionWithGradient : IFunction
-    {
-        void GetGradient(double[] destination);
-    }
-
     public static class FunctionOptimization
     {
+        public interface ILineSearch
+        {
+            void Perform(Func<double[], double> f, Func<double[], double[]> grad, double[] x0,
+                double[] grad0, double[] direction, double[] x, ref double f0);
+        }
+
+        public class SimpleSearch : ILineSearch
+        {
+            public void Perform(Func<double[], double> f, Func<double[], double[]> grad, double[] x0,
+                double[] grad0, double[] direction, double[] x, ref double f0)
+            {
+                double t = -1;
+            calc:
+                if (Math.Abs(t) < 1e-10)
+                {
+                    x0.CopyTo(x, 0);
+                    return;
+                }
+                AddVector(x, x0, direction, t, x0.Length);
+
+                double f1 = f(x);
+                if (f1 >= f0)
+                {
+                    t /= 2;
+                    goto calc;
+                }
+                f0 = f1;
+            }
+        }
+
         public static void GradientDescent(Func<double[], double> f, Func<double[], double[]> grad, double[] x,
             double eps, int maxIterations)
         {
@@ -30,56 +47,49 @@ namespace Matveev.Mtk.Library
             x.CopyTo(x0, 0);
             double f0 = f(x);
             int k = 0;
-            while (Math.Abs(f0) > eps && k++ < maxIterations)
+            while (k++ < maxIterations)
             {
                 double[] grad0 = grad(x);
-                double ngrad2 = SquareNorm(grad0, n);
-                double t = -f0 / ngrad2;
-
-            calc:
-                AddVector(x, x0, grad0, t, n);
-
-                double f1 = f(x);
-                if (Math.Abs(f1) > Math.Abs(f0))
-                {
-                    t /= 2;
-                    goto calc;
-                }
-                f0 = f1;
+                ILineSearch search = new SimpleSearch();
+                search.Perform(f, grad, x0, grad0, grad0, x, ref f0);
                 x.CopyTo(x0, 0);
             }
         }
 
-        public static void NewtonMethod(Func<double, double> f, Func<double[], double[]> grad,
-            Func<double[], double[,]> hessian, double eps, int maxIterations)
+        public static void NewtonMethod(Func<double[], double> f, Func<double[], double[]> grad,
+            Func<double[], double[,]> hessian, double[] x, double eps, int maxIterations)
         {
-        }
-
-        public static void GradientDescent(IFunctionWithGradient f, double eps)
-        {
-            int n = f.X.Length;
+            int n = x.Length;
             double[] x0 = new double[n];
-            f.X.CopyTo(x0, 0);
-            double f0 = f.Evaluate();
+            x.CopyTo(x0, 0);
+            double f0 = f(x);
             int k = 0;
-            while (Math.Abs(f0) > eps&&k++<100)
+            while (f0 > eps && k++ < maxIterations)
             {
-                double[] grad0 = new double[n];
-                f.GetGradient(grad0);
-                double ngrad2 = SquareNorm(grad0, n);
-                double t = -f0 / ngrad2;
-
-            calc:
-                AddVector(f.X, x0, grad0, t, n);
-
-                double f1 = f.Evaluate();
-                if (Math.Abs(f1) > Math.Abs(f0))
+                double[] grad0 = grad(x);
+                double[,] hessian0 = hessian(x0);
+                Matrix b = new Matrix(n, 1);
+                for (int i = 0; i < n; i++)
                 {
-                    t /= 2;
-                    goto calc;
+                    b[i, 0] = grad0[i];
                 }
-                f0 = f1;
-                f.X.CopyTo(x0, 0);
+                Matrix h = new Matrix(n, n);
+                for (int i = 0; i < n; i++)
+                {
+                    for (int j = 0; j < n; j++)
+                    {
+                        h[i, j] = hessian0[i, j];
+                    }
+                }
+                LinSolve.Gauss(h, b);
+                double[] direction = new double[n];
+                for (int i = 0; i < n; i++)
+                {
+                    direction[i] = b[i, 0]; // TODO: Introduce Matrix adapter for double[].
+                }
+                ILineSearch search = new SimpleSearch();
+                search.Perform(f, grad, x0, grad0, direction, x, ref f0);
+                x.CopyTo(x0, 0);
             }
         }
 
