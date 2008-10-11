@@ -78,7 +78,7 @@ namespace Matveev.Common
                 }
                 if (i < 0 || j < 0 || i >= _n || j >= _m)
                 {
-                    throw new System.ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException();
                 }
 
                 return _a[i][j];
@@ -93,7 +93,7 @@ namespace Matveev.Common
                 }
                 if (i < 0 || j < 0 || i >= _n || j >= _m)
                 {
-                    throw new System.ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException();
                 }
 
                 _a[i][j] = value;
@@ -179,7 +179,7 @@ namespace Matveev.Common
             }
             if (n1 != n2 || m1 != m2)
             {
-                throw new System.ArgumentException("Bad array dimensions");
+                throw new ArgumentException("Bad array dimensions");
             }
 
             Matrix result = new Matrix(n1, m1);
@@ -214,7 +214,7 @@ namespace Matveev.Common
                 m2 = right._m;
             }
             if(n1 != n2 || m1 != m2)
-                throw new System.ArgumentException("Bad array dimensions");
+                throw new ArgumentException("Bad array dimensions");
 
             Matrix result = new Matrix(n1, m1);
             for(int i = 0 ; i < n1 ; i++)
@@ -279,7 +279,7 @@ namespace Matveev.Common
             get
             {
                 if(_n != _m)
-                    throw new System.Exception("Error, (in inverse) expecting a square matrix");
+                    throw new Exception("Error, (in inverse) expecting a square matrix");
                 if(_n > 1)
                 {
                     Matrix identity = new Matrix(_n, _n);
@@ -290,7 +290,7 @@ namespace Matveev.Common
                     return identity;
                 }
                 if(_a[0][0] == 0)
-                    throw new System.Exception("Error, (in inverse) singular matrix");
+                    throw new Exception("Error, (in inverse) singular matrix");
 
                 Matrix result = new Matrix(1, 1);
                 result[0, 0] = 1 / _a[0][0];
@@ -302,50 +302,6 @@ namespace Matveev.Common
 
     public static class LinSolve
     {
-        /*
-         void Resolve_ax_f(double *D)
-{
-	int n = 2*N;
-    double *p,tmp;
-    int i,j,k;
-    for(i=0;i<n;i++)
-    {
-        for(k=i;k<n;k++)
-            if(A(k,i)!=0) break;
-        p=a[i];
-        tmp=D[i];
-        a[i]=a[k];
-        D[i]=D[k];
-        a[k]=p;
-        D[k]=tmp;
-
-        for(j=i+1;j<n;j++) A(i,j)/=A(i,i);
-        D[i]/=A(i,i);
-        A(i,i)=1;
-        for(k = i+1 ; k<n ; k++)
-        {
-            if(A(k,i)!=0)
-            {
-                for(j=i+1;j<n;j++) A(k,j)-=A(k,i)*A(i,j);
-                D[k]-=A(k,i)*D[i];
-                A(k,i)=0;
-            }
-        }
-    }
-    for(i=n-1;i>0;i--)
-    {
-        for(k=0;k<i;k++)
-        {
-            if(A(k,i)!=0)
-            {
-                D[k]-=A(k,i)*D[i];
-             //   A(k,i)=0;
-            }
-        }
-    }
-}
-
-         */
         public static void Gauss(Matrix A, Matrix f)
         {
             if(A.M != A.N || A.N != f.N)

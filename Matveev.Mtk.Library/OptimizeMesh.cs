@@ -51,7 +51,7 @@ namespace Matveev.Mtk.Library
                 return energy;
             };
 
-            Func<Point[], Vector[]> localGradient = LocalGradientProvider.GetNumericalGradient2(faceEnergy, 1e-5);
+            Func<Point[], Vector[]> localGradient = LocalGradientProvider.GetNumericalGradient2(faceEnergy, 1e-6);
 
             Func<double[], double[]> globalGradient = delegate(double[] globalX)
             {

@@ -1,4 +1,5 @@
 syntax: glob
+*.bak
 *.orig
 UI\bin\Release/*.config
 build.force

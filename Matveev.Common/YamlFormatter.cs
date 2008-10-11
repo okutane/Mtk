@@ -8,7 +8,6 @@ namespace Matveev.Common
 {
     public class YamlFormatter : IFormatter
     {
-
         #region IFormatter Members
 
         public SerializationBinder Binder
