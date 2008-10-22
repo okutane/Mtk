@@ -39,6 +39,23 @@ namespace Matveev.Mtk.Library
             }
         }
 
+        public class LineSearch : ILineSearch
+        {
+            public void Perform(Func<double[], double> f, Func<double[], double[]> grad, double[] x0,
+                double[] grad0, double[] direction, double[] x, ref double f0)
+            {
+                Func<double, double> phi = delegate(double alpha)
+                {
+                    double[] arg = new double[x.Length];
+                    AddVector(arg, x0, direction, alpha, x0.Length);
+                    return f(arg);
+                };
+                double t = OneDimensionalOptimization.Dihotomy(phi, -1, 0, 1e-4);                
+                AddVector(x, x0, direction, t, x0.Length);
+                f0 = f(x);
+            }
+        }
+
         public static void GradientDescent(Func<double[], double> f, Func<double[], double[]> grad, double[] x,
             double eps, int maxIterations)
         {
@@ -50,7 +67,7 @@ namespace Matveev.Mtk.Library
             while (k++ < maxIterations)
             {
                 double[] grad0 = grad(x);
-                ILineSearch search = new SimpleSearch();
+                ILineSearch search = new LineSearch();
                 search.Perform(f, grad, x0, grad0, grad0, x, ref f0);
                 x.CopyTo(x0, 0);
             }
@@ -87,7 +104,7 @@ namespace Matveev.Mtk.Library
                 {
                     direction[i] = b[i, 0]; // TODO: Introduce Matrix adapter for double[].
                 }
-                ILineSearch search = new SimpleSearch();
+                ILineSearch search = new LineSearch();
                 search.Perform(f, grad, x0, grad0, direction, x, ref f0);
                 x.CopyTo(x0, 0);
             }

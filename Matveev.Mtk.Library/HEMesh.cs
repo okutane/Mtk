@@ -258,13 +258,13 @@ namespace Matveev.Mtk.Library
 
                 return result;
             }
-            catch (Exception ex)
+            catch
             {
                 using (System.IO.Stream stream = System.IO.File.Create("clonesub.err"))
                 {
                     Utils.Serialize(faces, stream);
                 }
-                throw ex;
+                throw;
             }
         }
 

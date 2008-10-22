@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 using Matveev.Mtk.Core;
 
@@ -8,10 +6,10 @@ namespace Matveev.Mtk.Library.Fields
 {
     public class Torus : IImplicitSurface, IParametrizedSurface
     {
-        private double _r0; // R 
-        private double _r1; // r
-        private double _b; // 4 * R^2
-        private double _c; // R^2 - r^2
+        private readonly double _r0; // R 
+        private readonly double _r1; // r
+        private readonly double _b; // 4 * R^2
+        private readonly double _c; // R^2 - r^2
 
         public Torus(double r0, double r1)
         {
