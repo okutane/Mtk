@@ -30,7 +30,7 @@ namespace Matveev.Mtk.Tests
                 {
                     foreach (var polygonizer in implicitPolygonizers)
                     {
-                        suite.Add(new PolygonizationFixture(polygonizer.Value, surface.Value,
+                        suite.Add(new PolygonizationTest(polygonizer.Value, surface.Value,
                             string.Format("{0}[{1}]", surface.Key, polygonizer.Key)));
                     }
                 }
@@ -39,18 +39,14 @@ namespace Matveev.Mtk.Tests
             }
         }
 
-        [TestFixture]
-        public class PolygonizationFixture
+        public class PolygonizationTest : NUnit.Core.TestCase
         {
             private IImplicitSurfacePolygonizer _polygonizer;
             private IImplicitSurface _surface;
             private string _suffix;
 
-            public PolygonizationFixture()
-            {
-            }
-
-            public PolygonizationFixture(IImplicitSurfacePolygonizer polygonizer, IImplicitSurface surface, string suffix)
+            public PolygonizationTest(IImplicitSurfacePolygonizer polygonizer, IImplicitSurface surface,
+                string suffix) : base("", suffix)
             {
                 _polygonizer = polygonizer;
                 _surface = surface;
@@ -62,6 +58,13 @@ namespace Matveev.Mtk.Tests
             {
                 Mesh mesh = _polygonizer.Create(_surface, -1, 1, -1, 1, -1, 1, 4, 4, 4);
                 YamlSerializerTest.TestSerialize(string.Format(_suffix, _surface, _polygonizer), mesh);
+            }
+
+            public override void Run(TestCaseResult result)
+            {
+                Mesh mesh = _polygonizer.Create(_surface, -1, 1, -1, 1, -1, 1, 4, 4, 4);
+                YamlSerializerTest.TestSerialize(string.Format(_suffix, _surface, _polygonizer), mesh);
+                result.Success();
             }
         }
     }

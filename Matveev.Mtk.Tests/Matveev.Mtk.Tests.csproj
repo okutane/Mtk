@@ -61,7 +61,9 @@
     <Compile Include="HeaMeshTest.cs" />
     <Compile Include="HEVertexTest.cs" />
     <Compile Include="IntegrationTests.cs" />
+    <Compile Include="OneDimensionalOptimizationTest.cs" />
     <Compile Include="MT6Test.cs" />
+    <Compile Include="NewtonMethodTest.cs" />
     <Compile Include="OptimizeMeshTest.cs" />
     <Compile Include="ParametrizedSurfacePolygonizerTest.cs" />
     <Compile Include="PlaneVertexPositionOptimizerTest.cs" />

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 
 using Matveev.Mtk.Tests;
 using Matveev.Mtk.Tests.FunctionOptimization;
