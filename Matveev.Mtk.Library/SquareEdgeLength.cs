@@ -10,20 +10,10 @@ namespace Matveev.Mtk.Library
 {
     public class SquareEdgeLength : Energy
     {
-        private static Energy _instance;
+        public static readonly Energy Instance = new SquareEdgeLength();
 
         private SquareEdgeLength()
         {
-        }
-
-        public static Energy Instance
-        {
-            get
-            {
-                if (SquareEdgeLength._instance == null)
-                    SquareEdgeLength._instance = new SquareEdgeLength();
-                return SquareEdgeLength._instance;
-            }
         }
 
         public override double Eval(Mesh mesh)
