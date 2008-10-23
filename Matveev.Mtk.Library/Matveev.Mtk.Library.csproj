@@ -71,7 +71,6 @@
     <Compile Include="EdgeSwap.cs" />
     <Compile Include="FaceFunctions\DihedralAngles.cs" />
     <Compile Include="FaceFunctions\ImplicitApproximations.cs" />
-    <Compile Include="FaceFunctions\ImplicitLinearApproximationFaceFunction.cs" />
     <Compile Include="FaceFunctions\MultiplicationFaceFunction.cs" />
     <Compile Include="FaceFunctions\NormalDeviation.cs" />
     <Compile Include="FacePointProjection.cs" />

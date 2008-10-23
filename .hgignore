@@ -1,4 +1,5 @@
 syntax: glob
+*.err
 *.bak
 *.orig
 UI\bin\Release/*.config

@@ -1,5 +1,3 @@
-// Mesh.cs
-
 using System;
 using System.Collections.Generic;
 
@@ -24,7 +22,8 @@ namespace Matveev.Mtk.Core
 
         public abstract Mesh Clone(IDictionary<Edge, Edge> edgeMap);
 
-        public abstract Mesh CloneSub(IEnumerable<Face> faces, IDictionary<Vertex, Vertex> vertMap, IDictionary<Edge, Edge> edgeMap, IDictionary<Face, Face> faceMap);
+        public abstract Mesh CloneSub(IEnumerable<Face> faces, IDictionary<Vertex, Vertex> vertMap,
+            IDictionary<Edge, Edge> edgeMap, IDictionary<Face, Face> faceMap);
 
         public abstract Vertex AddVertex(Point p, Vector n);
 

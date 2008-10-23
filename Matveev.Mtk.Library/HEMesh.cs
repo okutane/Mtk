@@ -204,33 +204,9 @@ namespace Matveev.Mtk.Library
             {
                 HEMesh result = new HEMesh();
 
-                IDictionary<Vertex, Vertex> vMap;
-                IDictionary<Edge, Edge> eMap;
-                IDictionary<Face, Face> fMap;
-
-                if (vertMap != null)
-                {
-                    vertMap.Clear();
-                    vMap = vertMap;
-                }
-                else
-                    vMap = new Dictionary<Vertex, Vertex>();
-
-                if (edgeMap != null)
-                {
-                    edgeMap.Clear();
-                    eMap = edgeMap;
-                }
-                else
-                    eMap = new Dictionary<Edge, Edge>();
-
-                if (faceMap != null)
-                {
-                    faceMap.Clear();
-                    fMap = faceMap;
-                }
-                else
-                    fMap = new Dictionary<Face, Face>();
+                vertMap = GetCleanOrNew(vertMap);
+                edgeMap = GetCleanOrNew(edgeMap);
+                faceMap = GetCleanOrNew(faceMap);
 
                 List<Vertex> verts = new List<Vertex>();
 
@@ -238,22 +214,22 @@ namespace Matveev.Mtk.Library
                 {
                     foreach (Vertex vert in face.Vertices)
                     {
-                        if (!vMap.ContainsKey(vert))
-                            vMap.Add(vert, result.AddVertex(vert.Point, vert.Normal));
-                        verts.Add(vMap[vert]);
+                        if (!vertMap.ContainsKey(vert))
+                            vertMap.Add(vert, result.AddVertex(vert.Point, vert.Normal));
+                        verts.Add(vertMap[vert]);
                     }
                     Face newFace = result.CreateFace(verts[0], verts[1], verts[2]);
                     verts.Clear();
                     foreach (Edge oldEdge in face.Edges)
                         foreach (Edge newEdge in newFace.Edges)
                         {
-                            if (newEdge.End == vMap[oldEdge.End])
+                            if (newEdge.End == vertMap[oldEdge.End])
                             {
-                                eMap.Add(oldEdge, newEdge);
+                                edgeMap.Add(oldEdge, newEdge);
                                 break;
                             }
                         }
-                    fMap.Add(face, newFace);
+                    faceMap.Add(face, newFace);
                 }
 
                 return result;
@@ -273,6 +249,16 @@ namespace Matveev.Mtk.Library
         internal virtual HEVertexBase CreateVertex()
         {
             return new HEVertex(this);
+        }
+
+        private static IDictionary<T, T> GetCleanOrNew<T>(IDictionary<T, T> dictionary)
+        {
+            if (dictionary == null)
+            {
+                return new Dictionary<T, T>();
+            }
+            dictionary.Clear();
+            return dictionary;
         }
     }
 }

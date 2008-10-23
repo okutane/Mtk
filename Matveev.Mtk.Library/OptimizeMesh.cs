@@ -96,36 +96,27 @@ namespace Matveev.Mtk.Library
 
         public static void OptimizeImplicit(Mesh mesh, IImplicitSurface field, double epsilon, double alpha)
         {
-            ImproveVertexPositions(mesh, field);
-            return;
+            List<EdgeTransform> transforms = new List<EdgeTransform>(5);
+            transforms.Add(new EdgeCollapse(0.5));
+            transforms.Add(new EdgeCollapse(0));
+            transforms.Add(new EdgeCollapse(1));
+            transforms.Add(new EdgeSwap());
+            transforms.Add(new EdgeSplit(0.5));
+            Dictionary<EdgeTransform, int> numbersOfUses = new Dictionary<EdgeTransform, int>();
 
-            EdgeTransform _split = new EdgeSplit(0.5);
-            EdgeTransform _swap = new EdgeSwap();
-            EdgeTransform _collapseMiddle = new EdgeCollapse(0.5);
-            EdgeTransform _collapseBegin = new EdgeCollapse(0.0);
-            EdgeTransform _collapseEnd = new EdgeCollapse(1.0);
-
-            //EdgeTransform[] transforms = new EdgeTransform[] { _collapseMiddle, _collapseBegin, _collapseEnd,
-            //_swap,_split };
-            EdgeTransform[] transforms = new EdgeTransform[] { };
-
-            FaceFunction faceEnergy = new ImplicitLinearApproximationFaceFunction();
-            //FaceFunction faceEnergy = new NormalDeviation();
-            //FaceFunction faceEnergy = new DihedralAngles();
-            Energy energy = new CompositeEnergy(new VertexEnergy(alpha));
-            //Energy energy = new CompositeEnergy(new VertexEnergy(alpha), new DihedralEnergy());
+            Func<Point[], double> faceEnergy =
+                TriangleImplicitApproximations.GetApproximation(field.Eval, "square");
+            Energy energy = new CompositeEnergy(new VertexEnergy(alpha), new FaceEnergy(faceEnergy));
 
             //Этап 1. Проецирование всех вершин сетки на поверхность
             ProjectAll(mesh, field, epsilon);
 
             //Этап 2. Улучшение позиций всех вершин сетки
-            Tools.VertexPositionOptimizer.OptimizeAll(mesh, field, epsilon, energy);
+            ImproveVertexPositions(mesh, field);
 
             //Этап 3. Преобразования над структурой сетки
             Random rand = new Random(42);
-            List<Edge> candidats = new List<Edge>();
-            foreach (Edge edge in mesh.Edges)
-                candidats.Add(edge);
+            List<Edge> candidats = new List<Edge>(mesh.Edges);
             Edge candidat, smCandidat;
             List<Face> surrounding = new List<Face>();
             Mesh submesh;
@@ -134,20 +125,12 @@ namespace Matveev.Mtk.Library
             while (candidats.Count != 0)
             {
                 candidat = candidats[rand.Next(candidats.Count - 1)];
-                candidats.RemoveAll(delegate(Edge edge)
-                {
-                    return edge == candidat || edge == candidat.Pair;
-                });
+                candidats.RemoveAll(edge => edge == candidat || edge == candidat.Pair);
 
                 surrounding.Clear();
-                foreach (Face face in candidat.Begin.AdjacentFaces)
-                    if (!surrounding.Contains(face))
-                        surrounding.Add(face);
-                foreach (Face face in candidat.End.AdjacentFaces)
-                    if (!surrounding.Contains(face))
-                        surrounding.Add(face);
+                surrounding.AddRange(candidat.Begin.AdjacentFaces.Concat(candidat.End.AdjacentFaces).Distinct());
 
-                submesh = mesh.CloneSub(surrounding.ToArray(), null, edgeMap, null);
+                submesh = mesh.CloneSub(surrounding, null, edgeMap, null);
                 smCandidat = edgeMap[candidat];
                 E1 = energy.Eval(submesh);
 
@@ -173,10 +156,15 @@ namespace Matveev.Mtk.Library
 
                         if (E1 > E2)
                         {
-                            candidats.RemoveAll(delegate(Edge edge)
+                            if (numbersOfUses.ContainsKey(transform))
                             {
-                                return edgeMap.ContainsKey(edge);
-                            });
+                                numbersOfUses[transform] = numbersOfUses[transform] + 1;
+                            }
+                            else
+                            {
+                                numbersOfUses.Add(transform, 1);
+                            }
+                            candidats.RemoveAll(edgeMap.ContainsKey);
 
                             MeshPart result = transform.Execute(candidat);
 
@@ -184,10 +172,7 @@ namespace Matveev.Mtk.Library
                             {
                                 VertexOps.OptimizePosition(vertex, field, epsilon);
                             }
-                            foreach (Edge edge in result.GetEdges(1))
-                            {
-                                candidats.Add(edge);
-                            }
+                            candidats.AddRange(result.GetEdges(1));
                             break;
                         }
                         else
@@ -202,154 +187,6 @@ namespace Matveev.Mtk.Library
                     {
                     }
                 }
-
-                /*
-                #region Try collapse
-                {
-
-                    if (true)
-                    {
-                        surrounding.Clear();
-                        foreach (Face face in candidat.Begin.AdjacentFaces)
-                            if (!surrounding.Contains(face))
-                                surrounding.Add(face);
-                        foreach (Face face in candidat.End.AdjacentFaces)
-                            if (!surrounding.Contains(face))
-                                surrounding.Add(face);
-
-                        submesh = mesh.CloneSub(surrounding.ToArray(), null, edgeMap, null);
-                        E1 = energy.Eval(submesh);
-                        smCandidat = edgeMap[candidat];
-
-                        try
-                        {
-                            Vertex collapsed = _collapseMiddle.Execute(smCandidat);
-                            VertexOps.OptimizePosition(collapsed, field, epsilon);
-
-                            if (FaceOps.MeshSelfIntersectionTest(submesh))
-                                throw new Exception("self-intersection!");
-                            E2 = energy.Eval(submesh);
-
-                            if (E1 > E2)
-                            {
-                                candidats.RemoveAll(delegate(Edge edge)
-                           {
-                               return edgeMap.ContainsKey(edge);
-                           });
-
-                                collapsed = _collapseMiddle.Execute(candidat);
-                                VertexOps.OptimizePosition(collapsed, field, epsilon);
-                                if (collapsed.Type == VertexType.Internal)
-                                {
-                                    List<Vertex> list = new List<Vertex>();
-                                    list.Add(collapsed);
-                                    foreach (Vertex vert in collapsed.Adjacent)
-                                        if (vert.Type == VertexType.Internal)
-                                            list.Add(vert);
-                                    OptimizeVertexPositions(field, epsilon, list);
-                                }
-                                continue;
-                            }
-                        }
-                        catch
-                        {
-                        }
-                    }
-                }
-                #endregion
-                
-                #region Try swap
-                if(candidat.Pair != null)
-                {
-                    surrounding.Clear();
-                    foreach(Edge edge in mesh.Edges)
-                    {
-                        if(edge.End == candidat.End || edge.End == candidat.Begin)
-                            if(!surrounding.Contains(edge.Face))
-                                surrounding.Add(edge.Face);
-                    }
-                    submesh = mesh.CloneSub(surrounding.ToArray(), null, edgeMap, null);
-                    smCandidat = edgeMap[candidat];
-                    try
-                    {
-                        foreach(Edge edge in submesh.Edges)
-                        {
-                            if((edge.End == smCandidat.Next.End && edge.Begin == smCandidat.Pair.Next.End) || (edge.Begin == smCandidat.Next.End && edge.End == smCandidat.Pair.Next.End))
-                                throw new Exception("Swap rejected!");
-                        }
-
-                        E1 = energy.Eval(submesh);
-                        Edge swapped = submesh.EdgeSwap(smCandidat, null);
-
-                        if(FaceOps.MeshSelfIntersectionTest(submesh))
-                            throw new Exception("self-intersection!");
-
-                        E2 = energy.Eval(submesh);
-
-                        if(E1 > E2)
-                        {
-                            //Принимаем преобразование
-                            candidats.RemoveAll(delegate(Edge edge)
-                                {
-                                    return edge.Face == candidat.Face || edge.Face == candidat.Pair.Face;
-                                });
-                            swapped = mesh.EdgeSwap(candidat, affected);
-                            foreach(Face face in affected)
-                                foreach(Edge edge in face.Edges)
-                                    candidats.Add(edge);
-                            continue;
-                        }
-                    }
-                    catch
-                    {
-                    }
-                }
-
-                #endregion
-                
-                #region Try split
-                {
-                    if (candidat.Pair != null)
-                        submesh = mesh.CloneSub(new Face[] { candidat.Face, candidat.Pair.Face }, null, edgeMap, null);
-                    else
-                        submesh = mesh.CloneSub(new Face[] { candidat.Face }, null, edgeMap, null);
-                    smCandidat = edgeMap[candidat];
-
-                    E1 = energy.Eval(submesh);
-
-                    Vertex splitted = _split.Execute(smCandidat);
-                    VertexOps.OptimizePosition(splitted, field, epsilon);
-                    Point p = splitted.Point;
-                    Vector n = splitted.Normal;
-
-                    E2 = energy.Eval(submesh);
-
-                    if (E1 > E2)
-                    {
-                        //Принимаем преобразования для нашей сетки
-                        candidats.RemoveAll(delegate(Edge edge)
-                        {
-                            return edgeMap.ContainsKey(edge);
-                        });
-
-                        splitted = _split.Execute(candidat);
-                        splitted.Point = p;
-                        splitted.Normal = n;
-
-                        if (splitted.Type == VertexType.Internal)
-                        {
-                            List<Vertex> list = new List<Vertex>();
-                            list.Add(splitted);
-                            foreach (Vertex vert in splitted.Adjacent)
-                                if (vert.Type == VertexType.Internal)
-                                    list.Add(vert);
-                            OptimizeVertexPositions(field, epsilon, list);
-                        }
-                        continue;
-                    }
-                }
-                #endregion
-            */
             }
         }
 
@@ -358,17 +195,27 @@ namespace Matveev.Mtk.Library
             if (field == null)
                 throw new ArgumentNullException("field");
 
-            Vector i, j, k;
-            i = new Vector(1, 0, 0);
-            j = new Vector(0, 1, 0);
-            k = new Vector(0, 0, 1);
-
             foreach (Vertex vert in mesh.Vertices)
             {
                 Point p = vert.Point;
                 VertexOps.ProjectPointOnSurface(ref p, field, epsilon);
                 vert.Point = p;
                 vert.Normal = Vector.Normalize(field.Grad(p));
+            }
+        }
+
+        private class FaceEnergy : Energy
+        {
+            private readonly Func<Point[], double> _faceEnergy;
+
+            public FaceEnergy(Func<Point[], double> faceEnergy)
+            {
+                _faceEnergy = faceEnergy;
+            }
+
+            public override double Eval(Mesh mesh)
+            {
+                return mesh.Faces.Sum(face => _faceEnergy(face.Vertices.Select(vertex => vertex.Point).ToArray()));
             }
         }
     }
