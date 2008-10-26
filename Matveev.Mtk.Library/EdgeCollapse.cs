@@ -22,7 +22,15 @@ namespace Matveev.Mtk.Library
 
         public override bool IsPossible(Edge edge)
         {
-            return edge.Begin.Type != VertexType.Boundary && edge.End.Type != VertexType.Boundary;
+            if (edge.Begin.Type == VertexType.Boundary || edge.End.Type == VertexType.Boundary)
+            {
+                return false;
+            }
+            IEnumerable<Vertex> union =
+                edge.Begin.Adjacent.Union(edge.End.Adjacent);
+            IEnumerable<Vertex> intersection =
+                edge.Begin.Adjacent.Intersect(edge.End.Adjacent);
+            return union.Count() != 4 && intersection.Count() == 2;
         }
 
         public override MeshPart Execute(Edge edge)
@@ -94,7 +102,7 @@ namespace Matveev.Mtk.Library
                 }
                 n = Vn.Count;
 
-                v = mesh.AddVertex(b.Point + this._weight * (e.Point - b.Point),
+                v = mesh.AddVertex(b.Point.Interpolate(e.Point, this._weight),
                     Vector.Normalize(this._weight * b.Normal + (1 - this._weight) * e.Normal));
 
                 F.ForEach(face => mesh.DeleteFace(face));
