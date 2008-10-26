@@ -10,25 +10,11 @@ namespace Matveev.Mtk.Library
         private static Mesh _mesh;
         private static IImplicitSurface _surface;
 
-        private static MC _instance;
-
-        public static MC Instance
-        {
-            get
-            {
-                if (MC._instance == null)
-                    MC._instance = new MC();
-
-                return MC._instance;
-            }
-        }
+        public static readonly MC Instance = new MC();
 
         private static Vertex AddVertex(Point p, Vector n)
         {
-            Vertex result = MC._nonInternal.Find(delegate(Vertex vert)
-            {
-                return vert.Point == p;
-            });
+            Vertex result = MC._nonInternal.Find(vertex => vertex.Point == p);
             if (result == null)
             {
                 result = MC._mesh.AddVertex(p, n);
@@ -41,7 +27,6 @@ namespace Matveev.Mtk.Library
             double x0, double x1, double y0, double y1, double z0, double z1,
             int n, int m, int l)
         {
-            //MC._mesh = new HEMesh();
             MC._mesh = new HEMesh();
             MC._surface = surface;
 
@@ -130,7 +115,7 @@ namespace Matveev.Mtk.Library
 
         #region Edges Table
 
-        private static byte[,] edgesTable = new byte[,]
+        private static readonly byte[,] edgesTable = new byte[,]
             {
                 {0,1},
                 {1,2},
@@ -150,7 +135,7 @@ namespace Matveev.Mtk.Library
 
         #region Cases Table
 
-        private static short[,] casesTable = new short[,]
+        private static readonly short[,] casesTable = new short[,]
 {
     {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
     { 8, 3, 0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
@@ -411,6 +396,5 @@ namespace Matveev.Mtk.Library
 };
 
         #endregion
-
     }
 }
