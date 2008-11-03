@@ -48,7 +48,7 @@ namespace Matveev.Mtk.Library
             face = mesh.CreateFace(v1, v2, v4);
             face = mesh.CreateFace(v4, v2, v3);
 
-            return face.Edges.Where(e => e.End == v2).First();
+            return face.Edges.First(e => e.End == v2);
         }
 
         private static void FindOtherVertices(Edge edge, out Vertex v2, out Vertex v4)

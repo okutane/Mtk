@@ -37,15 +37,7 @@ namespace Matveev.Mtk.Library.Tests
             this._mesh.CreateFace(v1, v2, v3);
             this._mesh.CreateFace(v2, v4, v3);
 
-            Edge edge = null;
-            foreach (Edge edgeCandidat in this._mesh.Edges)
-            {
-                if (edgeCandidat.Pair != null)
-                {
-                    edge = edgeCandidat;
-                    break;
-                }
-            }
+            Edge edge = _mesh.Edges.First(edgeCandidat => edgeCandidat.Pair != null);
 
             Assert.IsTrue(this._target.IsPossible(edge));
         }
@@ -77,7 +69,7 @@ namespace Matveev.Mtk.Library.Tests
                        where (Math.Abs(e.Begin.Point.X + e.End.Point.X) < 1e-4)
                           && (Math.Abs(e.Begin.Point.Y + e.End.Point.Y) < 1e-4)
                        select e).First();
-            new EdgeSwap().Execute(edge);
+            _target.Execute(edge);
             YamlSerializerTest.TestSerialize("EdgeSwap.yaml", mesh);
         }
     }
