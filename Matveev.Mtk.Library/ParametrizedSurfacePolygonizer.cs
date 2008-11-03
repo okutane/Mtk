@@ -8,21 +8,10 @@ namespace Matveev.Mtk.Library
 {
     public class ParametrizedSurfacePolygonizer
     {
-        private static ParametrizedSurfacePolygonizer _instance;
+        public readonly static ParametrizedSurfacePolygonizer Instance = new ParametrizedSurfacePolygonizer();
 
         private ParametrizedSurfacePolygonizer()
         {
-        }
-
-        public static ParametrizedSurfacePolygonizer Instance
-        {
-            get
-            {
-                if (ParametrizedSurfacePolygonizer._instance == null)
-                    ParametrizedSurfacePolygonizer._instance = new ParametrizedSurfacePolygonizer();
-
-                return ParametrizedSurfacePolygonizer._instance;
-            }
         }
 
         public Mesh Create(IParametrizedSurface surface, int n, int m)
@@ -72,9 +61,9 @@ namespace Matveev.Mtk.Library
                     for (int j = 0; j < this._m; j++)
                     {
                         Vertex v0 = GetVertex(i, j);
-                        Vertex v1 = GetVertex(i, j + 1);
+                        Vertex v1 = GetVertex(i, (j + 1) % _m);
                         Vertex v2 = GetVertex(i + 1, j);
-                        Vertex v3 = GetVertex(i + 1, j + 1);
+                        Vertex v3 = GetVertex(i + 1, (j + 1) % _m);
 
                         this._product.CreateFace(v0, v1, v3);
                         this._product.CreateFace(v0, v3, v2);

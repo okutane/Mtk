@@ -1,4 +1,5 @@
 syntax: glob
+UI\bin\Debug (Profiled)/*.config
 *.err
 *.bak
 *.orig
