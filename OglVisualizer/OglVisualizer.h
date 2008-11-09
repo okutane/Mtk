@@ -377,15 +377,18 @@ namespace OglVisualizer
 
                 if(_edgeSelected)
                 {
-                    Matveev::Mtk::Core::Vertex ^b, ^e;
-                    b = _edgeSelected->Begin;
-                    e = _edgeSelected->End;
+                    Matveev::Mtk::Core::Vertex ^b = _edgeSelected->Begin;
+					Matveev::Mtk::Core::Vertex ^e = _edgeSelected->End;
                     glColor3f(1, 0, 0);
                     glLineWidth(2);
                     glBegin(GL_LINES);
                     PutVertex(b->Point);
                     PutVertex(e->Point);
                     glEnd();
+					glPointSize(5);
+					glBegin(GL_POINTS);
+					PutVertex(e->Point);
+					glEnd();
                     glLineWidth(1);
                 }
 
