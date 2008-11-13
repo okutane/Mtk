@@ -9,15 +9,13 @@ namespace Matveev.Mtk.Library.FaceFunctions
 {
     public sealed class DihedralAngles : FaceFunction
     {
-        DihedralAngle _function = new DihedralAngle();
-
         public override double Evaluate(Face face)
         {
             double result = 0;
 
             foreach (Edge edge in face.Edges)
             {
-                result += this._function.Evaluate(edge);
+                result += DihedralAngle.Instance.Evaluate(edge);
             }
 
             return result;

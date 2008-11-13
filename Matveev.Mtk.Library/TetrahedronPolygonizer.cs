@@ -14,12 +14,12 @@ namespace Matveev.Mtk.Library
 
         #region IImplicitSurfacePolygonizer Members
 
-        public Mesh Create(IImplicitSurface surface,
+        public Mesh Create(ISimpleFactory<Mesh> factory, IImplicitSurface surface,
             double x0, double x1, double y0, double y1, double z0, double z1,
             int n, int m, int l)
         {
             _surface = surface;
-            _mesh = new HEMesh();
+            _mesh = factory.Create();
             _nonInternal = new List<Vertex>();
 
             double hx, hy, hz;

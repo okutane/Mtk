@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 using Matveev.Mtk.Core;
 using Matveev.Mtk.Library.FaceFunctions;
+using Matveev.Mtk.Library.Validators;
+using Matveev.Mtk.Library.Fields;
 
 namespace Matveev.Mtk.Library
 {
@@ -31,6 +33,11 @@ namespace Matveev.Mtk.Library
 
             Func<Point[], double> faceEnergy =
                 TriangleImplicitApproximations.GetApproximation(surface.Eval, "square");
+
+            if (surface is QuadraticForm)
+            {
+                faceEnergy = ((QuadraticForm)surface).FaceDistance;
+            }
 
             Func<double[], double> globalEnergy = delegate(double[] globalX)
             {
@@ -106,7 +113,15 @@ namespace Matveev.Mtk.Library
 
             Func<Point[], double> faceEnergy =
                 TriangleImplicitApproximations.GetApproximation(field.Eval, "square");
+            if (field is QuadraticForm)
+            {
+                faceEnergy = ((QuadraticForm)field).FaceDistance;
+            }
             Energy energy = new CompositeEnergy(new VertexEnergy(alpha), new FaceEnergy(faceEnergy));
+            BoundingBox constraintsProvider = new BoundingBox(-1, 1, -1, 1, -1, 1);
+
+            List<IMeshValidator> validators = new List<IMeshValidator>();
+            validators.Add(new DihedralAnglesValidator(0.5));
 
             //Этап 1. Проецирование всех вершин сетки на поверхность
             ProjectAll(mesh, field, epsilon);
@@ -136,7 +151,7 @@ namespace Matveev.Mtk.Library
 
                 foreach (EdgeTransform transform in transforms)
                 {
-                    if (!transform.IsPossible(candidat))
+                    if (!transform.IsPossible(candidat, constraintsProvider))
                         continue;
 
                     IDictionary<Edge, Edge> edgeMap2 = new Dictionary<Edge, Edge>();
@@ -146,6 +161,14 @@ namespace Matveev.Mtk.Library
                     try
                     {
                         MeshPart smResult = transform.Execute(smCandidat2);
+
+                        foreach (IMeshValidator validator in validators)
+                        {
+                            if (!validator.IsValid(submesh))
+                            {
+                                throw new Exception("Invalid mesh");
+                            }
+                        }
 
                         foreach (Vertex vertex in smResult.GetVertices(0))
                         {

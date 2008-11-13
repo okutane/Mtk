@@ -21,7 +21,7 @@ namespace Matveev.Mtk.Library.Tests
         [SetUp]
         public void SetUp()
         {
-            this._mesh = new HEMesh();
+            this._mesh = HEMesh.Factory.Create();
             this._target = new EdgeSwap();
         }
 
@@ -39,7 +39,7 @@ namespace Matveev.Mtk.Library.Tests
 
             Edge edge = _mesh.Edges.First(edgeCandidat => edgeCandidat.Pair != null);
 
-            Assert.IsTrue(this._target.IsPossible(edge));
+            Assert.IsTrue(this._target.IsPossible(edge, null));
         }
 
         [Test]
@@ -57,14 +57,14 @@ namespace Matveev.Mtk.Library.Tests
 
             foreach (Edge edge in v1.OutEdges)
             {
-                Assert.IsFalse(this._target.IsPossible(edge));
+                Assert.IsFalse(this._target.IsPossible(edge, null));
             }
         }
 
         [Test]
         public void Execute()
         {
-            Mesh mesh = MC.Instance.Create(Plane.Sample, -1, 1, -1, 1, -1, 1, 3, 3, 3);
+            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, Plane.Sample, -1, 1, -1, 1, -1, 1, 3, 3, 3);
             Edge edge = (from e in mesh.Edges
                        where (Math.Abs(e.Begin.Point.X + e.End.Point.X) < 1e-4)
                           && (Math.Abs(e.Begin.Point.Y + e.End.Point.Y) < 1e-4)

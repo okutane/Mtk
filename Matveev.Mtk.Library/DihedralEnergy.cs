@@ -10,7 +10,6 @@ namespace Matveev.Mtk.Library
 {
     public class DihedralEnergy : Energy
     {
-        private EdgeFunction _dihedralAngle = new DihedralAngle();
         private EdgeFunction _length = new Length();
 
         public override double Eval(Mesh mesh)
@@ -19,7 +18,7 @@ namespace Matveev.Mtk.Library
 
             foreach (Edge edge in mesh.Edges)
             {
-                result += this._dihedralAngle.Evaluate(edge) * this._length.Evaluate(edge);
+                result += DihedralAngle.Instance.Evaluate(edge) * this._length.Evaluate(edge);
             }
 
             return result;

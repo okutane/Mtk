@@ -13,7 +13,7 @@ namespace Matveev.Mtk.Library.EdgeFunctions
 
         public EdgeDihedralEnergy()
         {
-            this._dihedralAngle = new DihedralAngle();
+            this._dihedralAngle = DihedralAngle.Instance;
             this._length = new Length();
         }
 

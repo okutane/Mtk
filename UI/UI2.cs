@@ -94,7 +94,7 @@ namespace UI
                     if (selected != null)
                     {
                         EdgeTransform transform = transforms[((Button)sender).Text];
-                        if (!transform.IsPossible(selected))
+                        if (!transform.IsPossible(selected, null))
                         {
                             MessageBox.Show("Transform is not possible");
                             return;
@@ -110,6 +110,14 @@ namespace UI
                 };
                 edgeActions.Add(btnEdgeTransform);
             }
+            Button btnSelectNext = new Button();
+            btnSelectNext.Text = "Select next";
+            btnSelectNext.Click += (sender, e) => Selection = visualizer.SelectedEdge = ((Edge)Selection).Next;
+            edgeActions.Add(btnSelectNext);
+            Button btnSelectPair = new Button();
+            btnSelectPair.Text = "Select pair";
+            btnSelectPair.Click += (sender, e) => Selection = visualizer.SelectedEdge = ((Edge)Selection).Pair;
+            edgeActions.Add(btnSelectPair);
         }
 
         private void ListVertexActions()
@@ -219,7 +227,7 @@ namespace UI
                     out polygonizer))
                     return;
 
-                _mesh = polygonizer.Create(surface, -1, 1, -1, 1, -1, 1, N, N, N);
+                _mesh = polygonizer.Create(Configuration.MeshFactory, surface, -1, 1, -1, 1, -1, 1, N, N, N);
                 visualizer.Mesh = _mesh;
                 _field = surface;
             };

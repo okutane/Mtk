@@ -19,7 +19,7 @@ namespace Matveev.Mtk.Library
             this._t = t;
         }
 
-        public override bool IsPossible(Edge edge)
+        public override bool IsPossible(Edge edge, IVertexConstraintsProvider constraintsProvider)
         {
             return true;
         }

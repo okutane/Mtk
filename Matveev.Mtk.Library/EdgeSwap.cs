@@ -10,7 +10,7 @@ namespace Matveev.Mtk.Library
 {
     public class EdgeSwap : EdgeTransform
     {
-        public override bool IsPossible(Edge edge)
+        public override bool IsPossible(Edge edge, IVertexConstraintsProvider constraintsProvider)
         {
             if (edge.Pair == null)
             {
@@ -27,8 +27,7 @@ namespace Matveev.Mtk.Library
                     return false;
                 }
             }
-
-            double acos = new DihedralAngle().Evaluate(edge);
+            
             return true;
         }
 

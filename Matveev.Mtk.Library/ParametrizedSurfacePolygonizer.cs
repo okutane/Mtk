@@ -43,7 +43,7 @@ namespace Matveev.Mtk.Library
                 this._stepU = (surface.MaxU - this._minU) / m;
                 this._stepV = (surface.MaxV - this._minV) / n;
                 this._vertices = new Dictionary<int, Vertex>();
-                this._product = new HEMesh();
+                this._product = HEMesh.Factory.Create();
             }
 
             public Mesh Product

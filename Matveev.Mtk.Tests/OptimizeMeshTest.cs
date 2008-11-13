@@ -15,11 +15,12 @@ namespace Matveev.Mtk.Library.Tests
     public class OptimizeMeshTest
     {
         [Test]
+        [Ignore]
         public void OptimizeImplicit()
         {
             IImplicitSurface surface = Sphere.Sample;
 
-            Mesh mesh = MT6.Instance.Create(surface, -1, 1, -1, 1, -1, 1, 8, 8, 8);
+            Mesh mesh = MT6.Instance.Create(HEMesh.Factory, surface, -1, 1, -1, 1, -1, 1, 8, 8, 8);
             OptimizeMesh.OptimizeImplicit(mesh, surface, 1e-2, 1e-3);
 
             int nonInternal = 0;

@@ -8,6 +8,12 @@ namespace Matveev.Mtk.Library.EdgeFunctions
 {
     public class DihedralAngle : EdgeFunction
     {
+        public static readonly EdgeFunction Instance = new DihedralAngle();
+
+        private DihedralAngle()
+        {
+        }
+
         public override double Evaluate(Edge edge)
         {
             if (edge.Pair == null)
