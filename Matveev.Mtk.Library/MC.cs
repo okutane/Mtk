@@ -23,11 +23,11 @@ namespace Matveev.Mtk.Library
             return result;
         }
 
-        public Mesh Create(IImplicitSurface surface,
+        public Mesh Create(ISimpleFactory<Mesh> factory, IImplicitSurface surface,
             double x0, double x1, double y0, double y1, double z0, double z1,
             int n, int m, int l)
         {
-            MC._mesh = new HEMesh();
+            MC._mesh = factory.Create();
             MC._surface = surface;
 
             double hx, hy, hz;

@@ -14,7 +14,7 @@ namespace Matveev.Mtk.Library.Tests
         [Test]
         public void TraceTest()
         {
-            HEMesh mesh = new HEMesh();
+            Mesh mesh = HEMesh.Factory.Create();
 
             Vertex v0 = mesh.AddVertex(new Point(0, 0, 0), new Vector());
             Vertex v1 = mesh.AddVertex(new Point(1, 0, 0), new Vector());

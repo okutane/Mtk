@@ -8,12 +8,26 @@ namespace Matveev.Mtk.Library
 {
     public partial class HEMesh : Mesh
     {
+        private class HEMeshFactory : ISimpleFactory<Mesh>
+        {
+            #region ISimpleFactory<Mesh> Members
+
+            public Mesh Create()
+            {
+                return new HEMesh();
+            }
+
+            #endregion
+        }
+
         protected List<Vertex> _vertices;
         List<HEEdge> edges;
         List<HEFace> faces;
         List<HEEdge> unpairedEdges;
 
-        public HEMesh()
+        public static readonly ISimpleFactory<Mesh> Factory = new HEMeshFactory();
+
+        protected HEMesh()
         {
             this._vertices = new List<Vertex>();
             edges = new List<HEEdge>();
@@ -27,7 +41,7 @@ namespace Matveev.Mtk.Library
         {
             get
             {
-                foreach(HEVertexBase vertex in this._vertices)
+                foreach (HEVertexBase vertex in this._vertices)
                     yield return vertex;
             }
         }
@@ -36,7 +50,7 @@ namespace Matveev.Mtk.Library
         {
             get
             {
-                foreach(HEEdge edge in edges)
+                foreach (HEEdge edge in edges)
                     yield return edge;
             }
         }
@@ -45,7 +59,7 @@ namespace Matveev.Mtk.Library
         {
             get
             {
-                foreach(HEFace face in faces)
+                foreach (HEFace face in faces)
                     yield return face;
             }
         }
@@ -69,28 +83,28 @@ namespace Matveev.Mtk.Library
 
         public override Face CreateFace(Vertex v1, Vertex v2, Vertex v3)
         {
-            if(v1 == v2 || v2 == v3 || v1 == v3)
+            if (v1 == v2 || v2 == v3 || v1 == v3)
                 return null;
 
             HEVertexBase[] vertices = new HEVertexBase[3];
             vertices[0] = (HEVertexBase)v1;
             vertices[1] = (HEVertexBase)v2;
             vertices[2] = (HEVertexBase)v3;
-         
-            foreach(HEVertexBase v in vertices)
+
+            foreach (HEVertexBase v in vertices)
             {
-                if(v.type == VertexType.Internal)
+                if (v.type == VertexType.Internal)
                     throw new Exception("Creating face through internal vertex");
             }
 
             HEFace face = new HEFace();
             HEEdge[] newEdges = new HEEdge[3];
 
-            for(int i = 0 ; i < 3 ; i++)
+            for (int i = 0; i < 3; i++)
                 newEdges[i] = new HEEdge(this);
 
             face.mainEdge = newEdges[2];
-            for(int i = 0 ; i < 3 ; i++)
+            for (int i = 0; i < 3; i++)
             {
                 HEEdge edge = newEdges[i];
                 HEVertexBase begin = vertices[i];
@@ -99,44 +113,44 @@ namespace Matveev.Mtk.Library
                 edge.face = face;
                 edge.next = newEdges[(i + 1) % 3];
 
-                if(begin.type == VertexType.Isolated)
-                {                    
+                if (begin.type == VertexType.Isolated)
+                {
                     begin.outEdge = edge;
                     begin.type = VertexType.Boundary;
                 }
 
-                foreach(HEEdge unpaired in unpairedEdges)
+                foreach (HEEdge unpaired in unpairedEdges)
                 {
-                    if(unpaired.end == begin && unpaired.Prev.End == edge.end)
+                    if (unpaired.end == begin && unpaired.Prev.End == edge.end)
                     {
                         edge.pair = unpaired;
                         unpaired.pair = edge;
                         unpairedEdges.Remove(unpaired);
                         break;
                     }
-                }                                
+                }
             }
 
-            foreach(HEEdge edge in newEdges)
+            foreach (HEEdge edge in newEdges)
             {
                 edges.Add(edge);
-                if(edge.pair == null)
+                if (edge.pair == null)
                     unpairedEdges.Add(edge);
             }
 
-            foreach(HEVertexBase v in vertices)
+            foreach (HEVertexBase v in vertices)
             {
-                if(v.type == VertexType.Boundary)
+                if (v.type == VertexType.Boundary)
                 {
                     HEEdge edge = v.outEdge;
                     do
                     {
                         edge = edge.pair;
-                        if(edge != null)
+                        if (edge != null)
                             edge = edge.next;
                     }
-                    while(edge != null && edge != v.outEdge);
-                    if(edge != null)
+                    while (edge != null && edge != v.outEdge);
+                    if (edge != null)
                     {
                         v.type = VertexType.Internal;
                     }
@@ -152,39 +166,39 @@ namespace Matveev.Mtk.Library
             HEEdge curEdge = ((HEFace)face).mainEdge;
             do
             {
-                if(curEdge.end.outEdge == curEdge.next)
+                if (curEdge.end.outEdge == curEdge.next)
                 {
                     curEdge.end.type = VertexType.Isolated;
                     curEdge.end.outEdge = null;
                 }
                 else
                 {
-                    if(curEdge.end.type == VertexType.Internal)
+                    if (curEdge.end.type == VertexType.Internal)
                         curEdge.end.type = VertexType.Boundary;
                 }
-                if(curEdge.pair != null)
+                if (curEdge.pair != null)
                 {
                     curEdge.pair.pair = null;
                     unpairedEdges.Add(curEdge.pair);
                 }
                 curEdge = curEdge.next;
             }
-            while(curEdge != ((HEFace)face).mainEdge);
+            while (curEdge != ((HEFace)face).mainEdge);
 
             faces.Remove((HEFace)face);
-            foreach(HEEdge edge in face.Edges)
+            foreach (HEEdge edge in face.Edges)
             {
                 edges.Remove(edge);
                 unpairedEdges.Remove(edge);
                 edge.Dispose();
             }
-            foreach(HEVertexBase vert in face.Vertices)
+            foreach (HEVertexBase vert in face.Vertices)
             {
                 HEEdge inEdge = edges.Find(delegate(HEEdge edge)
                 {
                     return edge.end == vert;
                 });
-                if(inEdge != null)
+                if (inEdge != null)
                 {
                     vert.outEdge = inEdge.next;
                     vert.type = VertexType.Boundary;
@@ -200,48 +214,37 @@ namespace Matveev.Mtk.Library
         public override Mesh CloneSub(IEnumerable<Face> faces, IDictionary<Vertex, Vertex> vertMap,
             IDictionary<Edge, Edge> edgeMap, IDictionary<Face, Face> faceMap)
         {
-            try
+            HEMesh result = new HEMesh();
+
+            vertMap = GetCleanOrNew(vertMap);
+            edgeMap = GetCleanOrNew(edgeMap);
+            faceMap = GetCleanOrNew(faceMap);
+
+            List<Vertex> verts = new List<Vertex>();
+
+            foreach (Face face in faces)
             {
-                HEMesh result = new HEMesh();
-
-                vertMap = GetCleanOrNew(vertMap);
-                edgeMap = GetCleanOrNew(edgeMap);
-                faceMap = GetCleanOrNew(faceMap);
-
-                List<Vertex> verts = new List<Vertex>();
-
-                foreach (Face face in faces)
+                foreach (Vertex vert in face.Vertices)
                 {
-                    foreach (Vertex vert in face.Vertices)
+                    if (!vertMap.ContainsKey(vert))
+                        vertMap.Add(vert, result.AddVertex(vert.Point, vert.Normal));
+                    verts.Add(vertMap[vert]);
+                }
+                Face newFace = result.CreateFace(verts[0], verts[1], verts[2]);
+                verts.Clear();
+                foreach (Edge oldEdge in face.Edges)
+                    foreach (Edge newEdge in newFace.Edges)
                     {
-                        if (!vertMap.ContainsKey(vert))
-                            vertMap.Add(vert, result.AddVertex(vert.Point, vert.Normal));
-                        verts.Add(vertMap[vert]);
-                    }
-                    Face newFace = result.CreateFace(verts[0], verts[1], verts[2]);
-                    verts.Clear();
-                    foreach (Edge oldEdge in face.Edges)
-                        foreach (Edge newEdge in newFace.Edges)
+                        if (newEdge.End == vertMap[oldEdge.End])
                         {
-                            if (newEdge.End == vertMap[oldEdge.End])
-                            {
-                                edgeMap.Add(oldEdge, newEdge);
-                                break;
-                            }
+                            edgeMap.Add(oldEdge, newEdge);
+                            break;
                         }
-                    faceMap.Add(face, newFace);
-                }
+                    }
+                faceMap.Add(face, newFace);
+            }
 
-                return result;
-            }
-            catch
-            {
-                using (System.IO.Stream stream = System.IO.File.Create("clonesub.err"))
-                {
-                    Utils.Serialize(faces, stream);
-                }
-                throw;
-            }
+            return result;
         }
 
         #endregion

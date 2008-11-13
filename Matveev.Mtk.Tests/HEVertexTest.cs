@@ -17,7 +17,7 @@ namespace Matveev.Mtk.Library.Tests
         [SetUp]
         public void SetUp()
         {
-            this._mesh = new HEMesh();
+            this._mesh = Configuration.MeshFactory.Create();
             this._target = new EdgeSwap();
         }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 using NUnit.Framework;
@@ -15,10 +16,7 @@ namespace Matveev.Mtk.Library.Tests
         [Test]
         public void Test()
         {
-            //{[(0,0,1) Internal,(0,-0,5,0,5) Internal,(-1,0,0) Internal]}
-            //{[(-1,0,0) Internal,(0,-0,5,0,5) Internal,(0,-1,0) Internal]}
-
-            HEMesh mesh = new HEMesh();
+            Mesh mesh = Configuration.MeshFactory.Create();
             Vertex v1 = mesh.AddVertex(new Point(0, 0, 1), new Vector());
             Vertex v2 = mesh.AddVertex(new Point(0, -0.5, 0.5), new Vector());
             Vertex v3 = mesh.AddVertex(new Point(-1, 0, 0), new Vector());
@@ -27,18 +25,7 @@ namespace Matveev.Mtk.Library.Tests
             mesh.CreateFace(v1, v2, v3);
             mesh.CreateFace(v3, v2, v4);
 
-            Edge edge = null;
-            foreach (Edge meshEdge in mesh.Edges)
-            {
-                if (meshEdge.Pair != null)
-                {
-                    edge = meshEdge;
-                    break;
-                }
-            }
-
-            DihedralAngle target = new DihedralAngle();
-            Assert.AreEqual(0.0, target.Evaluate(edge));
+            Assert.AreEqual(0.0, DihedralAngle.Instance.Evaluate(mesh.Edges.Single(edge => edge.Pair != null)));
         }
     }
 }

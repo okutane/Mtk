@@ -5,8 +5,10 @@ using System.Text;
 
 namespace Matveev.Common
 {
-    public static class InstanceCollector<T>
+    public static class InstanceCollector<T> where T : class
     {
+        private const BindingFlags _REQUESTED_FLAGS = BindingFlags.Static | BindingFlags.Public;
+
         public static Dictionary<string, T> Instances
         {
             get
@@ -32,15 +34,15 @@ namespace Matveev.Common
                 FindInstances(instances, nestedType);
             }
 
-            Type t = typeof(T);
-            foreach (FieldInfo field in type.GetFields(BindingFlags.Static | BindingFlags.Public))
+            foreach (FieldInfo field in type.GetFields(_REQUESTED_FLAGS))
             {
-                if (t.IsInterface && field.FieldType.GetInterface(t.Name) != null)
+                if (IsInstanceOf(typeof(T), field.FieldType))
                 {
-                    instances.Add(type.Name, (T)field.GetValue(null));
+                    instances.Add(type.Name + "." + field.Name, (T)field.GetValue(null));
                 }
             }
-            foreach (PropertyInfo property in type.GetProperties(BindingFlags.Static | BindingFlags.Public))
+
+            foreach (PropertyInfo property in type.GetProperties(_REQUESTED_FLAGS))
             {
                 MethodInfo getMethod = property.GetGetMethod();
                 if (getMethod == null)
@@ -48,17 +50,20 @@ namespace Matveev.Common
                 if (getMethod.IsStatic == false)
                     continue;
 
-                // TODO: Это плохо
-                if (t.IsInterface && property.PropertyType.GetInterface(t.Name) != null)
+                if (IsInstanceOf(typeof(T), property.PropertyType))
                 {
-                    instances.Add(type.Name, (T)getMethod.Invoke(null, null));
-                }
-                else
-                {
-                    if (property.PropertyType.IsSubclassOf(typeof(T)))
-                        instances.Add(type.Name, (T)property.GetValue(null, null));
+                    instances.Add(type.Name + "." + property.Name, (T)property.GetValue(null, null));
                 }
             }
+        }
+
+        private static bool IsInstanceOf(Type super, Type derived)
+        {
+            if (super.IsInterface)
+            {
+                return derived.GetInterface(super.Name) != null;
+            }
+            return derived.IsSubclassOf(super);
         }
     }
 }

@@ -60,7 +60,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bloomenthal.cs" />
+    <Compile Include="BoundingBox.cs" />
     <Compile Include="CompositeEnergy.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="ConjugateGradients.cs" />
     <Compile Include="DihedralEnergy.cs" />
     <Compile Include="EdgeCollapse.cs" />
@@ -106,7 +108,11 @@
     <Compile Include="TetrahedronPolygonizer.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="TriangleImplicitApproximations.cs" />
+    <Compile Include="Utilities\UMesh.cs" />
     <Compile Include="Utils.cs" />
+    <Compile Include="Validators\DihedralAnglesValidator.cs" />
+    <Compile Include="Validators\DuplicatedEdgesValidator.cs" />
+    <Compile Include="Validators\IsolatedVerticesValidator.cs" />
     <Compile Include="VertexEnergy.cs" />
     <Compile Include="VertexPointProjection.cs" />
   </ItemGroup>

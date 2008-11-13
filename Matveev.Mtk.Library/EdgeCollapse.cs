@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Matveev.Common.Utilities;
 using Matveev.Mtk.Core;
+using Matveev.Mtk.Library.Utilities;
 
 namespace Matveev.Mtk.Library
 {
@@ -20,11 +22,22 @@ namespace Matveev.Mtk.Library
             this._weight = weight;
         }
 
-        public override bool IsPossible(Edge edge)
+        public override bool IsPossible(Edge edge, IVertexConstraintsProvider constraintsProvider)
         {
-            if (edge.Begin.Type == VertexType.Boundary || edge.End.Type == VertexType.Boundary)
+            if (edge.Begin.Type == VertexType.Boundary && _weight != 0)
             {
+                if (!constraintsProvider.IsMovable(edge.Begin, edge.Begin.Point - edge.End.Point))
+                    return false;
+            }
+            if (edge.End.Type == VertexType.Boundary && _weight != 1)
+            {
+                if (!constraintsProvider.IsMovable(edge.End, edge.Begin.Point - edge.End.Point))
+                    return false;
                 return false;
+            }
+            if (edge.Begin.Type == VertexType.Boundary && edge.End.Type == VertexType.Boundary)
+            {
+                return edge.Pair == null;
             }
             IEnumerable<Vertex> union =
                 edge.Begin.Adjacent.Union(edge.End.Adjacent);
@@ -39,32 +52,14 @@ namespace Matveev.Mtk.Library
 
             if (edge.Pair == null)
             {
-                Vertex b, e, v;
-                b = edge.Begin;
-                e = edge.End;
-                List<Vertex> Vb, Ve, Vn;
-                List<Face> F;
-
-                Vb = new List<Vertex>(b.Adjacent);
-                Ve = new List<Vertex>(e.Adjacent);
-                Vn = new List<Vertex>();
-                F = new List<Face>(b.AdjacentFaces.Where(face => face != edge.Face));
-                F.AddRange(e.AdjacentFaces);
-
-                Vn.AddRange(Vb.Take(Vb.Count - 1));
-                Vn.AddRange(Ve.Skip(2));
-
-                F.ForEach(face => mesh.DeleteFace(face));
-                mesh.RemoveVertex(b);
-                mesh.RemoveVertex(e);
-
-                v = mesh.AddVertex(b.Point + this._weight * (e.Point - b.Point),
-                    Vector.Normalize(this._weight * b.Normal + (1 - this._weight) * e.Normal));
-                for (int i = 0; i < Vn.Count - 1; i++)
-                {
-                    mesh.CreateFace(v, Vn[i + 1], Vn[i]);
-                }
-                return v;
+                Vertex result = edge.End;
+                Vertex[] fan = edge.Begin.GetVertices(1);
+                edge.Begin.AdjacentFaces.ToList().ForEach(mesh.DeleteFace);
+                mesh.RemoveVertex(edge.Begin);
+                mesh.CreateFan(fan);
+                result.Point = edge.Begin.Point.Interpolate(edge.End.Point, _weight);
+                result.Normal = Vector.Normalize(_weight * edge.Begin.Normal + (1 - _weight) * edge.End.Normal);
+                return result;
             }
             else
             {
@@ -74,47 +69,29 @@ namespace Matveev.Mtk.Library
                     throw new ArgumentException("Tried to change topology");
                 }
 
-                Vertex b, e, v;
-                int k1, k2, n1, n2, n;
-                b = edge.Begin;
-                e = edge.End;
-
-                List<Vertex> Vb, Ve, Vn;
-                List<Face> F;
-                Vb = new List<Vertex>(b.Adjacent);
-                Ve = new List<Vertex>(e.Adjacent);
-                Vn = new List<Vertex>();
-                F = new List<Face>(b.AdjacentFaces.Where(f => f != edge.Face && f != edge.Pair.Face));
-                F.AddRange(e.AdjacentFaces);
-
-                k1 = Vb.IndexOf(e) + 1;
-                k2 = Ve.IndexOf(b) + 1;
-
-                n1 = Vb.Count;
-                n2 = Ve.Count;
-                for (int i = 0; i < n1 - 2; i++)
+                Vertex result;
+                Vertex removed;
+                if (edge.End.Type == VertexType.Boundary)
                 {
-                    Vn.Add(Vb[(k1 + i) % n1]);
+                    result = edge.End;
+                    removed = edge.Begin;
                 }
-                for (int i = 0; i < n2 - 2; i++)
+                else
                 {
-                    Vn.Add(Ve[(k2 + i) % n2]);
+                    result = edge.Begin;
+                    removed = edge.End;
                 }
-                n = Vn.Count;
-
-                v = mesh.AddVertex(b.Point.Interpolate(e.Point, this._weight),
-                    Vector.Normalize(this._weight * b.Normal + (1 - this._weight) * e.Normal));
-
-                F.ForEach(face => mesh.DeleteFace(face));
-                mesh.RemoveVertex(b);
-                mesh.RemoveVertex(e);
-
-                for (int i = 0; i < n; i++)
-                {
-                    mesh.CreateFace(v, Vn[(i + 1) % n], Vn[i]);
-                }
-
-                return v;
+                result.Point = edge.Begin.Point.Interpolate(edge.End.Point, _weight);
+                result.Normal = Vector.Normalize(_weight * edge.Begin.Normal + (1 - _weight) * edge.End.Normal);
+                Vertex[] vertices = removed.GetVertices(1);
+                int index = Array.IndexOf(vertices, result);
+                Vertex[] fan = new Vertex[vertices.Length];
+                Array.Copy(vertices, index, fan, 0, vertices.Length - index);
+                Array.Copy(vertices, 0, fan, vertices.Length - index, index);
+                removed.AdjacentFaces.ToList().ForEach(mesh.DeleteFace);
+                mesh.RemoveVertex(removed);
+                mesh.CreateFan(fan);
+                return result;
             }
         }
     }

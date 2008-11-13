@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Matveev.Mtk.Core;
 
@@ -160,19 +161,53 @@ namespace Matveev.Mtk.Library
             }
         }
 
-        public sealed override ICollection<Edge> GetEdges(int radius)
+        public sealed override Edge[] GetEdges(int radius)
         {
             if (radius == 0)
                 return new Edge[0];
 
-            return new List<Edge>(this.OutEdges);
+            return OutEdges.ToArray();
         }
 
-        public sealed override ICollection<Vertex> GetVertices(int radius)
+        public sealed override Vertex[] GetVertices(int radius)
         {
             if (radius == 0)
                 return new Vertex[] { this };
-
+            if (radius == 1)
+            {
+                List<Vertex> result = new List<Vertex>();
+                // TODO: use State pattern here.
+                if (type == VertexType.Boundary)
+                {
+                    HEEdge edge = outEdge;
+                    while (edge.pair != null)
+                    {
+                        edge = edge.pair.next;
+                    }
+                    do
+                    {
+                        result.Add(edge.end);
+                        if (edge.next.next.pair == null)
+                        {
+                            break;
+                        }
+                        edge = edge.next.next.pair;
+                    }
+                    while(true);
+                    result.Add(edge.next.end);
+                }
+                else
+                {
+                    HEEdge edge = outEdge;
+                    do
+                    {
+                        result.Add(edge.end);
+                        edge = edge.next.next.pair;
+                    }
+                    while (edge != outEdge);
+                }
+                return result.ToArray();
+            }
             throw new Exception("The method or operation is not implemented.");
         }
     }

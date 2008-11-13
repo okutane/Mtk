@@ -56,13 +56,13 @@ namespace Matveev.Mtk.Tests
             [Test]
             public void Polygonize()
             {
-                Mesh mesh = _polygonizer.Create(_surface, -1, 1, -1, 1, -1, 1, 4, 4, 4);
+                Mesh mesh = _polygonizer.Create(Configuration.MeshFactory, _surface, -1, 1, -1, 1, -1, 1, 4, 4, 4);
                 YamlSerializerTest.TestSerialize(string.Format(_suffix, _surface, _polygonizer), mesh);
             }
 
             public override void Run(TestCaseResult result)
             {
-                Mesh mesh = _polygonizer.Create(_surface, -1, 1, -1, 1, -1, 1, 4, 4, 4);
+                Mesh mesh = _polygonizer.Create(Configuration.MeshFactory, _surface, -1, 1, -1, 1, -1, 1, 4, 4, 4);
                 YamlSerializerTest.TestSerialize(string.Format(_suffix, _surface, _polygonizer), mesh);
                 result.Success();
             }

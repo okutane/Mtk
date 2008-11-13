@@ -1,13 +1,16 @@
-﻿using System.Runtime.Serialization;
-using System;
+﻿using System;
 using System.IO;
 using System.Collections;
 using System.Globalization;
+using System.Reflection;
+using System.Runtime.Serialization;
 
 namespace Matveev.Common
 {
     public class YamlFormatter : IFormatter
     {
+        private const BindingFlags BINDING_FLAGS = BindingFlags.Public | BindingFlags.Instance;
+
         #region IFormatter Members
 
         public SerializationBinder Binder
@@ -62,11 +65,11 @@ namespace Matveev.Common
             }
             else
             {
-                foreach (var field in type.GetFields())
+                foreach (var field in type.GetFields(BINDING_FLAGS))
                 {
                     writer.WriteLine("{0}: {1}", field.Name, field.GetValue(graph));
                 }
-                foreach (var property in type.GetProperties())
+                foreach (var property in type.GetProperties(BINDING_FLAGS))
                 {
                     object value = property.GetValue(graph, null);
                     if (value is IEnumerable && !(value is string))
