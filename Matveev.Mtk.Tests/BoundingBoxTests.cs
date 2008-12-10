@@ -43,17 +43,14 @@ namespace Matveev.Mtk.Tests
         private void TestConstraints(IImplicitSurface surface, string name)
         {
             Mesh mesh = MC.Instance.Create(HEMesh.Factory, surface, -1, 1, -1, 1, -1, 1, 4, 4, 4);
-            List<Pair<Vertex, Vector>> forbiddenMoves = new List<Pair<Vertex, Vector>>();
-            foreach (Vertex vertex in mesh.Vertices)
-            {
-                foreach (Vector vector in _basis)
-                {
-                    if (!_target.IsMovable(vertex, vector))
-                    {
-                        forbiddenMoves.Add(new Pair<Vertex, Vector>(vertex, vector));
-                    }
-                }
-            }
+            var forbiddenMoves = from v in mesh.Vertices
+                                 from e in _basis
+                                 where !_target.IsMovable(v, e)
+                                 select new
+                                 {
+                                     Vertex = v,
+                                     Direction = e
+                                 };
             YamlSerializerTest.TestSerialize(name + ".BoundingBox.yaml", forbiddenMoves);
         }
     }
