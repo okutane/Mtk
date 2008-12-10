@@ -1,4 +1,5 @@
 syntax: glob
+Matveev.Mtk.Tests\YamlActual/*.yaml
 UI\bin\Debug (Profiled)/*.config
 *.err
 *.bak

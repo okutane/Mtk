@@ -1,0 +1,520 @@
+---
+Vertices :
+- (-0.5,-0.5,-0.62962962962963) Internal
+- (-0.5,-0.833333333333333,-1) Boundary
+- (-0.833333333333333,-0.5,-1) Boundary
+- (-0.15,-0.5,-0.5) Internal
+- (0,-0.55,-0.5) Internal
+- (0,-1,-1) Boundary
+- (0.15,-0.5,-0.5) Internal
+- (0.5,-0.5,-0.62962962962963) Internal
+- (0.5,-0.833333333333333,-1) Boundary
+- (0.833333333333333,-0.5,-1) Boundary
+- (-0.5,-0.15,-0.5) Internal
+- (-0.55,0,-0.5) Internal
+- (-1,0,-1) Boundary
+- (0.5,-0.15,-0.5) Internal
+- (0.55,0,-0.5) Internal
+- (1,0,-1) Boundary
+- (-0.5,0.5,-0.62962962962963) Internal
+- (-0.5,0.15,-0.5) Internal
+- (-0.833333333333333,0.5,-1) Boundary
+- (-0.15,0.5,-0.5) Internal
+- (0.5,0.5,-0.62962962962963) Internal
+- (0.5,0.15,-0.5) Internal
+- (0.15,0.5,-0.5) Internal
+- (0.833333333333333,0.5,-1) Boundary
+- (-0.5,0.833333333333333,-1) Boundary
+- (0,0.55,-0.5) Internal
+- (0,1,-1) Boundary
+- (0.5,0.833333333333333,-1) Boundary
+- (0,-0.5,-0.333333333333333) Internal
+- (-0.5,0,-0.333333333333333) Internal
+- (0,-0.2,0) Internal
+- (-0.2,0,0) Internal
+- (0.2,0,0) Internal
+- (0.5,0,-0.333333333333333) Internal
+- (0,0.2,0) Internal
+- (0,0.5,-0.333333333333333) Internal
+- (0,-0.5,0.333333333333333) Internal
+- (-0.15,-0.5,0.5) Internal
+- (0,-0.55,0.5) Internal
+- (0.15,-0.5,0.5) Internal
+- (-0.5,0,0.333333333333333) Internal
+- (-0.55,0,0.5) Internal
+- (-0.5,-0.15,0.5) Internal
+- (0.5,-0.15,0.5) Internal
+- (0.5,0,0.333333333333333) Internal
+- (0.55,0,0.5) Internal
+- (-0.5,0.15,0.5) Internal
+- (-0.15,0.5,0.5) Internal
+- (0,0.5,0.333333333333333) Internal
+- (0.5,0.15,0.5) Internal
+- (0.15,0.5,0.5) Internal
+- (0,0.55,0.5) Internal
+- (-0.5,-0.5,0.62962962962963) Internal
+- (-0.833333333333333,-0.5,1) Boundary
+- (-0.5,-0.833333333333333,1) Boundary
+- (0,-1,1) Boundary
+- (0.5,-0.5,0.62962962962963) Internal
+- (0.5,-0.833333333333333,1) Boundary
+- (0.833333333333333,-0.5,1) Boundary
+- (-1,0,1) Boundary
+- (1,0,1) Boundary
+- (-0.5,0.5,0.62962962962963) Internal
+- (-0.833333333333333,0.5,1) Boundary
+- (0.5,0.5,0.62962962962963) Internal
+- (0.833333333333333,0.5,1) Boundary
+- (-0.5,0.833333333333333,1) Boundary
+- (0,1,1) Boundary
+- (0.5,0.833333333333333,1) Boundary
+Edges :
+- Begin=((-0.5,-0.5,-0.62962962962963) Internal), End=((-0.5,-0.833333333333333,-1) Boundary)
+- Begin=((-0.5,-0.833333333333333,-1) Boundary), End=((-0.833333333333333,-0.5,-1) Boundary)
+- Begin=((-0.833333333333333,-0.5,-1) Boundary), End=((-0.5,-0.5,-0.62962962962963) Internal)
+- Begin=((-0.5,-0.5,-0.62962962962963) Internal), End=((-0.15,-0.5,-0.5) Internal)
+- Begin=((-0.15,-0.5,-0.5) Internal), End=((-0.5,-0.833333333333333,-1) Boundary)
+- Begin=((-0.5,-0.833333333333333,-1) Boundary), End=((-0.5,-0.5,-0.62962962962963) Internal)
+- Begin=((-0.15,-0.5,-0.5) Internal), End=((0,-0.55,-0.5) Internal)
+- Begin=((0,-0.55,-0.5) Internal), End=((-0.5,-0.833333333333333,-1) Boundary)
+- Begin=((-0.5,-0.833333333333333,-1) Boundary), End=((-0.15,-0.5,-0.5) Internal)
+- Begin=((-0.5,-0.833333333333333,-1) Boundary), End=((0,-0.55,-0.5) Internal)
+- Begin=((0,-0.55,-0.5) Internal), End=((0,-1,-1) Boundary)
+- Begin=((0,-1,-1) Boundary), End=((-0.5,-0.833333333333333,-1) Boundary)
+- Begin=((0.15,-0.5,-0.5) Internal), End=((0.5,-0.5,-0.62962962962963) Internal)
+- Begin=((0.5,-0.5,-0.62962962962963) Internal), End=((0,-0.55,-0.5) Internal)
+- Begin=((0,-0.55,-0.5) Internal), End=((0.15,-0.5,-0.5) Internal)
+- Begin=((0.5,-0.5,-0.62962962962963) Internal), End=((0.5,-0.833333333333333,-1) Boundary)
+- Begin=((0.5,-0.833333333333333,-1) Boundary), End=((0,-0.55,-0.5) Internal)
+- Begin=((0,-0.55,-0.5) Internal), End=((0.5,-0.5,-0.62962962962963) Internal)
+- Begin=((0,-0.55,-0.5) Internal), End=((0.5,-0.833333333333333,-1) Boundary)
+- Begin=((0.5,-0.833333333333333,-1) Boundary), End=((0,-1,-1) Boundary)
+- Begin=((0,-1,-1) Boundary), End=((0,-0.55,-0.5) Internal)
+- Begin=((0.5,-0.5,-0.62962962962963) Internal), End=((0.833333333333333,-0.5,-1) Boundary)
+- Begin=((0.833333333333333,-0.5,-1) Boundary), End=((0.5,-0.833333333333333,-1) Boundary)
+- Begin=((0.5,-0.833333333333333,-1) Boundary), End=((0.5,-0.5,-0.62962962962963) Internal)
+- Begin=((-0.5,-0.15,-0.5) Internal), End=((-0.5,-0.5,-0.62962962962963) Internal)
+- Begin=((-0.5,-0.5,-0.62962962962963) Internal), End=((-0.55,0,-0.5) Internal)
+- Begin=((-0.55,0,-0.5) Internal), End=((-0.5,-0.15,-0.5) Internal)
+- Begin=((-0.5,-0.5,-0.62962962962963) Internal), End=((-0.833333333333333,-0.5,-1) Boundary)
+- Begin=((-0.833333333333333,-0.5,-1) Boundary), End=((-0.55,0,-0.5) Internal)
+- Begin=((-0.55,0,-0.5) Internal), End=((-0.5,-0.5,-0.62962962962963) Internal)
+- Begin=((-0.55,0,-0.5) Internal), End=((-0.833333333333333,-0.5,-1) Boundary)
+- Begin=((-0.833333333333333,-0.5,-1) Boundary), End=((-1,0,-1) Boundary)
+- Begin=((-1,0,-1) Boundary), End=((-0.55,0,-0.5) Internal)
+- Begin=((-0.5,-0.5,-0.62962962962963) Internal), End=((-0.5,-0.15,-0.5) Internal)
+- Begin=((-0.5,-0.15,-0.5) Internal), End=((-0.15,-0.5,-0.5) Internal)
+- Begin=((-0.15,-0.5,-0.5) Internal), End=((-0.5,-0.5,-0.62962962962963) Internal)
+- Begin=((0.5,-0.5,-0.62962962962963) Internal), End=((0.15,-0.5,-0.5) Internal)
+- Begin=((0.15,-0.5,-0.5) Internal), End=((0.5,-0.15,-0.5) Internal)
+- Begin=((0.5,-0.15,-0.5) Internal), End=((0.5,-0.5,-0.62962962962963) Internal)
+- Begin=((0.5,-0.5,-0.62962962962963) Internal), End=((0.5,-0.15,-0.5) Internal)
+- Begin=((0.5,-0.15,-0.5) Internal), End=((0.833333333333333,-0.5,-1) Boundary)
+- Begin=((0.833333333333333,-0.5,-1) Boundary), End=((0.5,-0.5,-0.62962962962963) Internal)
+- Begin=((0.5,-0.15,-0.5) Internal), End=((0.55,0,-0.5) Internal)
+- Begin=((0.55,0,-0.5) Internal), End=((0.833333333333333,-0.5,-1) Boundary)
+- Begin=((0.833333333333333,-0.5,-1) Boundary), End=((0.5,-0.15,-0.5) Internal)
+- Begin=((0.833333333333333,-0.5,-1) Boundary), End=((0.55,0,-0.5) Internal)
+- Begin=((0.55,0,-0.5) Internal), End=((1,0,-1) Boundary)
+- Begin=((1,0,-1) Boundary), End=((0.833333333333333,-0.5,-1) Boundary)
+- Begin=((-0.5,0.5,-0.62962962962963) Internal), End=((-0.5,0.15,-0.5) Internal)
+- Begin=((-0.5,0.15,-0.5) Internal), End=((-0.833333333333333,0.5,-1) Boundary)
+- Begin=((-0.833333333333333,0.5,-1) Boundary), End=((-0.5,0.5,-0.62962962962963) Internal)
+- Begin=((-0.5,0.15,-0.5) Internal), End=((-0.55,0,-0.5) Internal)
+- Begin=((-0.55,0,-0.5) Internal), End=((-0.833333333333333,0.5,-1) Boundary)
+- Begin=((-0.833333333333333,0.5,-1) Boundary), End=((-0.5,0.15,-0.5) Internal)
+- Begin=((-0.833333333333333,0.5,-1) Boundary), End=((-0.55,0,-0.5) Internal)
+- Begin=((-0.55,0,-0.5) Internal), End=((-1,0,-1) Boundary)
+- Begin=((-1,0,-1) Boundary), End=((-0.833333333333333,0.5,-1) Boundary)
+- Begin=((-0.5,0.5,-0.62962962962963) Internal), End=((-0.15,0.5,-0.5) Internal)
+- Begin=((-0.15,0.5,-0.5) Internal), End=((-0.5,0.15,-0.5) Internal)
+- Begin=((-0.5,0.15,-0.5) Internal), End=((-0.5,0.5,-0.62962962962963) Internal)
+- Begin=((0.5,0.5,-0.62962962962963) Internal), End=((0.5,0.15,-0.5) Internal)
+- Begin=((0.5,0.15,-0.5) Internal), End=((0.15,0.5,-0.5) Internal)
+- Begin=((0.15,0.5,-0.5) Internal), End=((0.5,0.5,-0.62962962962963) Internal)
+- Begin=((0.5,0.15,-0.5) Internal), End=((0.5,0.5,-0.62962962962963) Internal)
+- Begin=((0.5,0.5,-0.62962962962963) Internal), End=((0.55,0,-0.5) Internal)
+- Begin=((0.55,0,-0.5) Internal), End=((0.5,0.15,-0.5) Internal)
+- Begin=((0.5,0.5,-0.62962962962963) Internal), End=((0.833333333333333,0.5,-1) Boundary)
+- Begin=((0.833333333333333,0.5,-1) Boundary), End=((0.55,0,-0.5) Internal)
+- Begin=((0.55,0,-0.5) Internal), End=((0.5,0.5,-0.62962962962963) Internal)
+- Begin=((0.55,0,-0.5) Internal), End=((0.833333333333333,0.5,-1) Boundary)
+- Begin=((0.833333333333333,0.5,-1) Boundary), End=((1,0,-1) Boundary)
+- Begin=((1,0,-1) Boundary), End=((0.55,0,-0.5) Internal)
+- Begin=((-0.5,0.5,-0.62962962962963) Internal), End=((-0.833333333333333,0.5,-1) Boundary)
+- Begin=((-0.833333333333333,0.5,-1) Boundary), End=((-0.5,0.833333333333333,-1) Boundary)
+- Begin=((-0.5,0.833333333333333,-1) Boundary), End=((-0.5,0.5,-0.62962962962963) Internal)
+- Begin=((-0.15,0.5,-0.5) Internal), End=((-0.5,0.5,-0.62962962962963) Internal)
+- Begin=((-0.5,0.5,-0.62962962962963) Internal), End=((0,0.55,-0.5) Internal)
+- Begin=((0,0.55,-0.5) Internal), End=((-0.15,0.5,-0.5) Internal)
+- Begin=((-0.5,0.5,-0.62962962962963) Internal), End=((-0.5,0.833333333333333,-1) Boundary)
+- Begin=((-0.5,0.833333333333333,-1) Boundary), End=((0,0.55,-0.5) Internal)
+- Begin=((0,0.55,-0.5) Internal), End=((-0.5,0.5,-0.62962962962963) Internal)
+- Begin=((0,0.55,-0.5) Internal), End=((-0.5,0.833333333333333,-1) Boundary)
+- Begin=((-0.5,0.833333333333333,-1) Boundary), End=((0,1,-1) Boundary)
+- Begin=((0,1,-1) Boundary), End=((0,0.55,-0.5) Internal)
+- Begin=((0.5,0.5,-0.62962962962963) Internal), End=((0.15,0.5,-0.5) Internal)
+- Begin=((0.15,0.5,-0.5) Internal), End=((0.5,0.833333333333333,-1) Boundary)
+- Begin=((0.5,0.833333333333333,-1) Boundary), End=((0.5,0.5,-0.62962962962963) Internal)
+- Begin=((0.15,0.5,-0.5) Internal), End=((0,0.55,-0.5) Internal)
+- Begin=((0,0.55,-0.5) Internal), End=((0.5,0.833333333333333,-1) Boundary)
+- Begin=((0.5,0.833333333333333,-1) Boundary), End=((0.15,0.5,-0.5) Internal)
+- Begin=((0.5,0.833333333333333,-1) Boundary), End=((0,0.55,-0.5) Internal)
+- Begin=((0,0.55,-0.5) Internal), End=((0,1,-1) Boundary)
+- Begin=((0,1,-1) Boundary), End=((0.5,0.833333333333333,-1) Boundary)
+- Begin=((0.5,0.5,-0.62962962962963) Internal), End=((0.5,0.833333333333333,-1) Boundary)
+- Begin=((0.5,0.833333333333333,-1) Boundary), End=((0.833333333333333,0.5,-1) Boundary)
+- Begin=((0.833333333333333,0.5,-1) Boundary), End=((0.5,0.5,-0.62962962962963) Internal)
+- Begin=((0,-0.5,-0.333333333333333) Internal), End=((0,-0.55,-0.5) Internal)
+- Begin=((0,-0.55,-0.5) Internal), End=((-0.15,-0.5,-0.5) Internal)
+- Begin=((-0.15,-0.5,-0.5) Internal), End=((0,-0.5,-0.333333333333333) Internal)
+- Begin=((0,-0.5,-0.333333333333333) Internal), End=((0.15,-0.5,-0.5) Internal)
+- Begin=((0.15,-0.5,-0.5) Internal), End=((0,-0.55,-0.5) Internal)
+- Begin=((0,-0.55,-0.5) Internal), End=((0,-0.5,-0.333333333333333) Internal)
+- Begin=((-0.5,0,-0.333333333333333) Internal), End=((-0.5,-0.15,-0.5) Internal)
+- Begin=((-0.5,-0.15,-0.5) Internal), End=((-0.55,0,-0.5) Internal)
+- Begin=((-0.55,0,-0.5) Internal), End=((-0.5,0,-0.333333333333333) Internal)
+- Begin=((-0.15,-0.5,-0.5) Internal), End=((0,-0.2,0) Internal)
+- Begin=((0,-0.2,0) Internal), End=((0,-0.5,-0.333333333333333) Internal)
+- Begin=((0,-0.5,-0.333333333333333) Internal), End=((-0.15,-0.5,-0.5) Internal)
+- Begin=((-0.15,-0.5,-0.5) Internal), End=((-0.5,-0.15,-0.5) Internal)
+- Begin=((-0.5,-0.15,-0.5) Internal), End=((0,-0.2,0) Internal)
+- Begin=((0,-0.2,0) Internal), End=((-0.15,-0.5,-0.5) Internal)
+- Begin=((-0.5,-0.15,-0.5) Internal), End=((-0.2,0,0) Internal)
+- Begin=((-0.2,0,0) Internal), End=((0,-0.2,0) Internal)
+- Begin=((0,-0.2,0) Internal), End=((-0.5,-0.15,-0.5) Internal)
+- Begin=((-0.5,-0.15,-0.5) Internal), End=((-0.5,0,-0.333333333333333) Internal)
+- Begin=((-0.5,0,-0.333333333333333) Internal), End=((-0.2,0,0) Internal)
+- Begin=((-0.2,0,0) Internal), End=((-0.5,-0.15,-0.5) Internal)
+- Begin=((0.2,0,0) Internal), End=((0.5,0,-0.333333333333333) Internal)
+- Begin=((0.5,0,-0.333333333333333) Internal), End=((0.5,-0.15,-0.5) Internal)
+- Begin=((0.5,-0.15,-0.5) Internal), End=((0.2,0,0) Internal)
+- Begin=((0.2,0,0) Internal), End=((0.5,-0.15,-0.5) Internal)
+- Begin=((0.5,-0.15,-0.5) Internal), End=((0,-0.2,0) Internal)
+- Begin=((0,-0.2,0) Internal), End=((0.2,0,0) Internal)
+- Begin=((0,-0.2,0) Internal), End=((0.5,-0.15,-0.5) Internal)
+- Begin=((0.5,-0.15,-0.5) Internal), End=((0.15,-0.5,-0.5) Internal)
+- Begin=((0.15,-0.5,-0.5) Internal), End=((0,-0.2,0) Internal)
+- Begin=((0,-0.2,0) Internal), End=((0.15,-0.5,-0.5) Internal)
+- Begin=((0.15,-0.5,-0.5) Internal), End=((0,-0.5,-0.333333333333333) Internal)
+- Begin=((0,-0.5,-0.333333333333333) Internal), End=((0,-0.2,0) Internal)
+- Begin=((0.5,0,-0.333333333333333) Internal), End=((0.55,0,-0.5) Internal)
+- Begin=((0.55,0,-0.5) Internal), End=((0.5,-0.15,-0.5) Internal)
+- Begin=((0.5,-0.15,-0.5) Internal), End=((0.5,0,-0.333333333333333) Internal)
+- Begin=((-0.5,0,-0.333333333333333) Internal), End=((-0.55,0,-0.5) Internal)
+- Begin=((-0.55,0,-0.5) Internal), End=((-0.5,0.15,-0.5) Internal)
+- Begin=((-0.5,0.15,-0.5) Internal), End=((-0.5,0,-0.333333333333333) Internal)
+- Begin=((-0.5,0.15,-0.5) Internal), End=((-0.2,0,0) Internal)
+- Begin=((-0.2,0,0) Internal), End=((-0.5,0,-0.333333333333333) Internal)
+- Begin=((-0.5,0,-0.333333333333333) Internal), End=((-0.5,0.15,-0.5) Internal)
+- Begin=((-0.5,0.15,-0.5) Internal), End=((-0.15,0.5,-0.5) Internal)
+- Begin=((-0.15,0.5,-0.5) Internal), End=((-0.2,0,0) Internal)
+- Begin=((-0.2,0,0) Internal), End=((-0.5,0.15,-0.5) Internal)
+- Begin=((-0.15,0.5,-0.5) Internal), End=((0,0.2,0) Internal)
+- Begin=((0,0.2,0) Internal), End=((-0.2,0,0) Internal)
+- Begin=((-0.2,0,0) Internal), End=((-0.15,0.5,-0.5) Internal)
+- Begin=((-0.15,0.5,-0.5) Internal), End=((0,0.5,-0.333333333333333) Internal)
+- Begin=((0,0.5,-0.333333333333333) Internal), End=((0,0.2,0) Internal)
+- Begin=((0,0.2,0) Internal), End=((-0.15,0.5,-0.5) Internal)
+- Begin=((0.15,0.5,-0.5) Internal), End=((0,0.2,0) Internal)
+- Begin=((0,0.2,0) Internal), End=((0,0.5,-0.333333333333333) Internal)
+- Begin=((0,0.5,-0.333333333333333) Internal), End=((0.15,0.5,-0.5) Internal)
+- Begin=((0.15,0.5,-0.5) Internal), End=((0.5,0.15,-0.5) Internal)
+- Begin=((0.5,0.15,-0.5) Internal), End=((0,0.2,0) Internal)
+- Begin=((0,0.2,0) Internal), End=((0.15,0.5,-0.5) Internal)
+- Begin=((0.5,0.15,-0.5) Internal), End=((0.2,0,0) Internal)
+- Begin=((0.2,0,0) Internal), End=((0,0.2,0) Internal)
+- Begin=((0,0.2,0) Internal), End=((0.5,0.15,-0.5) Internal)
+- Begin=((0.5,0.15,-0.5) Internal), End=((0.5,0,-0.333333333333333) Internal)
+- Begin=((0.5,0,-0.333333333333333) Internal), End=((0.2,0,0) Internal)
+- Begin=((0.2,0,0) Internal), End=((0.5,0.15,-0.5) Internal)
+- Begin=((0.5,0,-0.333333333333333) Internal), End=((0.5,0.15,-0.5) Internal)
+- Begin=((0.5,0.15,-0.5) Internal), End=((0.55,0,-0.5) Internal)
+- Begin=((0.55,0,-0.5) Internal), End=((0.5,0,-0.333333333333333) Internal)
+- Begin=((0,0.5,-0.333333333333333) Internal), End=((-0.15,0.5,-0.5) Internal)
+- Begin=((-0.15,0.5,-0.5) Internal), End=((0,0.55,-0.5) Internal)
+- Begin=((0,0.55,-0.5) Internal), End=((0,0.5,-0.333333333333333) Internal)
+- Begin=((0,0.5,-0.333333333333333) Internal), End=((0,0.55,-0.5) Internal)
+- Begin=((0,0.55,-0.5) Internal), End=((0.15,0.5,-0.5) Internal)
+- Begin=((0.15,0.5,-0.5) Internal), End=((0,0.5,-0.333333333333333) Internal)
+- Begin=((0,-0.5,0.333333333333333) Internal), End=((-0.15,-0.5,0.5) Internal)
+- Begin=((-0.15,-0.5,0.5) Internal), End=((0,-0.55,0.5) Internal)
+- Begin=((0,-0.55,0.5) Internal), End=((0,-0.5,0.333333333333333) Internal)
+- Begin=((0,-0.5,0.333333333333333) Internal), End=((0,-0.55,0.5) Internal)
+- Begin=((0,-0.55,0.5) Internal), End=((0.15,-0.5,0.5) Internal)
+- Begin=((0.15,-0.5,0.5) Internal), End=((0,-0.5,0.333333333333333) Internal)
+- Begin=((-0.5,0,0.333333333333333) Internal), End=((-0.55,0,0.5) Internal)
+- Begin=((-0.55,0,0.5) Internal), End=((-0.5,-0.15,0.5) Internal)
+- Begin=((-0.5,-0.15,0.5) Internal), End=((-0.5,0,0.333333333333333) Internal)
+- Begin=((-0.2,0,0) Internal), End=((-0.5,0,0.333333333333333) Internal)
+- Begin=((-0.5,0,0.333333333333333) Internal), End=((-0.5,-0.15,0.5) Internal)
+- Begin=((-0.5,-0.15,0.5) Internal), End=((-0.2,0,0) Internal)
+- Begin=((-0.2,0,0) Internal), End=((-0.5,-0.15,0.5) Internal)
+- Begin=((-0.5,-0.15,0.5) Internal), End=((0,-0.2,0) Internal)
+- Begin=((0,-0.2,0) Internal), End=((-0.2,0,0) Internal)
+- Begin=((0,-0.2,0) Internal), End=((-0.5,-0.15,0.5) Internal)
+- Begin=((-0.5,-0.15,0.5) Internal), End=((-0.15,-0.5,0.5) Internal)
+- Begin=((-0.15,-0.5,0.5) Internal), End=((0,-0.2,0) Internal)
+- Begin=((0,-0.2,0) Internal), End=((-0.15,-0.5,0.5) Internal)
+- Begin=((-0.15,-0.5,0.5) Internal), End=((0,-0.5,0.333333333333333) Internal)
+- Begin=((0,-0.5,0.333333333333333) Internal), End=((0,-0.2,0) Internal)
+- Begin=((0,-0.2,0) Internal), End=((0,-0.5,0.333333333333333) Internal)
+- Begin=((0,-0.5,0.333333333333333) Internal), End=((0.15,-0.5,0.5) Internal)
+- Begin=((0.15,-0.5,0.5) Internal), End=((0,-0.2,0) Internal)
+- Begin=((0,-0.2,0) Internal), End=((0.15,-0.5,0.5) Internal)
+- Begin=((0.15,-0.5,0.5) Internal), End=((0.2,0,0) Internal)
+- Begin=((0.2,0,0) Internal), End=((0,-0.2,0) Internal)
+- Begin=((0.2,0,0) Internal), End=((0.15,-0.5,0.5) Internal)
+- Begin=((0.15,-0.5,0.5) Internal), End=((0.5,-0.15,0.5) Internal)
+- Begin=((0.5,-0.15,0.5) Internal), End=((0.2,0,0) Internal)
+- Begin=((0.2,0,0) Internal), End=((0.5,-0.15,0.5) Internal)
+- Begin=((0.5,-0.15,0.5) Internal), End=((0.5,0,0.333333333333333) Internal)
+- Begin=((0.5,0,0.333333333333333) Internal), End=((0.2,0,0) Internal)
+- Begin=((0.5,0,0.333333333333333) Internal), End=((0.5,-0.15,0.5) Internal)
+- Begin=((0.5,-0.15,0.5) Internal), End=((0.55,0,0.5) Internal)
+- Begin=((0.55,0,0.5) Internal), End=((0.5,0,0.333333333333333) Internal)
+- Begin=((-0.5,0,0.333333333333333) Internal), End=((-0.5,0.15,0.5) Internal)
+- Begin=((-0.5,0.15,0.5) Internal), End=((-0.55,0,0.5) Internal)
+- Begin=((-0.55,0,0.5) Internal), End=((-0.5,0,0.333333333333333) Internal)
+- Begin=((-0.15,0.5,0.5) Internal), End=((0,0.2,0) Internal)
+- Begin=((0,0.2,0) Internal), End=((0,0.5,0.333333333333333) Internal)
+- Begin=((0,0.5,0.333333333333333) Internal), End=((-0.15,0.5,0.5) Internal)
+- Begin=((-0.15,0.5,0.5) Internal), End=((-0.5,0.15,0.5) Internal)
+- Begin=((-0.5,0.15,0.5) Internal), End=((0,0.2,0) Internal)
+- Begin=((0,0.2,0) Internal), End=((-0.15,0.5,0.5) Internal)
+- Begin=((-0.5,0.15,0.5) Internal), End=((-0.2,0,0) Internal)
+- Begin=((-0.2,0,0) Internal), End=((0,0.2,0) Internal)
+- Begin=((0,0.2,0) Internal), End=((-0.5,0.15,0.5) Internal)
+- Begin=((-0.5,0.15,0.5) Internal), End=((-0.5,0,0.333333333333333) Internal)
+- Begin=((-0.5,0,0.333333333333333) Internal), End=((-0.2,0,0) Internal)
+- Begin=((-0.2,0,0) Internal), End=((-0.5,0.15,0.5) Internal)
+- Begin=((0.2,0,0) Internal), End=((0.5,0,0.333333333333333) Internal)
+- Begin=((0.5,0,0.333333333333333) Internal), End=((0.5,0.15,0.5) Internal)
+- Begin=((0.5,0.15,0.5) Internal), End=((0.2,0,0) Internal)
+- Begin=((0.2,0,0) Internal), End=((0.5,0.15,0.5) Internal)
+- Begin=((0.5,0.15,0.5) Internal), End=((0,0.2,0) Internal)
+- Begin=((0,0.2,0) Internal), End=((0.2,0,0) Internal)
+- Begin=((0,0.2,0) Internal), End=((0.5,0.15,0.5) Internal)
+- Begin=((0.5,0.15,0.5) Internal), End=((0.15,0.5,0.5) Internal)
+- Begin=((0.15,0.5,0.5) Internal), End=((0,0.2,0) Internal)
+- Begin=((0,0.2,0) Internal), End=((0.15,0.5,0.5) Internal)
+- Begin=((0.15,0.5,0.5) Internal), End=((0,0.5,0.333333333333333) Internal)
+- Begin=((0,0.5,0.333333333333333) Internal), End=((0,0.2,0) Internal)
+- Begin=((0.5,0,0.333333333333333) Internal), End=((0.55,0,0.5) Internal)
+- Begin=((0.55,0,0.5) Internal), End=((0.5,0.15,0.5) Internal)
+- Begin=((0.5,0.15,0.5) Internal), End=((0.5,0,0.333333333333333) Internal)
+- Begin=((0,0.5,0.333333333333333) Internal), End=((0,0.55,0.5) Internal)
+- Begin=((0,0.55,0.5) Internal), End=((-0.15,0.5,0.5) Internal)
+- Begin=((-0.15,0.5,0.5) Internal), End=((0,0.5,0.333333333333333) Internal)
+- Begin=((0,0.5,0.333333333333333) Internal), End=((0.15,0.5,0.5) Internal)
+- Begin=((0.15,0.5,0.5) Internal), End=((0,0.55,0.5) Internal)
+- Begin=((0,0.55,0.5) Internal), End=((0,0.5,0.333333333333333) Internal)
+- Begin=((-0.5,-0.5,0.62962962962963) Internal), End=((-0.833333333333333,-0.5,1) Boundary)
+- Begin=((-0.833333333333333,-0.5,1) Boundary), End=((-0.5,-0.833333333333333,1) Boundary)
+- Begin=((-0.5,-0.833333333333333,1) Boundary), End=((-0.5,-0.5,0.62962962962963) Internal)
+- Begin=((-0.15,-0.5,0.5) Internal), End=((-0.5,-0.5,0.62962962962963) Internal)
+- Begin=((-0.5,-0.5,0.62962962962963) Internal), End=((0,-0.55,0.5) Internal)
+- Begin=((0,-0.55,0.5) Internal), End=((-0.15,-0.5,0.5) Internal)
+- Begin=((-0.5,-0.5,0.62962962962963) Internal), End=((-0.5,-0.833333333333333,1) Boundary)
+- Begin=((-0.5,-0.833333333333333,1) Boundary), End=((0,-0.55,0.5) Internal)
+- Begin=((0,-0.55,0.5) Internal), End=((-0.5,-0.5,0.62962962962963) Internal)
+- Begin=((0,-0.55,0.5) Internal), End=((-0.5,-0.833333333333333,1) Boundary)
+- Begin=((-0.5,-0.833333333333333,1) Boundary), End=((0,-1,1) Boundary)
+- Begin=((0,-1,1) Boundary), End=((0,-0.55,0.5) Internal)
+- Begin=((0.5,-0.5,0.62962962962963) Internal), End=((0.15,-0.5,0.5) Internal)
+- Begin=((0.15,-0.5,0.5) Internal), End=((0.5,-0.833333333333333,1) Boundary)
+- Begin=((0.5,-0.833333333333333,1) Boundary), End=((0.5,-0.5,0.62962962962963) Internal)
+- Begin=((0.15,-0.5,0.5) Internal), End=((0,-0.55,0.5) Internal)
+- Begin=((0,-0.55,0.5) Internal), End=((0.5,-0.833333333333333,1) Boundary)
+- Begin=((0.5,-0.833333333333333,1) Boundary), End=((0.15,-0.5,0.5) Internal)
+- Begin=((0.5,-0.833333333333333,1) Boundary), End=((0,-0.55,0.5) Internal)
+- Begin=((0,-0.55,0.5) Internal), End=((0,-1,1) Boundary)
+- Begin=((0,-1,1) Boundary), End=((0.5,-0.833333333333333,1) Boundary)
+- Begin=((0.5,-0.5,0.62962962962963) Internal), End=((0.5,-0.833333333333333,1) Boundary)
+- Begin=((0.5,-0.833333333333333,1) Boundary), End=((0.833333333333333,-0.5,1) Boundary)
+- Begin=((0.833333333333333,-0.5,1) Boundary), End=((0.5,-0.5,0.62962962962963) Internal)
+- Begin=((-0.5,-0.5,0.62962962962963) Internal), End=((-0.5,-0.15,0.5) Internal)
+- Begin=((-0.5,-0.15,0.5) Internal), End=((-0.833333333333333,-0.5,1) Boundary)
+- Begin=((-0.833333333333333,-0.5,1) Boundary), End=((-0.5,-0.5,0.62962962962963) Internal)
+- Begin=((-0.5,-0.15,0.5) Internal), End=((-0.55,0,0.5) Internal)
+- Begin=((-0.55,0,0.5) Internal), End=((-0.833333333333333,-0.5,1) Boundary)
+- Begin=((-0.833333333333333,-0.5,1) Boundary), End=((-0.5,-0.15,0.5) Internal)
+- Begin=((-0.833333333333333,-0.5,1) Boundary), End=((-0.55,0,0.5) Internal)
+- Begin=((-0.55,0,0.5) Internal), End=((-1,0,1) Boundary)
+- Begin=((-1,0,1) Boundary), End=((-0.833333333333333,-0.5,1) Boundary)
+- Begin=((-0.5,-0.5,0.62962962962963) Internal), End=((-0.15,-0.5,0.5) Internal)
+- Begin=((-0.15,-0.5,0.5) Internal), End=((-0.5,-0.15,0.5) Internal)
+- Begin=((-0.5,-0.15,0.5) Internal), End=((-0.5,-0.5,0.62962962962963) Internal)
+- Begin=((0.5,-0.5,0.62962962962963) Internal), End=((0.5,-0.15,0.5) Internal)
+- Begin=((0.5,-0.15,0.5) Internal), End=((0.15,-0.5,0.5) Internal)
+- Begin=((0.15,-0.5,0.5) Internal), End=((0.5,-0.5,0.62962962962963) Internal)
+- Begin=((0.5,-0.15,0.5) Internal), End=((0.5,-0.5,0.62962962962963) Internal)
+- Begin=((0.5,-0.5,0.62962962962963) Internal), End=((0.55,0,0.5) Internal)
+- Begin=((0.55,0,0.5) Internal), End=((0.5,-0.15,0.5) Internal)
+- Begin=((0.5,-0.5,0.62962962962963) Internal), End=((0.833333333333333,-0.5,1) Boundary)
+- Begin=((0.833333333333333,-0.5,1) Boundary), End=((0.55,0,0.5) Internal)
+- Begin=((0.55,0,0.5) Internal), End=((0.5,-0.5,0.62962962962963) Internal)
+- Begin=((0.55,0,0.5) Internal), End=((0.833333333333333,-0.5,1) Boundary)
+- Begin=((0.833333333333333,-0.5,1) Boundary), End=((1,0,1) Boundary)
+- Begin=((1,0,1) Boundary), End=((0.55,0,0.5) Internal)
+- Begin=((-0.5,0.15,0.5) Internal), End=((-0.5,0.5,0.62962962962963) Internal)
+- Begin=((-0.5,0.5,0.62962962962963) Internal), End=((-0.55,0,0.5) Internal)
+- Begin=((-0.55,0,0.5) Internal), End=((-0.5,0.15,0.5) Internal)
+- Begin=((-0.5,0.5,0.62962962962963) Internal), End=((-0.833333333333333,0.5,1) Boundary)
+- Begin=((-0.833333333333333,0.5,1) Boundary), End=((-0.55,0,0.5) Internal)
+- Begin=((-0.55,0,0.5) Internal), End=((-0.5,0.5,0.62962962962963) Internal)
+- Begin=((-0.55,0,0.5) Internal), End=((-0.833333333333333,0.5,1) Boundary)
+- Begin=((-0.833333333333333,0.5,1) Boundary), End=((-1,0,1) Boundary)
+- Begin=((-1,0,1) Boundary), End=((-0.55,0,0.5) Internal)
+- Begin=((-0.5,0.5,0.62962962962963) Internal), End=((-0.5,0.15,0.5) Internal)
+- Begin=((-0.5,0.15,0.5) Internal), End=((-0.15,0.5,0.5) Internal)
+- Begin=((-0.15,0.5,0.5) Internal), End=((-0.5,0.5,0.62962962962963) Internal)
+- Begin=((0.5,0.5,0.62962962962963) Internal), End=((0.15,0.5,0.5) Internal)
+- Begin=((0.15,0.5,0.5) Internal), End=((0.5,0.15,0.5) Internal)
+- Begin=((0.5,0.15,0.5) Internal), End=((0.5,0.5,0.62962962962963) Internal)
+- Begin=((0.5,0.5,0.62962962962963) Internal), End=((0.5,0.15,0.5) Internal)
+- Begin=((0.5,0.15,0.5) Internal), End=((0.833333333333333,0.5,1) Boundary)
+- Begin=((0.833333333333333,0.5,1) Boundary), End=((0.5,0.5,0.62962962962963) Internal)
+- Begin=((0.5,0.15,0.5) Internal), End=((0.55,0,0.5) Internal)
+- Begin=((0.55,0,0.5) Internal), End=((0.833333333333333,0.5,1) Boundary)
+- Begin=((0.833333333333333,0.5,1) Boundary), End=((0.5,0.15,0.5) Internal)
+- Begin=((0.833333333333333,0.5,1) Boundary), End=((0.55,0,0.5) Internal)
+- Begin=((0.55,0,0.5) Internal), End=((1,0,1) Boundary)
+- Begin=((1,0,1) Boundary), End=((0.833333333333333,0.5,1) Boundary)
+- Begin=((-0.5,0.5,0.62962962962963) Internal), End=((-0.5,0.833333333333333,1) Boundary)
+- Begin=((-0.5,0.833333333333333,1) Boundary), End=((-0.833333333333333,0.5,1) Boundary)
+- Begin=((-0.833333333333333,0.5,1) Boundary), End=((-0.5,0.5,0.62962962962963) Internal)
+- Begin=((-0.5,0.5,0.62962962962963) Internal), End=((-0.15,0.5,0.5) Internal)
+- Begin=((-0.15,0.5,0.5) Internal), End=((-0.5,0.833333333333333,1) Boundary)
+- Begin=((-0.5,0.833333333333333,1) Boundary), End=((-0.5,0.5,0.62962962962963) Internal)
+- Begin=((-0.15,0.5,0.5) Internal), End=((0,0.55,0.5) Internal)
+- Begin=((0,0.55,0.5) Internal), End=((-0.5,0.833333333333333,1) Boundary)
+- Begin=((-0.5,0.833333333333333,1) Boundary), End=((-0.15,0.5,0.5) Internal)
+- Begin=((-0.5,0.833333333333333,1) Boundary), End=((0,0.55,0.5) Internal)
+- Begin=((0,0.55,0.5) Internal), End=((0,1,1) Boundary)
+- Begin=((0,1,1) Boundary), End=((-0.5,0.833333333333333,1) Boundary)
+- Begin=((0.15,0.5,0.5) Internal), End=((0.5,0.5,0.62962962962963) Internal)
+- Begin=((0.5,0.5,0.62962962962963) Internal), End=((0,0.55,0.5) Internal)
+- Begin=((0,0.55,0.5) Internal), End=((0.15,0.5,0.5) Internal)
+- Begin=((0.5,0.5,0.62962962962963) Internal), End=((0.5,0.833333333333333,1) Boundary)
+- Begin=((0.5,0.833333333333333,1) Boundary), End=((0,0.55,0.5) Internal)
+- Begin=((0,0.55,0.5) Internal), End=((0.5,0.5,0.62962962962963) Internal)
+- Begin=((0,0.55,0.5) Internal), End=((0.5,0.833333333333333,1) Boundary)
+- Begin=((0.5,0.833333333333333,1) Boundary), End=((0,1,1) Boundary)
+- Begin=((0,1,1) Boundary), End=((0,0.55,0.5) Internal)
+- Begin=((0.5,0.5,0.62962962962963) Internal), End=((0.833333333333333,0.5,1) Boundary)
+- Begin=((0.833333333333333,0.5,1) Boundary), End=((0.5,0.833333333333333,1) Boundary)
+- Begin=((0.5,0.833333333333333,1) Boundary), End=((0.5,0.5,0.62962962962963) Internal)
+Faces :
+- [(-0.5,-0.5,-0.62962962962963) Internal,(-0.5,-0.833333333333333,-1) Boundary,(-0.833333333333333,-0.5,-1) Boundary]
+- [(-0.5,-0.5,-0.62962962962963) Internal,(-0.15,-0.5,-0.5) Internal,(-0.5,-0.833333333333333,-1) Boundary]
+- [(-0.15,-0.5,-0.5) Internal,(0,-0.55,-0.5) Internal,(-0.5,-0.833333333333333,-1) Boundary]
+- [(-0.5,-0.833333333333333,-1) Boundary,(0,-0.55,-0.5) Internal,(0,-1,-1) Boundary]
+- [(0.15,-0.5,-0.5) Internal,(0.5,-0.5,-0.62962962962963) Internal,(0,-0.55,-0.5) Internal]
+- [(0.5,-0.5,-0.62962962962963) Internal,(0.5,-0.833333333333333,-1) Boundary,(0,-0.55,-0.5) Internal]
+- [(0,-0.55,-0.5) Internal,(0.5,-0.833333333333333,-1) Boundary,(0,-1,-1) Boundary]
+- [(0.5,-0.5,-0.62962962962963) Internal,(0.833333333333333,-0.5,-1) Boundary,(0.5,-0.833333333333333,-1) Boundary]
+- [(-0.5,-0.15,-0.5) Internal,(-0.5,-0.5,-0.62962962962963) Internal,(-0.55,0,-0.5) Internal]
+- [(-0.5,-0.5,-0.62962962962963) Internal,(-0.833333333333333,-0.5,-1) Boundary,(-0.55,0,-0.5) Internal]
+- [(-0.55,0,-0.5) Internal,(-0.833333333333333,-0.5,-1) Boundary,(-1,0,-1) Boundary]
+- [(-0.5,-0.5,-0.62962962962963) Internal,(-0.5,-0.15,-0.5) Internal,(-0.15,-0.5,-0.5) Internal]
+- [(0.5,-0.5,-0.62962962962963) Internal,(0.15,-0.5,-0.5) Internal,(0.5,-0.15,-0.5) Internal]
+- [(0.5,-0.5,-0.62962962962963) Internal,(0.5,-0.15,-0.5) Internal,(0.833333333333333,-0.5,-1) Boundary]
+- [(0.5,-0.15,-0.5) Internal,(0.55,0,-0.5) Internal,(0.833333333333333,-0.5,-1) Boundary]
+- [(0.833333333333333,-0.5,-1) Boundary,(0.55,0,-0.5) Internal,(1,0,-1) Boundary]
+- [(-0.5,0.5,-0.62962962962963) Internal,(-0.5,0.15,-0.5) Internal,(-0.833333333333333,0.5,-1) Boundary]
+- [(-0.5,0.15,-0.5) Internal,(-0.55,0,-0.5) Internal,(-0.833333333333333,0.5,-1) Boundary]
+- [(-0.833333333333333,0.5,-1) Boundary,(-0.55,0,-0.5) Internal,(-1,0,-1) Boundary]
+- [(-0.5,0.5,-0.62962962962963) Internal,(-0.15,0.5,-0.5) Internal,(-0.5,0.15,-0.5) Internal]
+- [(0.5,0.5,-0.62962962962963) Internal,(0.5,0.15,-0.5) Internal,(0.15,0.5,-0.5) Internal]
+- [(0.5,0.15,-0.5) Internal,(0.5,0.5,-0.62962962962963) Internal,(0.55,0,-0.5) Internal]
+- [(0.5,0.5,-0.62962962962963) Internal,(0.833333333333333,0.5,-1) Boundary,(0.55,0,-0.5) Internal]
+- [(0.55,0,-0.5) Internal,(0.833333333333333,0.5,-1) Boundary,(1,0,-1) Boundary]
+- [(-0.5,0.5,-0.62962962962963) Internal,(-0.833333333333333,0.5,-1) Boundary,(-0.5,0.833333333333333,-1) Boundary]
+- [(-0.15,0.5,-0.5) Internal,(-0.5,0.5,-0.62962962962963) Internal,(0,0.55,-0.5) Internal]
+- [(-0.5,0.5,-0.62962962962963) Internal,(-0.5,0.833333333333333,-1) Boundary,(0,0.55,-0.5) Internal]
+- [(0,0.55,-0.5) Internal,(-0.5,0.833333333333333,-1) Boundary,(0,1,-1) Boundary]
+- [(0.5,0.5,-0.62962962962963) Internal,(0.15,0.5,-0.5) Internal,(0.5,0.833333333333333,-1) Boundary]
+- [(0.15,0.5,-0.5) Internal,(0,0.55,-0.5) Internal,(0.5,0.833333333333333,-1) Boundary]
+- [(0.5,0.833333333333333,-1) Boundary,(0,0.55,-0.5) Internal,(0,1,-1) Boundary]
+- [(0.5,0.5,-0.62962962962963) Internal,(0.5,0.833333333333333,-1) Boundary,(0.833333333333333,0.5,-1) Boundary]
+- [(0,-0.5,-0.333333333333333) Internal,(0,-0.55,-0.5) Internal,(-0.15,-0.5,-0.5) Internal]
+- [(0,-0.5,-0.333333333333333) Internal,(0.15,-0.5,-0.5) Internal,(0,-0.55,-0.5) Internal]
+- [(-0.5,0,-0.333333333333333) Internal,(-0.5,-0.15,-0.5) Internal,(-0.55,0,-0.5) Internal]
+- [(-0.15,-0.5,-0.5) Internal,(0,-0.2,0) Internal,(0,-0.5,-0.333333333333333) Internal]
+- [(-0.15,-0.5,-0.5) Internal,(-0.5,-0.15,-0.5) Internal,(0,-0.2,0) Internal]
+- [(-0.5,-0.15,-0.5) Internal,(-0.2,0,0) Internal,(0,-0.2,0) Internal]
+- [(-0.5,-0.15,-0.5) Internal,(-0.5,0,-0.333333333333333) Internal,(-0.2,0,0) Internal]
+- [(0.2,0,0) Internal,(0.5,0,-0.333333333333333) Internal,(0.5,-0.15,-0.5) Internal]
+- [(0.2,0,0) Internal,(0.5,-0.15,-0.5) Internal,(0,-0.2,0) Internal]
+- [(0,-0.2,0) Internal,(0.5,-0.15,-0.5) Internal,(0.15,-0.5,-0.5) Internal]
+- [(0,-0.2,0) Internal,(0.15,-0.5,-0.5) Internal,(0,-0.5,-0.333333333333333) Internal]
+- [(0.5,0,-0.333333333333333) Internal,(0.55,0,-0.5) Internal,(0.5,-0.15,-0.5) Internal]
+- [(-0.5,0,-0.333333333333333) Internal,(-0.55,0,-0.5) Internal,(-0.5,0.15,-0.5) Internal]
+- [(-0.5,0.15,-0.5) Internal,(-0.2,0,0) Internal,(-0.5,0,-0.333333333333333) Internal]
+- [(-0.5,0.15,-0.5) Internal,(-0.15,0.5,-0.5) Internal,(-0.2,0,0) Internal]
+- [(-0.15,0.5,-0.5) Internal,(0,0.2,0) Internal,(-0.2,0,0) Internal]
+- [(-0.15,0.5,-0.5) Internal,(0,0.5,-0.333333333333333) Internal,(0,0.2,0) Internal]
+- [(0.15,0.5,-0.5) Internal,(0,0.2,0) Internal,(0,0.5,-0.333333333333333) Internal]
+- [(0.15,0.5,-0.5) Internal,(0.5,0.15,-0.5) Internal,(0,0.2,0) Internal]
+- [(0.5,0.15,-0.5) Internal,(0.2,0,0) Internal,(0,0.2,0) Internal]
+- [(0.5,0.15,-0.5) Internal,(0.5,0,-0.333333333333333) Internal,(0.2,0,0) Internal]
+- [(0.5,0,-0.333333333333333) Internal,(0.5,0.15,-0.5) Internal,(0.55,0,-0.5) Internal]
+- [(0,0.5,-0.333333333333333) Internal,(-0.15,0.5,-0.5) Internal,(0,0.55,-0.5) Internal]
+- [(0,0.5,-0.333333333333333) Internal,(0,0.55,-0.5) Internal,(0.15,0.5,-0.5) Internal]
+- [(0,-0.5,0.333333333333333) Internal,(-0.15,-0.5,0.5) Internal,(0,-0.55,0.5) Internal]
+- [(0,-0.5,0.333333333333333) Internal,(0,-0.55,0.5) Internal,(0.15,-0.5,0.5) Internal]
+- [(-0.5,0,0.333333333333333) Internal,(-0.55,0,0.5) Internal,(-0.5,-0.15,0.5) Internal]
+- [(-0.2,0,0) Internal,(-0.5,0,0.333333333333333) Internal,(-0.5,-0.15,0.5) Internal]
+- [(-0.2,0,0) Internal,(-0.5,-0.15,0.5) Internal,(0,-0.2,0) Internal]
+- [(0,-0.2,0) Internal,(-0.5,-0.15,0.5) Internal,(-0.15,-0.5,0.5) Internal]
+- [(0,-0.2,0) Internal,(-0.15,-0.5,0.5) Internal,(0,-0.5,0.333333333333333) Internal]
+- [(0,-0.2,0) Internal,(0,-0.5,0.333333333333333) Internal,(0.15,-0.5,0.5) Internal]
+- [(0,-0.2,0) Internal,(0.15,-0.5,0.5) Internal,(0.2,0,0) Internal]
+- [(0.2,0,0) Internal,(0.15,-0.5,0.5) Internal,(0.5,-0.15,0.5) Internal]
+- [(0.2,0,0) Internal,(0.5,-0.15,0.5) Internal,(0.5,0,0.333333333333333) Internal]
+- [(0.5,0,0.333333333333333) Internal,(0.5,-0.15,0.5) Internal,(0.55,0,0.5) Internal]
+- [(-0.5,0,0.333333333333333) Internal,(-0.5,0.15,0.5) Internal,(-0.55,0,0.5) Internal]
+- [(-0.15,0.5,0.5) Internal,(0,0.2,0) Internal,(0,0.5,0.333333333333333) Internal]
+- [(-0.15,0.5,0.5) Internal,(-0.5,0.15,0.5) Internal,(0,0.2,0) Internal]
+- [(-0.5,0.15,0.5) Internal,(-0.2,0,0) Internal,(0,0.2,0) Internal]
+- [(-0.5,0.15,0.5) Internal,(-0.5,0,0.333333333333333) Internal,(-0.2,0,0) Internal]
+- [(0.2,0,0) Internal,(0.5,0,0.333333333333333) Internal,(0.5,0.15,0.5) Internal]
+- [(0.2,0,0) Internal,(0.5,0.15,0.5) Internal,(0,0.2,0) Internal]
+- [(0,0.2,0) Internal,(0.5,0.15,0.5) Internal,(0.15,0.5,0.5) Internal]
+- [(0,0.2,0) Internal,(0.15,0.5,0.5) Internal,(0,0.5,0.333333333333333) Internal]
+- [(0.5,0,0.333333333333333) Internal,(0.55,0,0.5) Internal,(0.5,0.15,0.5) Internal]
+- [(0,0.5,0.333333333333333) Internal,(0,0.55,0.5) Internal,(-0.15,0.5,0.5) Internal]
+- [(0,0.5,0.333333333333333) Internal,(0.15,0.5,0.5) Internal,(0,0.55,0.5) Internal]
+- [(-0.5,-0.5,0.62962962962963) Internal,(-0.833333333333333,-0.5,1) Boundary,(-0.5,-0.833333333333333,1) Boundary]
+- [(-0.15,-0.5,0.5) Internal,(-0.5,-0.5,0.62962962962963) Internal,(0,-0.55,0.5) Internal]
+- [(-0.5,-0.5,0.62962962962963) Internal,(-0.5,-0.833333333333333,1) Boundary,(0,-0.55,0.5) Internal]
+- [(0,-0.55,0.5) Internal,(-0.5,-0.833333333333333,1) Boundary,(0,-1,1) Boundary]
+- [(0.5,-0.5,0.62962962962963) Internal,(0.15,-0.5,0.5) Internal,(0.5,-0.833333333333333,1) Boundary]
+- [(0.15,-0.5,0.5) Internal,(0,-0.55,0.5) Internal,(0.5,-0.833333333333333,1) Boundary]
+- [(0.5,-0.833333333333333,1) Boundary,(0,-0.55,0.5) Internal,(0,-1,1) Boundary]
+- [(0.5,-0.5,0.62962962962963) Internal,(0.5,-0.833333333333333,1) Boundary,(0.833333333333333,-0.5,1) Boundary]
+- [(-0.5,-0.5,0.62962962962963) Internal,(-0.5,-0.15,0.5) Internal,(-0.833333333333333,-0.5,1) Boundary]
+- [(-0.5,-0.15,0.5) Internal,(-0.55,0,0.5) Internal,(-0.833333333333333,-0.5,1) Boundary]
+- [(-0.833333333333333,-0.5,1) Boundary,(-0.55,0,0.5) Internal,(-1,0,1) Boundary]
+- [(-0.5,-0.5,0.62962962962963) Internal,(-0.15,-0.5,0.5) Internal,(-0.5,-0.15,0.5) Internal]
+- [(0.5,-0.5,0.62962962962963) Internal,(0.5,-0.15,0.5) Internal,(0.15,-0.5,0.5) Internal]
+- [(0.5,-0.15,0.5) Internal,(0.5,-0.5,0.62962962962963) Internal,(0.55,0,0.5) Internal]
+- [(0.5,-0.5,0.62962962962963) Internal,(0.833333333333333,-0.5,1) Boundary,(0.55,0,0.5) Internal]
+- [(0.55,0,0.5) Internal,(0.833333333333333,-0.5,1) Boundary,(1,0,1) Boundary]
+- [(-0.5,0.15,0.5) Internal,(-0.5,0.5,0.62962962962963) Internal,(-0.55,0,0.5) Internal]
+- [(-0.5,0.5,0.62962962962963) Internal,(-0.833333333333333,0.5,1) Boundary,(-0.55,0,0.5) Internal]
+- [(-0.55,0,0.5) Internal,(-0.833333333333333,0.5,1) Boundary,(-1,0,1) Boundary]
+- [(-0.5,0.5,0.62962962962963) Internal,(-0.5,0.15,0.5) Internal,(-0.15,0.5,0.5) Internal]
+- [(0.5,0.5,0.62962962962963) Internal,(0.15,0.5,0.5) Internal,(0.5,0.15,0.5) Internal]
+- [(0.5,0.5,0.62962962962963) Internal,(0.5,0.15,0.5) Internal,(0.833333333333333,0.5,1) Boundary]
+- [(0.5,0.15,0.5) Internal,(0.55,0,0.5) Internal,(0.833333333333333,0.5,1) Boundary]
+- [(0.833333333333333,0.5,1) Boundary,(0.55,0,0.5) Internal,(1,0,1) Boundary]
+- [(-0.5,0.5,0.62962962962963) Internal,(-0.5,0.833333333333333,1) Boundary,(-0.833333333333333,0.5,1) Boundary]
+- [(-0.5,0.5,0.62962962962963) Internal,(-0.15,0.5,0.5) Internal,(-0.5,0.833333333333333,1) Boundary]
+- [(-0.15,0.5,0.5) Internal,(0,0.55,0.5) Internal,(-0.5,0.833333333333333,1) Boundary]
+- [(-0.5,0.833333333333333,1) Boundary,(0,0.55,0.5) Internal,(0,1,1) Boundary]
+- [(0.15,0.5,0.5) Internal,(0.5,0.5,0.62962962962963) Internal,(0,0.55,0.5) Internal]
+- [(0.5,0.5,0.62962962962963) Internal,(0.5,0.833333333333333,1) Boundary,(0,0.55,0.5) Internal]
+- [(0,0.55,0.5) Internal,(0.5,0.833333333333333,1) Boundary,(0,1,1) Boundary]
+- [(0.5,0.5,0.62962962962963) Internal,(0.833333333333333,0.5,1) Boundary,(0.5,0.833333333333333,1) Boundary]
