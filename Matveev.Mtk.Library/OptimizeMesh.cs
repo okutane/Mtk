@@ -34,9 +34,10 @@ namespace Matveev.Mtk.Library
             Func<Point[], double> faceEnergy =
                 TriangleImplicitApproximations.GetApproximation(surface.Eval, "square");
 
-            if (surface is QuadraticForm)
+            QuadraticForm quadraticForm = surface as QuadraticForm;
+            if (quadraticForm != null)
             {
-                faceEnergy = ((QuadraticForm)surface).FaceDistance;
+                faceEnergy = quadraticForm.FaceDistance;
             }
 
             Func<double[], double> globalEnergy = delegate(double[] globalX)
@@ -103,12 +104,8 @@ namespace Matveev.Mtk.Library
 
         public static void OptimizeImplicit(Mesh mesh, IImplicitSurface field, double epsilon, double alpha)
         {
-            List<EdgeTransform> transforms = new List<EdgeTransform>(5);
-            transforms.Add(new EdgeCollapse(0.5));
-            transforms.Add(new EdgeCollapse(0));
-            transforms.Add(new EdgeCollapse(1));
-            transforms.Add(new EdgeSwap());
-            transforms.Add(new EdgeSplit(0.5));
+            ICollection<EdgeTransform> transforms = Configuration.EdgeTransforms;
+
             Dictionary<EdgeTransform, int> numbersOfUses = new Dictionary<EdgeTransform, int>();
 
             Func<Point[], double> faceEnergy =
@@ -122,6 +119,7 @@ namespace Matveev.Mtk.Library
 
             List<IMeshValidator> validators = new List<IMeshValidator>();
             validators.Add(new DihedralAnglesValidator(0.5));
+            validators.Add(new FaceNormalsValidator());
 
             //Ётап 1. ѕроецирование всех вершин сетки на поверхность
             ProjectAll(mesh, field, epsilon);
@@ -131,86 +129,92 @@ namespace Matveev.Mtk.Library
 
             //Ётап 3. ѕреобразовани€ над структурой сетки
             Random rand = new Random(42);
-            List<Edge> candidats = new List<Edge>(mesh.Edges);
-            Edge candidat, smCandidat;
-            List<Face> surrounding = new List<Face>();
-            Mesh submesh;
-            Dictionary<Edge, Edge> edgeMap = new Dictionary<Edge, Edge>();
-            double E1, E2;
-            while (candidats.Count != 0)
+            bool changed;
+            do
             {
-                candidat = candidats[rand.Next(candidats.Count - 1)];
-                candidats.RemoveAll(edge => edge == candidat || edge == candidat.Pair);
-
-                surrounding.Clear();
-                surrounding.AddRange(candidat.Begin.AdjacentFaces.Concat(candidat.End.AdjacentFaces).Distinct());
-
-                submesh = mesh.CloneSub(surrounding, null, edgeMap, null);
-                smCandidat = edgeMap[candidat];
-                E1 = energy.Eval(submesh);
-
-                foreach (EdgeTransform transform in transforms)
+                changed = false;
+                List<Edge> candidats = new List<Edge>(mesh.Edges);
+                Edge candidat, smCandidat;
+                List<Face> surrounding = new List<Face>();
+                Mesh submesh;
+                Dictionary<Edge, Edge> edgeMap = new Dictionary<Edge, Edge>();
+                double E1, E2;
+                while (candidats.Count != 0)
                 {
-                    if (!transform.IsPossible(candidat, constraintsProvider))
-                        continue;
+                    candidat = candidats[rand.Next(candidats.Count - 1)];
+                    candidats.RemoveAll(edge => edge == candidat || edge == candidat.Pair);
 
-                    IDictionary<Edge, Edge> edgeMap2 = new Dictionary<Edge, Edge>();
-                    Mesh submesh2 = submesh.Clone(edgeMap2);
-                    Edge smCandidat2 = edgeMap2[smCandidat];
+                    surrounding.Clear();
+                    surrounding.AddRange(candidat.Begin.AdjacentFaces.Concat(candidat.End.AdjacentFaces).Distinct());
 
-                    try
+                    submesh = mesh.CloneSub(surrounding, null, edgeMap, null);
+                    smCandidat = edgeMap[candidat];
+                    E1 = energy.Eval(submesh);
+
+                    foreach (EdgeTransform transform in transforms)
                     {
-                        MeshPart smResult = transform.Execute(smCandidat2);
+                        if (!transform.IsPossible(candidat, constraintsProvider))
+                            continue;
 
-                        foreach (IMeshValidator validator in validators)
+                        IDictionary<Edge, Edge> edgeMap2 = new Dictionary<Edge, Edge>();
+                        Mesh submesh2 = submesh.Clone(edgeMap2);
+                        Edge smCandidat2 = edgeMap2[smCandidat];
+
+                        try
                         {
-                            if (!validator.IsValid(submesh))
+                            MeshPart smResult = transform.Execute(smCandidat2);
+
+                            foreach (IMeshValidator validator in validators)
                             {
-                                throw new Exception("Invalid mesh");
+                                if (!validator.IsValid(submesh))
+                                {
+                                    throw new Exception("Invalid mesh");
+                                }
                             }
-                        }
-
-                        foreach (Vertex vertex in smResult.GetVertices(0))
-                        {
-                            VertexOps.OptimizePosition(vertex, field, epsilon);
-                        }
-
-                        E2 = energy.Eval(submesh2);
-
-                        if (E1 > E2)
-                        {
-                            if (numbersOfUses.ContainsKey(transform))
-                            {
-                                numbersOfUses[transform] = numbersOfUses[transform] + 1;
-                            }
-                            else
-                            {
-                                numbersOfUses.Add(transform, 1);
-                            }
-                            candidats.RemoveAll(edgeMap.ContainsKey);
-
-                            MeshPart result = transform.Execute(candidat);
 
                             foreach (Vertex vertex in smResult.GetVertices(0))
                             {
                                 VertexOps.OptimizePosition(vertex, field, epsilon);
                             }
-                            candidats.AddRange(result.GetEdges(1));
-                            break;
+
+                            E2 = energy.Eval(submesh2);
+
+                            if (E1 > E2)
+                            {
+                                if (numbersOfUses.ContainsKey(transform))
+                                {
+                                    numbersOfUses[transform] = numbersOfUses[transform] + 1;
+                                }
+                                else
+                                {
+                                    numbersOfUses.Add(transform, 1);
+                                }
+                                candidats.RemoveAll(edgeMap.ContainsKey);
+
+                                MeshPart result = transform.Execute(candidat);
+                                foreach (Vertex vertex in smResult.GetVertices(0))
+                                {
+                                    VertexOps.OptimizePosition(vertex, field, epsilon);
+                                }
+                                candidats.AddRange(result.GetEdges(1));
+                                changed = true;
+                                break;
+                            }
+                            else
+                            {
+                                Tools.VertexPositionOptimizer.OptimizeAll(submesh2, field, epsilon, energy);
+                                double E3 = energy.Eval(submesh2);
+                                if (E1 > E3)
+                                    throw new Exception("Should optimize vertex positions " + transform.ToString());
+                            }
                         }
-                        else
+                        catch
                         {
-                            Tools.VertexPositionOptimizer.OptimizeAll(submesh2, field, epsilon, energy);
-                            double E3 = energy.Eval(submesh2);
-                            if (E1 > E3)
-                                throw new Exception("Should optimize vertex positions " + transform.ToString());
                         }
-                    }
-                    catch
-                    {
                     }
                 }
             }
+            while (changed);
         }
 
         public static void ProjectAll(Mesh mesh, IImplicitSurface field, double epsilon)

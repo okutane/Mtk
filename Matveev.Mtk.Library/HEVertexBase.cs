@@ -120,13 +120,35 @@ namespace Matveev.Mtk.Library
         {
             get
             {
-                HEEdge edge = outEdge;
-                do
+                // TODO: use State pattern here.
+                if (type == VertexType.Boundary)
                 {
-                    yield return edge;
-                    edge = edge.pair.next;
+                    HEEdge edge = outEdge;
+                    while (edge.pair != null)
+                    {
+                        edge = edge.pair.next;
+                    }
+                    while(true)
+                    {
+                        yield return edge;
+                        if (edge.next.next.pair == null)
+                        {
+                            yield return edge.next;
+                            yield break;
+                        }
+                        edge = edge.next.next.pair;
+                    }
                 }
-                while (edge != outEdge);
+                else
+                {
+                    HEEdge edge = outEdge;
+                    do
+                    {
+                        yield return edge;
+                        edge = edge.next.next.pair;
+                    }
+                    while (edge != outEdge);
+                }
             }
         }
 
@@ -175,38 +197,7 @@ namespace Matveev.Mtk.Library
                 return new Vertex[] { this };
             if (radius == 1)
             {
-                List<Vertex> result = new List<Vertex>();
-                // TODO: use State pattern here.
-                if (type == VertexType.Boundary)
-                {
-                    HEEdge edge = outEdge;
-                    while (edge.pair != null)
-                    {
-                        edge = edge.pair.next;
-                    }
-                    do
-                    {
-                        result.Add(edge.end);
-                        if (edge.next.next.pair == null)
-                        {
-                            break;
-                        }
-                        edge = edge.next.next.pair;
-                    }
-                    while(true);
-                    result.Add(edge.next.end);
-                }
-                else
-                {
-                    HEEdge edge = outEdge;
-                    do
-                    {
-                        result.Add(edge.end);
-                        edge = edge.next.next.pair;
-                    }
-                    while (edge != outEdge);
-                }
-                return result.ToArray();
+                return OutEdges.Select(e => e.End).ToArray();
             }
             throw new Exception("The method or operation is not implemented.");
         }

@@ -112,6 +112,7 @@
     <Compile Include="Utils.cs" />
     <Compile Include="Validators\DihedralAnglesValidator.cs" />
     <Compile Include="Validators\DuplicatedEdgesValidator.cs" />
+    <Compile Include="Validators\FaceNormalsValidator.cs" />
     <Compile Include="Validators\IsolatedVerticesValidator.cs" />
     <Compile Include="VertexEnergy.cs" />
     <Compile Include="VertexPointProjection.cs" />
