@@ -51,6 +51,19 @@ namespace Matveev.Mtk.Tests
         }
 
         [Test]
+        public void ImpossibleNonConvex()
+        {
+            Mesh mesh = Configuration.MeshFactory.Create();
+            Vertex v0 = mesh.AddVertex(new Point(0, 0, 0), new Vector());
+            Vertex v1 = mesh.AddVertex(new Point(1, -1, 0), new Vector());
+            Vertex v2 = mesh.AddVertex(new Point(0, -0.5, 0), new Vector());
+            Vertex v3 = mesh.AddVertex(new Point(-1, -1, 0), new Vector());
+            Vertex v4 = mesh.AddVertex(new Point(0, 1, 0), new Vector());
+            mesh.CreateClosedFan(v0, v1, v2, v3, v4);
+            Assert.IsFalse(new EdgeCollapse(1).IsPossible(FindEdge(mesh, v0, v1), null));
+        }
+
+        [Test]
         public void Possible()
         {
             Mesh mesh = Configuration.MeshFactory.Create();

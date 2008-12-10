@@ -17,6 +17,7 @@ namespace Matveev.Mtk.Tests
             List<IMeshValidator> validators = new List<IMeshValidator>();
             validators.Add(new IsolatedVerticesValidator());
             validators.Add(new DuplicatedEdgesValidator());
+            validators.Add(new FaceNormalsValidator());
             foreach (IMeshValidator validator in validators)
             {
                 Assert.IsTrue(validator.IsValid(mesh), validator.GetType().Name);

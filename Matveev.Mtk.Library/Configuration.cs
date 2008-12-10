@@ -7,8 +7,19 @@ using Matveev.Mtk.Core;
 
 namespace Matveev.Mtk.Library
 {
-    public class Configuration
+    public static class Configuration
     {
-        public static readonly ISimpleFactory<Mesh> MeshFactory = HEMesh.Factory;
+        public static ISimpleFactory<Mesh> MeshFactory = HEMesh.Factory;
+
+        public static ICollection<EdgeTransform> EdgeTransforms = new List<EdgeTransform>();
+
+        static Configuration()
+        {
+            EdgeTransforms.Add(new EdgeCollapse(0.5));
+            EdgeTransforms.Add(new EdgeCollapse(0));
+            EdgeTransforms.Add(new EdgeCollapse(1));
+            EdgeTransforms.Add(new EdgeSwap());
+            EdgeTransforms.Add(new EdgeSplit(0.5));
+        }
     }
 }

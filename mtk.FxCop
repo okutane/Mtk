@@ -108,11 +108,29 @@
  </Rules>
  <FxCopReport Version="1.36">
   <Namespaces>
+   <Namespace Name="Matveev.Common.Utilities">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2008-11-23 17:51:56Z">
+      <Issue>
+       <Item>Matveev.Common.Utilities</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
    <Namespace Name="Matveev.Mtk.Library.EdgeFunctions">
     <Messages>
      <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2008-08-10 10:43:39Z">
       <Issue>
        <Item>Matveev.Mtk.Library.EdgeFunctions</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="Matveev.Mtk.Library.FaceFunctions">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2008-11-23 17:51:56Z">
+      <Issue>
+       <Item>Matveev.Mtk.Library.FaceFunctions</Item>
       </Issue>
      </Message>
     </Messages>
@@ -131,6 +149,24 @@
      <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2008-08-10 10:43:39Z">
       <Issue>
        <Item>Matveev.Mtk.Library.PositionOptimizers</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="Matveev.Mtk.Library.Utilities">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2008-11-23 17:51:56Z">
+      <Issue>
+       <Item>Matveev.Mtk.Library.Utilities</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="Matveev.Mtk.Library.Validators">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2008-11-23 17:51:56Z">
+      <Issue>
+       <Item>Matveev.Mtk.Library.Validators</Item>
       </Issue>
      </Message>
     </Messages>
@@ -499,6 +535,65 @@
             </Issue>
            </Message>
           </Messages>
+         </Type>
+         <Type Name="Pair`2">
+          <Messages>
+           <Message Id="1" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-11-23 17:51:56Z" FixCategory="NonBreaking">
+            <Issue Name="TypeTypeParameterMoreMeaningfulName">
+             <Item>'Pair&lt;T1, T2&gt;'</Item>
+             <Item>'T1'</Item>
+            </Issue>
+           </Message>
+           <Message Id="2" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-11-23 17:51:56Z" FixCategory="NonBreaking">
+            <Issue Name="TypeTypeParameterMoreMeaningfulName">
+             <Item>'Pair&lt;T1, T2&gt;'</Item>
+             <Item>'T2'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#First">
+            <Messages>
+             <Message TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104" Created="2008-11-23 17:51:56Z">
+              <Issue>
+               <Item>'Pair&lt;T1, T2&gt;.First'</Item>
+               <Item>'T1'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2008-11-23 17:51:56Z">
+              <Issue>
+               <Item>'Pair&lt;T1, T2&gt;.First'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Second">
+            <Messages>
+             <Message TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104" Created="2008-11-23 17:51:56Z">
+              <Issue>
+               <Item>'Pair&lt;T1, T2&gt;.Second'</Item>
+               <Item>'T2'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2008-11-23 17:51:56Z">
+              <Issue>
+               <Item>'Pair&lt;T1, T2&gt;.Second'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ToString()">
+            <Messages>
+             <Message Id="System.String.Format(System.String,System.Object,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2008-11-23 17:51:56Z">
+              <Issue>
+               <Item>'string.Format(string, object, object)'</Item>
+               <Item>'Pair&lt;T1, T2&gt;.ToString()'</Item>
+               <Item>'string.Format(IFormatProvider, string, params object[])'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
          </Type>
          <Type Name="YamlFormatter">
           <Members>
@@ -1226,6 +1321,45 @@
            </Member>
           </Members>
          </Type>
+         <Type Name="Configuration">
+          <Messages>
+           <Message TypeName="TypeNamesShouldNotMatchNamespaces" Category="Microsoft.Naming" CheckId="CA1724" Created="2008-11-23 17:51:56Z">
+            <Issue Name="System">
+             <Item>'Configuration'</Item>
+             <Item>System.Configuration</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#.cctor()">
+            <Messages>
+             <Message TypeName="InitializeReferenceTypeStaticFieldsInline" Category="Microsoft.Performance" CheckId="CA1810" Created="2008-11-23 17:51:56Z">
+              <Issue>
+               <Item>'Configuration'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#EdgeTransforms">
+            <Messages>
+             <Message TypeName="NonConstantFieldsShouldNotBeVisible" Category="Microsoft.Usage" CheckId="CA2211" Created="2008-11-23 17:51:56Z">
+              <Issue>
+               <Item>'Configuration.EdgeTransforms'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#MeshFactory">
+            <Messages>
+             <Message TypeName="NonConstantFieldsShouldNotBeVisible" Category="Microsoft.Usage" CheckId="CA2211" Created="2008-11-23 17:51:56Z">
+              <Issue>
+               <Item>'Configuration.MeshFactory'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
          <Type Name="ConjugateGradients">
           <Members>
            <Member Name="#CG(System.Int32,System.Int32[],System.Int32[],System.Double[],System.Double[],System.Double[],System.Double[],System.Int32,System.Double)">
@@ -1304,21 +1438,6 @@
                <Item>'EdgeSplit.Execute(Edge)'</Item>
                <Item>'face'</Item>
                <Item>'Face'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="EdgeSwap">
-          <Members>
-           <Member Name="#IsPossible(Matveev.Mtk.Core.Edge)">
-            <Messages>
-             <Message Id="acos" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-08-10 10:43:39Z">
-              <Issue>
-               <Item>'EdgeSwap.IsPossible(Edge)'</Item>
-               <Item>'acos'</Item>
-               <Item>'double'</Item>
               </Issue>
              </Message>
             </Messages>
@@ -1503,6 +1622,24 @@
              </Message>
             </Messages>
            </Member>
+           <Member Name="#GetEdges(System.Int32)">
+            <Messages>
+             <Message Id="edgesNearBegin" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-11-23 17:51:56Z">
+              <Issue>
+               <Item>'HEEdge.GetEdges(int)'</Item>
+               <Item>'edgesNearBegin'</Item>
+               <Item>'ICollection&lt;Edge&gt;'</Item>
+              </Issue>
+             </Message>
+             <Message Id="edgesNearEnd" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-11-23 17:51:56Z">
+              <Issue>
+               <Item>'HEEdge.GetEdges(int)'</Item>
+               <Item>'edgesNearEnd'</Item>
+               <Item>'ICollection&lt;Edge&gt;'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
            <Member Name="#GetVertices(System.Int32)">
             <Messages>
              <Message TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201" Created="2008-08-10 10:43:39Z">
@@ -1576,6 +1713,16 @@
              </Message>
             </Messages>
            </Member>
+           <Member Name="#Factory">
+            <Messages>
+             <Message TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104" Created="2008-11-23 17:51:56Z">
+              <Issue>
+               <Item>'HEMesh.Factory'</Item>
+               <Item>'ISimpleFactory&lt;Mesh&gt;'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
           </Members>
          </Type>
          <Type Name="HEVertexBase">
@@ -1638,23 +1785,23 @@
          </Type>
          <Type Name="IImplicitSurfacePolygonizer">
           <Members>
-           <Member Name="#Create(Matveev.Mtk.Core.IImplicitSurface,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Int32,System.Int32,System.Int32)">
+           <Member Name="#Create(Matveev.Mtk.Core.ISimpleFactory`1&lt;Matveev.Mtk.Core.Mesh&gt;,Matveev.Mtk.Core.IImplicitSurface,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Int32,System.Int32,System.Int32)">
             <Messages>
-             <Message Id="l" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+             <Message Id="l" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-11-23 17:51:56Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'IImplicitSurfacePolygonizer.Create(IImplicitSurface, double, double, double, double, double, double, int, int, int)'</Item>
+               <Item>'IImplicitSurfacePolygonizer.Create(ISimpleFactory&lt;Mesh&gt;, IImplicitSurface, double, double, double, double, double, double, int, int, int)'</Item>
                <Item>'l'</Item>
               </Issue>
              </Message>
-             <Message Id="m" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+             <Message Id="m" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-11-23 17:51:56Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'IImplicitSurfacePolygonizer.Create(IImplicitSurface, double, double, double, double, double, double, int, int, int)'</Item>
+               <Item>'IImplicitSurfacePolygonizer.Create(ISimpleFactory&lt;Mesh&gt;, IImplicitSurface, double, double, double, double, double, double, int, int, int)'</Item>
                <Item>'m'</Item>
               </Issue>
              </Message>
-             <Message Id="n" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-08-10 10:43:39Z">
+             <Message Id="n" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-11-23 17:51:56Z">
               <Issue Name="MemberParameterMoreMeaningfulName">
-               <Item>'IImplicitSurfacePolygonizer.Create(IImplicitSurface, double, double, double, double, double, double, int, int, int)'</Item>
+               <Item>'IImplicitSurfacePolygonizer.Create(ISimpleFactory&lt;Mesh&gt;, IImplicitSurface, double, double, double, double, double, double, int, int, int)'</Item>
                <Item>'n'</Item>
               </Issue>
              </Message>
@@ -1774,6 +1921,16 @@
              </Message>
             </Messages>
            </Member>
+           <Member Name="#Instance">
+            <Messages>
+             <Message TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104" Created="2008-11-23 17:51:56Z">
+              <Issue>
+               <Item>'MC.Instance'</Item>
+               <Item>'MC'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
           </Members>
          </Type>
          <Type Name="MT6">
@@ -1812,8 +1969,28 @@
          </Type>
          <Type Name="OptimizeMesh">
           <Members>
+           <Member Name="#ImproveVertexPositions(Matveev.Mtk.Core.Mesh,Matveev.Mtk.Core.IImplicitSurface)">
+            <Messages>
+             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Created="2008-11-23 17:51:56Z">
+              <Issue Name="Parameter">
+               <Item>'surface'</Item>
+               <Item>'QuadraticForm'</Item>
+               <Item>'OptimizeMesh.ImproveVertexPositions(Mesh, IImplicitSurface)'</Item>
+               <Item>castclass</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
            <Member Name="#OptimizeImplicit(Matveev.Mtk.Core.Mesh,Matveev.Mtk.Core.IImplicitSurface,System.Double,System.Double)">
             <Messages>
+             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Created="2008-11-23 17:51:56Z">
+              <Issue Name="Parameter">
+               <Item>'field'</Item>
+               <Item>'QuadraticForm'</Item>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>castclass</Item>
+              </Issue>
+             </Message>
              <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-10-23 17:14:05Z">
               <Issue>
                <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
@@ -1824,6 +2001,17 @@
               <Issue Name="TooGeneric">
                <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
                <Item>'Exception'</Item>
+              </Issue>
+              <Issue Name="TooGeneric">
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="result" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-11-23 17:51:56Z">
+              <Issue>
+               <Item>'OptimizeMesh.OptimizeImplicit(Mesh, IImplicitSurface, double, double)'</Item>
+               <Item>'result'</Item>
+               <Item>'MeshPart'</Item>
               </Issue>
              </Message>
             </Messages>
@@ -1849,6 +2037,16 @@
              <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2008-08-10 10:43:39Z" FixCategory="DependsOnFix">
               <Issue>
                <Item>'ParametrizedSurfacePolygonizer.Create(IParametrizedSurface, int, int)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Instance">
+            <Messages>
+             <Message TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104" Created="2008-11-23 17:51:56Z">
+              <Issue>
+               <Item>'ParametrizedSurfacePolygonizer.Instance'</Item>
+               <Item>'ParametrizedSurfacePolygonizer'</Item>
               </Issue>
              </Message>
             </Messages>
@@ -1882,11 +2080,16 @@
           <Members>
            <Member Name="#Instance">
             <Messages>
-             <Message TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104" Created="2008-10-23 17:14:05Z">
+             <Message TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104" Status="Excluded" Created="2008-10-23 17:14:05Z">
               <Issue>
                <Item>'SquareEdgeLength.Instance'</Item>
                <Item>'Energy'</Item>
               </Issue>
+              <Notes>
+               <User Name="Octane">
+                <Note Id="0" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -1987,6 +2190,24 @@
          </Type>
         </Types>
        </Namespace>
+       <Namespace Name="Matveev.Mtk.Library.EdgeFunctions">
+        <Types>
+         <Type Name="DihedralAngle">
+          <Members>
+           <Member Name="#Instance">
+            <Messages>
+             <Message TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104" Created="2008-11-23 17:51:56Z">
+              <Issue>
+               <Item>'DihedralAngle.Instance'</Item>
+               <Item>'EdgeFunction'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
        <Namespace Name="Matveev.Mtk.Library.FaceFunctions">
         <Types>
          <Type Name="ImplicitApproximations+LinearApproximation">
@@ -2069,6 +2290,28 @@
          </Type>
          <Type Name="QuadraticForm">
           <Members>
+           <Member Name="#.ctor(System.Double[,],System.Double[],System.Double)">
+            <Messages>
+             <Message Id="a" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-11-23 17:51:56Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'QuadraticForm.QuadraticForm(double[,], double[], double)'</Item>
+               <Item>'a'</Item>
+              </Issue>
+             </Message>
+             <Message Id="b" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-11-23 17:51:56Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'QuadraticForm.QuadraticForm(double[,], double[], double)'</Item>
+               <Item>'b'</Item>
+              </Issue>
+             </Message>
+             <Message Id="c" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-11-23 17:51:56Z">
+              <Issue Name="MemberParameterMoreMeaningfulName">
+               <Item>'QuadraticForm.QuadraticForm(double[,], double[], double)'</Item>
+               <Item>'c'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
            <Member Name="#_a">
             <Messages>
              <Message Id="Member" TypeName="PreferJaggedArraysOverMultidimensional" Category="Microsoft.Performance" CheckId="CA1814" Created="2008-10-22 14:47:47Z">
@@ -2078,11 +2321,42 @@
              </Message>
             </Messages>
            </Member>
+           <Member Name="#HyperboloidOne">
+            <Messages>
+             <Message TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104" Created="2008-11-23 17:51:56Z">
+              <Issue>
+               <Item>'QuadraticForm.HyperboloidOne'</Item>
+               <Item>'QuadraticForm'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
            <Member Name="#ParabolicHyperboloid">
             <Messages>
-             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2008-10-22 14:47:47Z">
+             <Message TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104" Created="2008-11-23 17:51:56Z">
               <Issue>
                <Item>'QuadraticForm.ParabolicHyperboloid'</Item>
+               <Item>'QuadraticForm'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Plane">
+            <Messages>
+             <Message TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104" Created="2008-11-23 17:51:56Z">
+              <Issue>
+               <Item>'QuadraticForm.Plane'</Item>
+               <Item>'QuadraticForm'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Sphere">
+            <Messages>
+             <Message TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104" Created="2008-11-23 17:51:56Z">
+              <Issue>
+               <Item>'QuadraticForm.Sphere'</Item>
+               <Item>'QuadraticForm'</Item>
               </Issue>
              </Message>
             </Messages>
@@ -2492,6 +2766,11 @@
     </Modules>
    </Target>
   </Targets>
+  <Notes>
+   <User Name="Octane">
+    <Note Id="0" Modified="2008-11-23 18:01:45Z">SquareEdgeLength is immutable.</Note>
+   </User>
+  </Notes>
   <Rules>
    <Rule TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020">
     <Resolution Name="Default">Consider merging the types defined in '{0}' with another namespace.</Resolution>
@@ -2501,9 +2780,6 @@
    </Rule>
    <Rule TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811">
     <Resolution Name="Default">{0} appears to have no upstream public or protected callers.</Resolution>
-   </Rule>
-   <Rule TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823">
-    <Resolution Name="Default">It appears that field {0} is never used or is only ever assigned to. Use this field or remove it.</Resolution>
    </Rule>
    <Rule TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405">
     <Resolution Name="Default">{0} is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: {1}</Resolution>
@@ -2620,6 +2896,9 @@
    </Rule>
    <Rule TypeName="StaticHolderTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1053">
     <Resolution Name="Default">Remove the public constructors from {0}.</Resolution>
+   </Rule>
+   <Rule TypeName="TypeNamesShouldNotMatchNamespaces" Category="Microsoft.Naming" CheckId="CA1724">
+    <Resolution Name="System">The type name {0} conflicts in whole or in part with the namespace name '{1}' defined in the .NET Framework. Rename the type to eliminate the conflict.</Resolution>
    </Rule>
   </Rules>
  </FxCopReport>
