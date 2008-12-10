@@ -49,10 +49,12 @@ namespace Matveev.Mtk.Tests
             TestSerialize("SimpleMesh.yaml", mesh);
         }
 
-        public static void TestSerialize(string actual, object obj)
+        public static void TestSerialize(string name, object obj)
         {
-            string expected = Path.Combine("../../YamlExpected", actual);
-            actual = Path.Combine("YamlActual", actual);
+            string expectedDirectory = Environment.GetEnvironmentVariable("TESTS_FOLDER");
+            string actualDirectory = Path.Combine(expectedDirectory, "../YamlActual");
+            string expected = Path.Combine(expectedDirectory, name);
+            string actual = Path.Combine(actualDirectory, name);
             using (Stream stream = new FileStream(actual, FileMode.Create))
                 formatter.Serialize(stream, obj);
             if (File.Exists(expected))
