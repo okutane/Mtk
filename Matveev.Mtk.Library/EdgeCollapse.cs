@@ -43,7 +43,11 @@ namespace Matveev.Mtk.Library
                 edge.Begin.Adjacent.Union(edge.End.Adjacent);
             IEnumerable<Vertex> intersection =
                 edge.Begin.Adjacent.Intersect(edge.End.Adjacent);
-            return union.Count() != 4 && intersection.Count() == 2;
+            if (union.Count() == 4 || intersection.Count() != 2)
+            {
+                return false;
+            }
+            return true;
         }
 
         public override MeshPart Execute(Edge edge)
