@@ -163,5 +163,7 @@ namespace Matveev.Mtk.Core
         }
 
         #endregion
+
+        public readonly static Point ORIGIN = new Point(0, 0, 0);
     }
 }

@@ -108,11 +108,7 @@ namespace Matveev.Mtk.Core
             if (obj is Vector)
             {
                 Vector other = (Vector)obj;
-
-                double norm = (this - other).Norm;
-
-                if (Math.Abs(norm) < 1e-15)
-                    return true;
+                return (this - other).Norm < 1e-15;
             }
 
             return false;

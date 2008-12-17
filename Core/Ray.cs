@@ -10,6 +10,12 @@ namespace Matveev.Mtk.Core
         public Point origin;
         public Vector direction;
 
+        public Ray(Point origin, Vector direction)
+        {
+            this.origin = origin;
+            this.direction = direction;
+        }
+
         public void Trace(Face face, out double distance, out double u, out double v)
         {
             Point[] points = face.Vertices.Select(vertex => vertex.Point).ToArray();
