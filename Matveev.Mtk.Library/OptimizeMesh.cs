@@ -166,7 +166,7 @@ namespace Matveev.Mtk.Library
 
                             foreach (IMeshValidator validator in validators)
                             {
-                                if (!validator.IsValid(submesh))
+                                if (!validator.IsValid(submesh2))
                                 {
                                     throw new Exception("Invalid mesh");
                                 }
