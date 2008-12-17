@@ -54,6 +54,9 @@ namespace Matveev.Mtk.Library
             }
 
             _nonInternal.Clear();
+            /* TODO: Mesh shouldn't contain any isolated vertices at this point,
+             * fix this issue and remove that workaround. */
+            _mesh.Vertices.Where(v => v.Type == VertexType.Isolated).ToList().ForEach(_mesh.RemoveVertex);
             return _mesh;
         }
 
