@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 using Matveev.Mtk.Core;
@@ -208,7 +209,31 @@ namespace Matveev.Mtk.Library
 
         public override Mesh Clone(IDictionary<Edge, Edge> edgeMap)
         {
-            return CloneSub(faces.ToArray(), null, edgeMap, null);
+            HEMesh result = new HEMesh();
+
+            IDictionary<Vertex, Vertex> vertMap = new Dictionary<Vertex, Vertex>();
+            foreach (Vertex vertex in _vertices)
+            {
+                vertMap.Add(vertex, result.AddVertex(vertex.Point, vertex.Normal));
+            }
+            edgeMap = GetCleanOrNew(edgeMap);
+
+            foreach (Face face in faces)
+            {
+                List<Vertex> verts = new List<Vertex>(3);
+                foreach (Vertex vert in face.Vertices)
+                {
+                    verts.Add(vertMap[vert]);
+                }
+                Face newFace = result.CreateFace(verts[0], verts[1], verts[2]);
+                foreach (Edge oldEdge in face.Edges)
+                {
+                    Edge newEdge = newFace.Edges.Single(edge => edge.End == vertMap[oldEdge.End]);
+                    edgeMap.Add(oldEdge, newEdge);
+                }
+            }
+
+            return result;
         }
 
         public override Mesh CloneSub(IEnumerable<Face> faces, IDictionary<Vertex, Vertex> vertMap,
