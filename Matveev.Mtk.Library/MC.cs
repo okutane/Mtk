@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Matveev.Mtk.Core;
 
@@ -48,8 +49,11 @@ namespace Matveev.Mtk.Library
                 }
             }
 
-            MC._nonInternal.Clear();
-            return MC._mesh;
+            _nonInternal.Clear();
+            /* TODO: Mesh shouldn't contain any isolated vertices at this point,
+             * fix this issue and remove that workaround. */
+            _mesh.Vertices.Where(v => v.Type == VertexType.Isolated).ToList().ForEach(_mesh.RemoveVertex);
+            return _mesh;
         }
 
         private static void CellSubroutine(double x0, double x1, double y0, double y1, double z0, double z1)

@@ -27,7 +27,6 @@ Vertices :
 - (0.5,0.5,0) Internal
 - (-1,1,0) Boundary
 - (1,1,0) Boundary
-- (0.833333333333333,0.5,-0.5) Isolated
 - (-0.5,-0.833333333333333,0.5) Internal
 - (-0.666666666666667,-1,0.5) Boundary
 - (0,-0.5,0.25) Internal
