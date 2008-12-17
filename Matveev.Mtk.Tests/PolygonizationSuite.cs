@@ -62,9 +62,17 @@ namespace Matveev.Mtk.Tests
 
             public override void Run(TestCaseResult result)
             {
-                Mesh mesh = _polygonizer.Create(Configuration.MeshFactory, _surface, -1, 1, -1, 1, -1, 1, 4, 4, 4);
-                YamlSerializerTest.TestSerialize(string.Format(_suffix, _surface, _polygonizer), mesh);
-                result.Success();
+                try
+                {
+                    Mesh mesh = _polygonizer.Create(Configuration.MeshFactory, _surface, -1, 1, -1, 1, -1, 1, 4, 4, 4);
+                    YamlSerializerTest.TestSerialize(string.Format(_suffix, _surface, _polygonizer), mesh);
+                    YamlSerializerTest.TestSerialize(string.Format(_suffix, _surface, _polygonizer), mesh.Clone(null));
+                    result.Success();
+                }
+                catch (Exception ex)
+                {
+                    result.Failure(ex.Message, ex.StackTrace);
+                }
             }
         }
     }
