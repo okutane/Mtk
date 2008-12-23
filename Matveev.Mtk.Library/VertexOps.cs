@@ -1,9 +1,9 @@
-// VertexOps.cs
-
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Matveev.Mtk.Core;
 
-namespace Matveev.Mtk.Core
+namespace Matveev.Mtk.Library
 {
     public static class VertexOps
     {
@@ -28,29 +28,40 @@ namespace Matveev.Mtk.Core
             if(vert.Type != VertexType.Internal)
                 throw new Exception("Can't calculate curvature of non internal vertex.");
 
-            List<Vector> v = new List<Vector>();
-            Vector mean = new Vector(0, 0, 0);
-            foreach(Face face in vert.AdjacentFaces)
+            Plane plane = new Plane((Point)vert.Normal, vert.Normal);
+
+            List<double[]> uv =
+                new List<double[]>(vert.AdjacentFaces.Select(f => plane.Trace(new Ray(Point.ORIGIN, f.Normal))));
+
+            for (int i = 0; i < uv.Count - 1; i++)
             {
-                Vector n = face.Normal;
-                mean += n;
-                v.Add(n);
+                for (int j = i + 2; j < uv.Count; j++)
+                {
+                    if (LineIntersectionTest2d(uv[i][0], uv[i][1], uv[i + 1][0], uv[i + 1][1],
+                        uv[j][0], uv[j][1], uv[(j + 1) % uv.Count][0], uv[(j + 1) % uv.Count][1]))
+                        return 1;
+                }
             }
+                       
+            return 0;
+        }
 
-            mean = Vector.Normalize(mean);
-            Vector e1, e2;
+        private static Vector[] GetOrthogonalPair(Vector mean)
+        {
+            Vector e1;
+            Vector e2;
 
-            int imin=0;
+            int imin = 0;
             double val;
             double min = Math.Abs(mean * new Vector(1, 0, 0));
             val = Math.Abs(mean * new Vector(0, 1, 0));
-            if(val < min)
+            if (val < min)
             {
                 min = val;
                 imin = 1;
             }
             val = Math.Abs(mean * new Vector(0, 0, 1));
-            if(val < min)
+            if (val < min)
             {
                 min = val;
                 imin = 2;
@@ -59,29 +70,7 @@ namespace Matveev.Mtk.Core
             e2[imin] = 1;
             e1 = mean ^ e2;
             e2 = mean ^ e1;
-
-            Vector p, q, r;
-            p = mean ^ e2;
-            q = e1 ^ mean;
-            r = e1 ^ e2;
-
-            double[,] uv = new double[2, v.Count];
-            for(int i = 0 ; i < v.Count ; i++)
-            {
-                double div = r * v[i];
-                uv[0, i] = p * v[i] / div;
-                uv[1, i] = q * v[i] / div;
-            }
-
-            for(int i = 0 ; i < v.Count-1 ; i++)
-                for(int j = i + 2 ; j < v.Count ; j++)
-                {
-                    if(LineIntersectionTest2d(uv[0, i],uv[1, i],uv[0, i + 1],uv[1, i + 1],
-                        uv[0, j],uv[1, j],uv[0, (j + 1) % v.Count],uv[1, (j + 1) % v.Count]))
-                        return 1;
-                }
-                       
-            return 0;
+            return new Vector[] { e1, e2 };
         }
 
         public static bool LineIntersectionTest2d(double x1, double y1, double x2, double y2,

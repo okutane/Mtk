@@ -64,7 +64,6 @@
     <Compile Include="Vector.cs" />
     <Compile Include="Abstract Mesh\Vertex.cs" />
     <Compile Include="VertexAction.cs" />
-    <Compile Include="VertexOps.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Matveev.Common\Matveev.Common.csproj">

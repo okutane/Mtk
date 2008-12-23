@@ -77,6 +77,7 @@
     <Compile Include="FaceFunctions\NormalDeviation.cs" />
     <Compile Include="FacePointProjection.cs" />
     <Compile Include="FieldFunction.cs" />
+    <Compile Include="Fields\CompactQuadraticForm.cs" />
     <Compile Include="Fields\Plane.cs" />
     <Compile Include="Fields\QuadraticForm.cs" />
     <Compile Include="Fields\Sphere.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="MT6.cs" />
     <Compile Include="OptimizeMesh.cs" />
     <Compile Include="ParametrizedSurfacePolygonizer.cs" />
+    <Compile Include="Plane.cs" />
     <Compile Include="PointProjection.cs" />
     <Compile Include="PositionOptimizers\EdgeVertexPositionOptimizer.cs" />
     <Compile Include="PositionOptimizers\PlaneVertexPositionOptimizer.cs" />
@@ -115,6 +117,7 @@
     <Compile Include="Validators\FaceNormalsValidator.cs" />
     <Compile Include="Validators\IsolatedVerticesValidator.cs" />
     <Compile Include="VertexEnergy.cs" />
+    <Compile Include="VertexOps.cs" />
     <Compile Include="VertexPointProjection.cs" />
   </ItemGroup>
   <ItemGroup>
