@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="AllTestsSuite.cs" />
     <Compile Include="BoundingBoxTests.cs" />
+    <Compile Include="CompactQuadraticFormTests.cs" />
     <Compile Include="ConjugateGradientsTest.cs" />
     <Compile Include="DihedralEnergy.cs" />
     <Compile Include="EdgeCollapseTest.cs" />
