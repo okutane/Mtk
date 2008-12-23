@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Xml.Serialization;
 
 using NUnit.Framework;
 
 using Matveev.Common;
-using System.Runtime.Serialization;
-using Matveev.Mtk.Library;
 using Matveev.Mtk.Core;
+using Matveev.Mtk.Library;
 
 namespace Matveev.Mtk.Tests
 {
