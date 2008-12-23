@@ -9,7 +9,7 @@ using Rhino.Mocks;
 using Matveev.Mtk.Core;
 using Matveev.Mtk.Library.Utilities;
 
-namespace Matveev.Mtk.Tests
+namespace Matveev.Mtk.Tests.Common
 {
     [TestFixture]
     public class UMeshTests
