@@ -257,10 +257,11 @@ namespace OglVisualizer
                 glEnable(GL_LIGHT0);
                 glEnable(GL_DEPTH_TEST);
                 glClearColor(0, 0, 0, 1);
-                glClearColor(BackColor.R / 255.0, BackColor.G / 255.0, BackColor.B / 255.0, 1);
+                glClearColor(BackColor.R / 255.0f, BackColor.G / 255.0f, BackColor.B / 255.0f, 1);
                 glPolygonMode(GL_FRONT, GL_FILL);
 
-                GLfloat lightPosition[] = {_lightDirection.x, _lightDirection.y, _lightDirection.z, 0};
+                GLfloat lightPosition[] = {(float)_lightDirection.x, (float)_lightDirection.y,
+					(float)_lightDirection.z, 0};
                 glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
             }
             else
@@ -268,7 +269,7 @@ namespace OglVisualizer
                 glDisable(GL_LIGHTING);
                 glDisable(GL_LIGHT0);
                 glPolygonMode(GL_FRONT, GL_LINE);
-                glClearColor(BackColor.R / 255.0, BackColor.G / 255.0, BackColor.B / 255.0, 1);
+                glClearColor(BackColor.R / 255.0f, BackColor.G / 255.0f, BackColor.B / 255.0f, 1);
             }
 			
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -296,7 +297,7 @@ namespace OglVisualizer
                 glEnd();
 
                 //Draw bounds
-                glColor3f(0.1, 0.1, 0.1);
+                glColor3f(0.1f, 0.1f, 0.1f);
                 glBegin(GL_LINES);
                 for each(Matveev::Mtk::Core::Edge ^edge in _mesh->Edges)
                 {

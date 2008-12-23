@@ -98,7 +98,7 @@ namespace Matveev.Mtk.Core
             return "(" + x + "," + y + "," + z + ")";
         }
 
-        public static explicit operator Point(Vector v)
+        public static implicit operator Point(Vector v)
         {
             return new Point(v.x, v.y, v.z);
         }

@@ -110,7 +110,7 @@ namespace Matveev.Mtk.Core
             return string.Format(NumberFormatInfo.InvariantInfo, "({0},{1},{2})", X, Y, Z);
         }
 
-        public static explicit operator Vector(Point p)
+        public static implicit operator Vector(Point p)
         {
             return new Vector(p.X, p.Y, p.Z);
         }
