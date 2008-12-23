@@ -53,6 +53,8 @@ namespace Matveev.Mtk.Library.Fields
             return result;
         }
 
+        #endregion
+
         public double FaceDistance(Point[] points)
         {
             double[][] a = new double[3][];
@@ -101,8 +103,6 @@ namespace Matveev.Mtk.Library.Fields
 
             return cg0 * points[0].AreaTo(points[1], points[2]);
         }
-
-        #endregion
 
         public static readonly QuadraticForm ParabolicHyperboloid =
             new QuadraticForm(new double[,] { { 1, 0, 0 }, { 0, -1, 0 }, { 0, 0, 0 } },
