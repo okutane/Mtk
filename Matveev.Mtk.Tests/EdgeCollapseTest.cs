@@ -51,6 +51,7 @@ namespace Matveev.Mtk.Tests
         }
 
         [Test]
+        [Ignore("This is currently done via validators")]
         public void ImpossibleNonConvex()
         {
             Mesh mesh = Configuration.MeshFactory.Create();
