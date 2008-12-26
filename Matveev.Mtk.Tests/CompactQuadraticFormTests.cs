@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,8 +16,6 @@ namespace Matveev.Mtk.Tests
     {
         private static readonly CompactQuadraticForm _POINT = new CompactQuadraticForm(
             new double[,] { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 } }, new double[3], 0);
-        private static readonly CompactQuadraticForm _XYPLANE = new CompactQuadraticForm(
-            new double[3, 3], new double[] { 0, 0, 2 }, 0);
         private static readonly CompactQuadraticForm _SQUARE = new CompactQuadraticForm(
             new double[,] { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 1 } }, new double[3], 0);
         private static readonly CompactQuadraticForm _COMPLEX = new CompactQuadraticForm(
@@ -53,7 +52,25 @@ namespace Matveev.Mtk.Tests
             CompactQuadraticForm constant = new CompactQuadraticForm(new double[3, 3], new double[3], 1);
             for (int i = 0; i < 3; i++)
             {
-                Assert.AreEqual(3, constant.FaceDistance(triangle));
+                Assert.AreEqual(1, constant.FaceDistance(triangle));
+                CollectionAssert.AreEqual(new double[9], constant.GradOfFaceDistance(triangle));
+                Point tmp = triangle[0];
+                triangle[0] = triangle[1];
+                triangle[1] = triangle[2];
+                triangle[2] = tmp;
+            }
+        }
+
+        [Test]
+        public void OnlyLinear()
+        {
+            CompactQuadraticForm onlyLinear = new CompactQuadraticForm(new double[3, 3], new double[] { 0, 0, 1 },
+                0);
+            for (int i = 0; i < 3; i++)
+            {
+                Assert.AreEqual(4, onlyLinear.FaceDistance(triangle));
+                CollectionAssert.AreEqual(new double[] { 0, 0, 4.0 / 3, 0, 0, 4.0 / 3, 0, 0, 4.0 / 3 },
+                    onlyLinear.GradOfFaceDistance(triangle), new MyComparer());
                 Point tmp = triangle[0];
                 triangle[0] = triangle[1];
                 triangle[1] = triangle[2];
@@ -67,7 +84,9 @@ namespace Matveev.Mtk.Tests
             CompactQuadraticForm linear = new CompactQuadraticForm(new double[3, 3], new double[] { 0, 0, 1 }, 1);
             for (int i = 0; i < 3; i++)
             {
-                Assert.AreEqual(27, linear.FaceDistance(triangle));
+                Assert.AreEqual(9, linear.FaceDistance(triangle));
+                CollectionAssert.AreEqual(new double[] { 0, 0, 2, 0, 0, 2, 0, 0, 2 },
+                    linear.GradOfFaceDistance(triangle));
                 Point tmp = triangle[0];
                 triangle[0] = triangle[1];
                 triangle[1] = triangle[2];
@@ -82,25 +101,7 @@ namespace Matveev.Mtk.Tests
                 new double[,] { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 1 } }, new double[3], 1);
             for (int i = 0; i < 3; i++)
             {
-                Assert.AreEqual(75, field.FaceDistance(triangle));
-                Point tmp = triangle[0];
-                triangle[0] = triangle[1];
-                triangle[1] = triangle[2];
-                triangle[2] = tmp;
-            }
-        }
-
-        [Test]
-        public void XYPlaneTest()
-        {
-            Point[] triangle = new Point[] {
-                new Point(0, 0, 1),
-                new Point(3, 0, 1),
-                new Point(0, 2, 1),
-            };
-            for (int i = 0; i < 3; i++)
-            {
-                Assert.AreEqual(12, _XYPLANE.FaceDistance(triangle));
+                Assert.AreEqual(25, field.FaceDistance(triangle));
                 Point tmp = triangle[0];
                 triangle[0] = triangle[1];
                 triangle[1] = triangle[2];
@@ -111,15 +112,11 @@ namespace Matveev.Mtk.Tests
         [Test]
         public void SquareTest()
         {
-            Point[] triangle = new Point[] {
-                new Point(0, 0, 2),
-                new Point(3, 0, 2),
-                new Point(0, 2, 2),
-            };
             for (int i = 0; i < 3; i++)
             {
-                Assert.AreEqual(48, _SQUARE.FaceDistance(triangle),
-                    string.Format("p0={0}, p1={1}, p2={2}", triangle[0], triangle[1], triangle[2]));
+                Assert.AreEqual(16, _SQUARE.FaceDistance(triangle));
+                CollectionAssert.AreEqual(new double[] { 0, 0, 32.0 / 3, 0, 0, 32.0 / 3, 0, 0, 32.0 / 3 },
+                    _SQUARE.GradOfFaceDistance(triangle), new MyComparer());
                 Point tmp = triangle[0];
                 triangle[0] = triangle[1];
                 triangle[1] = triangle[2];
@@ -130,14 +127,9 @@ namespace Matveev.Mtk.Tests
         [Test]
         public void ComplexTest()
         {
-            Point[] triangle = new Point[] {
-                new Point(0, 0, 2),
-                new Point(3, 0, 2),
-                new Point(0, 2, 2),
-            };
             for (int i = 0; i < 3; i++)
             {
-                Assert.AreEqual(75, _COMPLEX.FaceDistance(triangle),
+                Assert.AreEqual(25, _COMPLEX.FaceDistance(triangle),
                     string.Format("p0={0}, p1={1}, p2={2}", triangle[0], triangle[1], triangle[2]));
                 Point tmp = triangle[0];
                 triangle[0] = triangle[1];
@@ -145,5 +137,25 @@ namespace Matveev.Mtk.Tests
                 triangle[2] = tmp;
             }
         }
+
+        private class MyComparer : IComparer
+        {
+            #region IComparer Members
+
+            public int Compare(object x, object y)
+            {
+                double left = (double)x;
+                double right = (double)y;
+
+                if (Math.Abs(left - right) < 1e-4)
+                {
+                    return 0;
+                }
+                return (int)(Math.Sign(left - right) * Math.Ceiling(Math.Abs(left - right)));
+            }
+
+            #endregion
+        }
+
     }
 }
