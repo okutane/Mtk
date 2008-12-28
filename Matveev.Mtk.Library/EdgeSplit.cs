@@ -42,7 +42,7 @@ namespace Matveev.Mtk.Library
             if (!unpaired)
             {
                 v3 = edge.Pair.Next.End;
-                mesh.DeleteFace(edge.Pair.Face);
+                mesh.DeleteFace(edge.Pair.ParentFace);
                 face = mesh.CreateFace(v3, v, v0);
                 //if (affected != null)
                 //    affected.Add(face);
@@ -50,7 +50,7 @@ namespace Matveev.Mtk.Library
                 //if (affected != null)
                 //    affected.Add(face);
             }
-            mesh.DeleteFace(edge.Face);
+            mesh.DeleteFace(edge.ParentFace);
             face = mesh.CreateFace(v0, v, v2);
             //if (affected != null)
             //    affected.Add(face);

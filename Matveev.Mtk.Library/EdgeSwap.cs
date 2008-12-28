@@ -42,8 +42,8 @@ namespace Matveev.Mtk.Library
             v3 = edge.Begin;
             FindOtherVertices(edge, out v2, out v4);
 
-            mesh.DeleteFace(edge.Pair.Face);
-            mesh.DeleteFace(edge.Face);
+            mesh.DeleteFace(edge.Pair.ParentFace);
+            mesh.DeleteFace(edge.ParentFace);
             face = mesh.CreateFace(v1, v2, v4);
             face = mesh.CreateFace(v4, v2, v3);
 

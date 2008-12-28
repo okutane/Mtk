@@ -66,7 +66,7 @@ namespace Matveev.Mtk.Library
             }
         }
 
-        public override Face Face
+        public override Face ParentFace
         {
             get
             {

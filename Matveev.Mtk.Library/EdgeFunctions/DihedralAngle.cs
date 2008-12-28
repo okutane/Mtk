@@ -19,7 +19,7 @@ namespace Matveev.Mtk.Library.EdgeFunctions
             if (edge.Pair == null)
                 return 0;
 
-            double cos = edge.Face.Normal * edge.Pair.Face.Normal;
+            double cos = edge.ParentFace.Normal * edge.Pair.ParentFace.Normal;
             if (cos > 1)
                 cos = 1;
             if (cos < -1)

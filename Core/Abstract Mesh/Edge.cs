@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Matveev.Mtk.Core
 {
-    public abstract class Edge:MeshPart
+    public abstract class Edge : MeshPart
     {
         public abstract Vertex Begin
         {
@@ -32,7 +32,7 @@ namespace Matveev.Mtk.Core
             get;
         }
 
-        public abstract Face Face
+        public abstract Face ParentFace
         {
             get;
         }
