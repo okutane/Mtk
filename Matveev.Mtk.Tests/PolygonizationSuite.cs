@@ -10,6 +10,7 @@ using NUnit.Framework;
 using Matveev.Common;
 using Matveev.Mtk.Core;
 using Matveev.Mtk.Library;
+using Matveev.Mtk.Library.Utilities;
 
 namespace Matveev.Mtk.Tests
 {
@@ -66,7 +67,8 @@ namespace Matveev.Mtk.Tests
                 {
                     Mesh mesh = _polygonizer.Create(Configuration.MeshFactory, _surface, -1, 1, -1, 1, -1, 1, 4, 4, 4);
                     YamlSerializerTest.TestSerialize(string.Format(_suffix, _surface, _polygonizer), mesh);
-                    YamlSerializerTest.TestSerialize(string.Format(_suffix, _surface, _polygonizer), mesh.Clone(null));
+                    YamlSerializerTest.TestSerialize(string.Format(_suffix, _surface, _polygonizer),
+                        mesh.Clone(null));
                     result.Success();
                 }
                 catch (Exception ex)

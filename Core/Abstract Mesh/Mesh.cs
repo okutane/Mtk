@@ -20,11 +20,6 @@ namespace Matveev.Mtk.Core
             get;
         }
 
-        public abstract Mesh Clone(IDictionary<Edge, Edge> edgeMap);
-
-        public abstract Mesh CloneSub(IEnumerable<Face> faces, IDictionary<Vertex, Vertex> vertMap,
-            IDictionary<Edge, Edge> edgeMap, IDictionary<Face, Face> faceMap);
-
         public abstract Vertex AddVertex(Point p, Vector n);
 
         public abstract void RemoveVertex(Vertex vert);
