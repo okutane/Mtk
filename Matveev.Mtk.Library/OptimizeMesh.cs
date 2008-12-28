@@ -4,8 +4,9 @@ using System.Collections.Generic;
 
 using Matveev.Mtk.Core;
 using Matveev.Mtk.Library.FaceFunctions;
-using Matveev.Mtk.Library.Validators;
 using Matveev.Mtk.Library.Fields;
+using Matveev.Mtk.Library.Validators;
+using Matveev.Mtk.Library.Utilities;
 
 namespace Matveev.Mtk.Library
 {
@@ -39,6 +40,11 @@ namespace Matveev.Mtk.Library
             {
                 faceEnergy = quadraticForm.FaceDistance;
             }
+            CompactQuadraticForm cqf = surface as CompactQuadraticForm;
+            if (cqf != null)
+            {
+                faceEnergy = cqf.FaceDistance;
+            }
 
             Func<double[], double> globalEnergy = delegate(double[] globalX)
             {
@@ -53,13 +59,28 @@ namespace Matveev.Mtk.Library
                         int index = face[i];
                         points[i] = new Point(x[3 * index], x[3 * index + 1], x[3 * index + 2]);
                     }
-                    energy += faceEnergy(points);
+                    double weight = points[0].AreaTo(points[1], points[2]);
+                    weight = 1;
+                    energy += weight * faceEnergy(points);
                 }
 
                 return energy;
             };
 
             Func<Point[], Vector[]> localGradient = LocalGradientProvider.GetNumericalGradient2(faceEnergy, 1e-6);
+
+            if (cqf != null)
+            {
+                localGradient = delegate(Point[] points)
+                {
+                    double[] grad = cqf.GradOfFaceDistance(points);
+                    return new Vector[] {
+                        new Vector(grad[0], grad[1], grad[2]),
+                        new Vector(grad[3], grad[4], grad[5]),
+                        new Vector(grad[6], grad[7], grad[8]),
+                    };
+                };
+            }
 
             Func<double[], double[]> globalGradient = delegate(double[] globalX)
             {
@@ -75,12 +96,14 @@ namespace Matveev.Mtk.Library
                         points[i] = new Point(x[3 * index], x[3 * index + 1], x[3 * index + 2]);
                     }
                     Vector[] localGradValue = localGradient(points);
+                    double weight = points[0].AreaTo(points[1], points[2]);
+                    weight = 1;
                     for (int i = 0; i < face.Length; i++)
                     {
                         int index = face[i];
-                        result[3 * index] += localGradValue[i].x;
-                        result[3 * index + 1] += localGradValue[i].y;
-                        result[3 * index + 2] += localGradValue[i].z;
+                        result[3 * index] += weight * localGradValue[i].x;
+                        result[3 * index + 1] += weight * localGradValue[i].y;
+                        result[3 * index + 2] += weight * localGradValue[i].z;
                     }
                 }
                 foreach (int fixedPoint in fixedPoints)
