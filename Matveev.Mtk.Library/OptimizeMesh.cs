@@ -177,7 +177,9 @@ namespace Matveev.Mtk.Library
                     foreach (EdgeTransform transform in transforms)
                     {
                         if (!transform.IsPossible(candidat, constraintsProvider))
+                        {
                             continue;
+                        }
 
                         IDictionary<Edge, Edge> edgeMap2 = new Dictionary<Edge, Edge>();
                         Mesh submesh2 = submesh.Clone(edgeMap2);
@@ -202,38 +204,33 @@ namespace Matveev.Mtk.Library
 
                             E2 = energy.Eval(submesh2);
 
-                            if (E1 > E2)
+                            if (E1 <= E2)
                             {
-                                if (numbersOfUses.ContainsKey(transform))
-                                {
-                                    numbersOfUses[transform] = numbersOfUses[transform] + 1;
-                                }
-                                else
-                                {
-                                    numbersOfUses.Add(transform, 1);
-                                }
-                                candidats.RemoveAll(edgeMap.ContainsKey);
-
-                                MeshPart result = transform.Execute(candidat);
-                                foreach (Vertex vertex in smResult.GetVertices(0))
-                                {
-                                    VertexOps.OptimizePosition(vertex, field, epsilon);
-                                }
-                                candidats.AddRange(result.GetEdges(1));
-                                changed = true;
-                                break;
-                            }
-                            else
-                            {
-                                Tools.VertexPositionOptimizer.OptimizeAll(submesh2, field, epsilon, energy);
-                                double E3 = energy.Eval(submesh2);
-                                if (E1 > E3)
-                                    throw new Exception("Should optimize vertex positions " + transform.ToString());
+                                continue;
                             }
                         }
                         catch
                         {
                         }
+
+                        if (numbersOfUses.ContainsKey(transform))
+                        {
+                            numbersOfUses[transform] = numbersOfUses[transform] + 1;
+                        }
+                        else
+                        {
+                            numbersOfUses.Add(transform, 1);
+                        }
+                        candidats.RemoveAll(edgeMap.ContainsKey);
+
+                        MeshPart result = transform.Execute(candidat);
+                        foreach (Vertex vertex in result.GetVertices(0))
+                        {
+                            //VertexOps.OptimizePosition(vertex, field, epsilon);
+                        }
+                        candidats.AddRange(result.GetEdges(1));
+                        changed = true;
+                        break;
                     }
                 }
             }
