@@ -37,11 +37,10 @@ namespace Matveev.Mtk.Library
             };
         }
 
-        public static Func<Point[], Vector[]> GetNumericalGradient2(Func<Point[], double> localEnergy, double h)
+        public static LocalGradDelegate GetNumericalGradient2(Func<Point[], double> localEnergy, double h)
         {
-            return delegate(Point[] points)
+            return delegate(Point[] points, Vector[] result)
             {
-                Vector[] result = new Vector[points.Length];
                 for (int i = 0; i < points.Length; i++)
                 {
                     for (int j = 0; j < 3; j++)
@@ -59,8 +58,6 @@ namespace Matveev.Mtk.Library
                         result[i][j] = (value) / (12 * h);
                     }
                 }
-
-                return result;
             };
         }
     }

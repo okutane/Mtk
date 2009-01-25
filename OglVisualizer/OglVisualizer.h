@@ -32,7 +32,6 @@ namespace OglVisualizer
     public ref class Visualizer : public System::Windows::Forms::UserControl
 	{	
 	private:
-		HWND hwnd;
 		HDC hdc;
 		HGLRC hrc;
 
@@ -214,9 +213,9 @@ namespace OglVisualizer
 			double oz;
 			gluUnProject(x, y, 1, modelMatrix, projMatrix, viewport,
 				&ox, &oy, &oz);
-			result.origin = gcnew Point(ox, oy, oz);
+			result.origin = Point(ox, oy, oz);
 			gluUnProject(x, y, 0, modelMatrix, projMatrix, viewport, &ox, &oy, &oz);
-            Point ^lookAt = gcnew Point(ox, oy, oz);
+            Point lookAt = Point(ox, oy, oz);
             result.direction = Vector::Normalize(lookAt - result.origin);
 
             return result;
@@ -352,11 +351,11 @@ namespace OglVisualizer
 						z = 0;
                         for each(Matveev::Mtk::Core::Vertex ^vert in face->Vertices)
                         {
-                            x += vert->Point->X;
-                            y += vert->Point->Y;
-                            z += vert->Point->Z;
+                            x += vert->Point.X;
+                            y += vert->Point.Y;
+                            z += vert->Point.Z;
                         }
-						Point ^p = gcnew Point(x / 3, y / 3, z / 3);
+						Point p = Point(x / 3, y / 3, z / 3);
                         PutVertex(p);
                         p = p + 0.2 * (face->Normal);
                         PutVertex(p);
@@ -425,8 +424,7 @@ namespace OglVisualizer
 
 		virtual void OnCreateControl() override
 		{
-			hwnd = (HWND)this->Handle.ToInt32();
-			hdc = GetDC(hwnd);
+			hdc = GetDC((HWND)this->Handle.ToInt32());
 			if(hdc == 0)
 				throw gcnew Exception("Couldn't get Device Context!");
 

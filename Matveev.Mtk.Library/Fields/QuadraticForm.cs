@@ -13,6 +13,11 @@ namespace Matveev.Mtk.Library.Fields
         private readonly double[] _b;
         private readonly double _c;
 
+#region Buffers for FaceDistance method
+        private readonly double[][] a = new double[3][] { new double[3], new double[3], new double[3] };
+        private readonly double[] b = new double[3];
+#endregion
+
         public QuadraticForm(double[,] a, double[] b, double c)
         {
             _a = a;
@@ -57,8 +62,6 @@ namespace Matveev.Mtk.Library.Fields
 
         public double FaceDistance(Point[] points)
         {
-            double[][] a = new double[3][];
-            double[] b = new double[3];
             double c = _c;
 
             for (int i = 0; i < 3; i++)
@@ -68,7 +71,6 @@ namespace Matveev.Mtk.Library.Fields
 
             for (int i = 0; i < 3; i++)
             {
-                a[i] = new double[3];
                 for (int j = 0; j < 3; j++)
                 {
                     a[i][j] = 0;

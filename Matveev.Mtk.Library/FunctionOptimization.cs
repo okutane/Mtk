@@ -7,17 +7,20 @@ using Matveev.Common;
 
 namespace Matveev.Mtk.Library
 {
+    public delegate void GradDelegate(double[] argument, double[] result);
+
     public static class FunctionOptimization
     {
+
         public interface ILineSearch
         {
-            void Perform(Func<double[], double> f, Func<double[], double[]> grad, double[] x0,
+            void Perform(Func<double[], double> f, GradDelegate grad, double[] x0,
                 double[] grad0, double[] direction, double[] x, ref double f0);
         }
 
         public class SimpleSearch : ILineSearch
         {
-            public void Perform(Func<double[], double> f, Func<double[], double[]> grad, double[] x0,
+            public void Perform(Func<double[], double> f, GradDelegate grad, double[] x0,
                 double[] grad0, double[] direction, double[] x, ref double f0)
             {
                 double t = -1;
@@ -41,12 +44,12 @@ namespace Matveev.Mtk.Library
 
         public class LineSearch : ILineSearch
         {
-            public void Perform(Func<double[], double> f, Func<double[], double[]> grad, double[] x0,
+            public void Perform(Func<double[], double> f, GradDelegate grad, double[] x0,
                 double[] grad0, double[] direction, double[] x, ref double f0)
             {
+                double[] arg = new double[x.Length];
                 Func<double, double> phi = delegate(double alpha)
                 {
-                    double[] arg = new double[x.Length];
                     AddVector(arg, x0, direction, alpha, x0.Length);
                     return f(arg);
                 };
@@ -56,34 +59,43 @@ namespace Matveev.Mtk.Library
             }
         }
 
-        public static void GradientDescent(Func<double[], double> f, Func<double[], double[]> grad, double[] x,
+        public static void GradientDescent(Func<double[], double> f, GradDelegate grad, double[] x,
             double eps, int maxIterations)
         {
             int n = x.Length;
             double[] x0 = new double[n];
+            double[] grad0 = new double[n];
             x.CopyTo(x0, 0);
             double f0 = f(x);
             int k = 0;
-            while (k++ < maxIterations)
+            double change;
+            do
             {
-                double[] grad0 = grad(x);
+                grad(x, grad0);
                 ILineSearch search = new LineSearch();
                 search.Perform(f, grad, x0, grad0, grad0, x, ref f0);
+                change = 0;
+                for (int i = 0; i < n; i++)
+                {
+                    change += Math.Pow(x[i] - x0[i], 2);
+                }
                 x.CopyTo(x0, 0);
             }
+            while (k++ < maxIterations && change > eps);
         }
 
-        public static void NewtonMethod(Func<double[], double> f, Func<double[], double[]> grad,
+        public static void NewtonMethod(Func<double[], double> f, GradDelegate grad,
             Func<double[], double[,]> hessian, double[] x, double eps, int maxIterations)
         {
             int n = x.Length;
             double[] x0 = new double[n];
+            double[] grad0 = new double[n];
             x.CopyTo(x0, 0);
             double f0 = f(x);
             int k = 0;
             while (f0 > eps && k++ < maxIterations)
             {
-                double[] grad0 = grad(x);
+                grad(x, x0);
                 double[,] hessian0 = hessian(x0);
                 Matrix b = new Matrix(n, 1);
                 for (int i = 0; i < n; i++)

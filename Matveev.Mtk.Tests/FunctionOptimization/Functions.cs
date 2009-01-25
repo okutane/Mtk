@@ -9,7 +9,7 @@ namespace Matveev.Mtk.Tests.FunctionOptimization
     {
         double Function(double[] x);
 
-        double[] Gradient(double[] x);
+        void Gradient(double[] x, double[] result);
 
         double[,] Hessian(double[] x);
 
@@ -54,9 +54,10 @@ namespace Matveev.Mtk.Tests.FunctionOptimization
             return Math.Pow(x[0], 2) + Math.Pow(x[1] / 2, 2);
         }
 
-        public double[] Gradient(double[] x)
+        public void Gradient(double[] x, double[] result)
         {
-            return new double[] { 2 * x[0], x[1] / 2 };
+            result[0] = 2 * x[0];
+            result[1] = x[1] / 2;
         }
 
         public double[,] Hessian(double[] x)
@@ -114,9 +115,10 @@ namespace Matveev.Mtk.Tests.FunctionOptimization
             return Math.Pow(x[0], 4) + Math.Pow(x[1] / 2, 4);
         }
 
-        public double[] Gradient(double[] x)
+        public void Gradient(double[] x, double[] result)
         {
-            return new double[] { 4 * Math.Pow(x[0], 3), Math.Pow(x[1], 3) / 4 };
+            result[0] = 4 * Math.Pow(x[0], 3);
+            result[1] = Math.Pow(x[1], 3) / 4;
         }
 
         public double[,] Hessian(double[] x)
@@ -176,9 +178,10 @@ namespace Matveev.Mtk.Tests.FunctionOptimization
             return Math.Pow(1 - x[0], 2) + 100 * Math.Pow(x[1] - x[0] * x[0], 2);
         }
 
-        public double[] Gradient(double[] x)
+        public void Gradient(double[] x, double[] result)
         {
-            return new double[] { 2 * x[0] - 2 - 400 * (x[1] - x[0] * x[0]), 200 * (x[1] - x[0] * x[0]) };
+            result[0] = 2 * x[0] - 2 - 400 * (x[1] - x[0] * x[0]);
+            result[1] = 200 * (x[1] - x[0] * x[0]);
         }
 
         public double[,] Hessian(double[] x)
