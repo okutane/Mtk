@@ -252,6 +252,15 @@ namespace UI
                 MessageBox.Show("Done");
             };
             meshActions.Add(btnProjectAll);
+            Button btnImproveVertexPositions = new Button();
+            btnImproveVertexPositions.Text = "ImproveVertexPositions";
+            btnImproveVertexPositions.Click += delegate(object sender, EventArgs e)
+            {
+                OptimizeMesh.ImproveVertexPositions(_mesh, _field);
+                this.Invalidate();
+                MessageBox.Show("Done");
+            };
+            meshActions.Add(btnImproveVertexPositions);
             Button btnOptimizeAll = new Button();
             btnOptimizeAll.Text = "Optimize";
             btnOptimizeAll.Click += delegate(object sender, EventArgs e)
