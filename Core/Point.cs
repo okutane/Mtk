@@ -8,7 +8,7 @@ using Matveev.Common;
 
 namespace Matveev.Mtk.Core
 {
-    public class Point : IPoint<Point>
+    public struct Point : IPoint<Point>
     {
         public double X;
         public double Y;

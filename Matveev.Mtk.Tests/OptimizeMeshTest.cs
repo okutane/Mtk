@@ -110,5 +110,15 @@ namespace Matveev.Mtk.Tests
                 transforms.ForEach(Configuration.EdgeTransforms.Add);
             }
         }
+
+        [Test]
+        public void ImproveVertexPositionsSphere()
+        {
+            Mesh sphereMesh = MC.Instance.Create(Configuration.MeshFactory, Sphere.Sample, -1, 1, -1, 1, -1, 1,
+                2, 2, 2);
+            OptimizeMesh.ImproveVertexPositions(sphereMesh, Sphere.Sample);
+
+            YamlSerializerTest.TestSerialize("ImproveVertexPositionsSphere.yaml", sphereMesh);
+        }
     }
 }

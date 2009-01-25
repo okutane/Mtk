@@ -10,19 +10,17 @@ using Matveev.Mtk.Library.Utilities;
 
 namespace Matveev.Mtk.Library
 {
+    public delegate void LocalGradDelegate(Point[] points, Vector[] result);
+
     public static class OptimizeMesh
     {
         public static void ImproveVertexPositions(Mesh mesh, IImplicitSurface surface)
         {
             Vertex[] vertices = mesh.Vertices.ToArray();
             List<int> fixedPoints = new List<int>();
-            double[] x = new double[3 * vertices.Length];
             for (int i = 0; i < vertices.Length; i++)
             {
                 Point point = vertices[i].Point;
-                x[3 * i] = point.X;
-                x[3 * i + 1] = point.Y;
-                x[3 * i + 2] = point.Z;
                 if (vertices[i].Type != VertexType.Internal)
                 {
                     fixedPoints.Add(i);
@@ -46,14 +44,14 @@ namespace Matveev.Mtk.Library
                 faceEnergy = cqf.FaceDistance;
             }
 
-            Func<double[], double> globalEnergy = delegate(double[] globalX)
+            Point[] points = new Point[3];
+            Func<double[], double> globalEnergy = delegate(double[] x)
             {
                 double energy = 0;
 
                 foreach (int[] face in faces)
                 {
                     // TODO: Refactor, extract converting methods.
-                    Point[] points = new Point[3];
                     for (int i = 0; i < points.Length; i++)
                     {
                         int index = face[i];
@@ -67,35 +65,32 @@ namespace Matveev.Mtk.Library
                 return energy;
             };
 
-            Func<Point[], Vector[]> localGradient = LocalGradientProvider.GetNumericalGradient2(faceEnergy, 1e-6);
+            LocalGradDelegate localGradient = LocalGradientProvider.GetNumericalGradient2(faceEnergy, 1e-6);
 
             if (cqf != null)
             {
-                localGradient = delegate(Point[] points)
+                localGradient = delegate(Point[] facePoints, Vector[] result)
                 {
                     double[] grad = cqf.GradOfFaceDistance(points);
-                    return new Vector[] {
-                        new Vector(grad[0], grad[1], grad[2]),
-                        new Vector(grad[3], grad[4], grad[5]),
-                        new Vector(grad[6], grad[7], grad[8]),
-                    };
+                    result[0] = new Vector(grad[0], grad[1], grad[2]);
+                    result[1] = new Vector(grad[3], grad[4], grad[5]);
+                    result[2] = new Vector(grad[6], grad[7], grad[8]);
                 };
             }
 
-            Func<double[], double[]> globalGradient = delegate(double[] globalX)
+            Vector[] localGradValue = new Vector[3];
+            GradDelegate globalGradient = delegate(double[] x, double[] result)
             {
-                double[] result = new double[globalX.Length];
-
+                Array.Clear(result, 0, result.Length);
                 foreach (int[] face in faces)
                 {
                     // TODO: Refactor, extract converting methods.
-                    Point[] points = new Point[3];
                     for (int i = 0; i < face.Length; i++)
                     {
                         int index = face[i];
                         points[i] = new Point(x[3 * index], x[3 * index + 1], x[3 * index + 2]);
                     }
-                    Vector[] localGradValue = localGradient(points);
+                    localGradient(points, localGradValue);
                     double weight = points[0].AreaTo(points[1], points[2]);
                     weight = 1;
                     for (int i = 0; i < face.Length; i++)
@@ -113,15 +108,22 @@ namespace Matveev.Mtk.Library
                         result[3 * fixedPoint + i] = 0;
                     }
                 }
-
-                return result;
             };
 
-            FunctionOptimization.GradientDescent(globalEnergy, globalGradient, x, 1e-8, 300);
+            double[] buffer = new double[3 * vertices.Length];
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                Point point = vertices[i].Point;
+                buffer[3 * i] = point.X;
+                buffer[3 * i + 1] = point.Y;
+                buffer[3 * i + 2] = point.Z;
+            }
+
+            FunctionOptimization.GradientDescent(globalEnergy, globalGradient, buffer, 1e-8, 300);
 
             for (int i = 0; i < vertices.Length; i++)
             {
-                vertices[i].Point = new Point(x[3 * i], x[3 * i + 1], x[3 * i + 2]);
+                vertices[i].Point = new Point(buffer[3 * i], buffer[3 * i + 1], buffer[3 * i + 2]);
             }
         }
 
