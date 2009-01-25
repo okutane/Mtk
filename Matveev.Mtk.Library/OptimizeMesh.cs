@@ -160,7 +160,6 @@ namespace Matveev.Mtk.Library
                 changed = false;
                 List<Edge> candidats = new List<Edge>(mesh.Edges);
                 Edge candidat, smCandidat;
-                List<Face> surrounding = new List<Face>();
                 Mesh submesh;
                 Dictionary<Edge, Edge> edgeMap = new Dictionary<Edge, Edge>();
                 double E1, E2;
@@ -169,8 +168,8 @@ namespace Matveev.Mtk.Library
                     candidat = candidats[rand.Next(candidats.Count - 1)];
                     candidats.RemoveAll(edge => edge == candidat || edge == candidat.Pair);
 
-                    surrounding.Clear();
-                    surrounding.AddRange(candidat.Begin.AdjacentFaces.Concat(candidat.End.AdjacentFaces).Distinct());
+                    IEnumerable<Face> surrounding =
+                        candidat.Begin.AdjacentFaces.Concat(candidat.End.AdjacentFaces).Distinct();
 
                     submesh = mesh.CloneSub(surrounding, null, edgeMap, null);
                     smCandidat = edgeMap[candidat];
@@ -190,29 +189,24 @@ namespace Matveev.Mtk.Library
                         try
                         {
                             MeshPart smResult = transform.Execute(smCandidat2);
-
-                            foreach (IMeshValidator validator in validators)
-                            {
-                                if (!validator.IsValid(submesh2))
-                                {
-                                    throw new Exception("Invalid mesh");
-                                }
-                            }
-
-                            foreach (Vertex vertex in smResult.GetVertices(0))
-                            {
-                                VertexOps.OptimizePosition(vertex, field, epsilon);
-                            }
-
-                            E2 = energy.Eval(submesh2);
-
-                            if (E1 <= E2)
-                            {
-                                continue;
-                            }
                         }
                         catch
                         {
+                            continue;
+                        }
+
+                        if (!validators.TrueForAll(v => v.IsValid(submesh2)))
+                        {
+                            continue;
+                        }
+
+                        ImproveVertexPositions(submesh2, field);
+
+                        E2 = energy.Eval(submesh2);
+
+                        if (E1 <= E2)
+                        {
+                            continue;
                         }
 
                         if (numbersOfUses.ContainsKey(transform))
@@ -226,10 +220,8 @@ namespace Matveev.Mtk.Library
                         candidats.RemoveAll(edgeMap.ContainsKey);
 
                         MeshPart result = transform.Execute(candidat);
-                        foreach (Vertex vertex in result.GetVertices(0))
-                        {
-                            //VertexOps.OptimizePosition(vertex, field, epsilon);
-                        }
+
+                        // TODO: Add local ImproveVertexPositions call here
                         candidats.AddRange(result.GetEdges(1));
                         changed = true;
                         break;
