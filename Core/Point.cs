@@ -1,17 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 
 using Matveev.Common;
 
 namespace Matveev.Mtk.Core
 {
-    public struct Point : IPoint<Point>
+    [StructLayout(LayoutKind.Explicit)]
+    public unsafe struct Point : IPoint<Point>
     {
+        [FieldOffset(0)]
         public double X;
+        [FieldOffset(8)]
         public double Y;
+        [FieldOffset(16)]
         public double Z;
 
         public Point(double x, double y, double z)
@@ -31,37 +35,20 @@ namespace Matveev.Mtk.Core
             return left.X != right.X || left.Y != right.Y || left.Z != right.Z;
         }
 
-        [IndexerName("Coords")]
         public double this[int index]
         {
             get
             {
-                if (index == 0)
+                fixed (double* p = &X)
                 {
-                    return X;
-                }
-                else if (index == 1)
-                {
-                    return Y;
-                }
-                else
-                {
-                    return Z;
+                    return p[index];
                 }
             }
             set
             {
-                if (index == 0)
+                fixed (double* p = &X)
                 {
-                    X = value;
-                }
-                else if (index == 1)
-                {
-                    Y = value;
-                }
-                else
-                {
-                    Z = value;
+                    p[index] = value;
                 }
             }
         }
