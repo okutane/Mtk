@@ -14,6 +14,142 @@ namespace Matveev.Mtk.Library
 
     public static class OptimizeMesh
     {
+        public static void ImproveVertexPositions(IEnumerable<Vertex> vertices, IImplicitSurface surface)
+        {
+            Vertex[] verticesArray = vertices.Where(v => v.Type == VertexType.Internal).ToArray();
+            List<Vertex> constVertices = new List<Vertex>();
+            Func<Vertex, int> indexSelector = delegate(Vertex v)
+            {
+                int vertexIndex = Array.IndexOf(verticesArray, v);
+                if (vertexIndex >= 0)
+                {
+                    return vertexIndex;
+                }
+                vertexIndex = constVertices.IndexOf(v);
+                if (vertexIndex >= 0)
+                {
+                    return -vertexIndex - 1;
+                }
+                constVertices.Add(v);
+                return -constVertices.Count;
+            };
+            IEnumerable<Face> facesCollection = verticesArray.SelectMany(v => v.AdjacentFaces).Distinct();
+            int[][] faces = facesCollection.Select(f => f.Vertices.Select(indexSelector).ToArray()).ToArray();
+
+            Func<Point[], double> faceEnergy;
+            LocalGradDelegate localGradient;
+            GetLocalFunctions(surface, out faceEnergy, out localGradient);
+
+            Point[] points = new Point[3];
+            Func<double[], double> globalEnergy = delegate(double[] x)
+            {
+                double energy = 0;
+
+                foreach (int[] face in faces)
+                {
+                    // TODO: Refactor, extract converting methods.
+                    for (int i = 0; i < points.Length; i++)
+                    {
+                        int index = face[i];
+                        if (index >= 0)
+                        {
+                            points[i] = new Point(x[3 * index], x[3 * index + 1], x[3 * index + 2]);
+                        }
+                        else
+                        {
+                            points[i] = constVertices[-index - 1].Point;
+                        }
+                    }
+                    double weight = points[0].AreaTo(points[1], points[2]);
+                    weight = 1;
+                    energy += weight * faceEnergy(points);
+                }
+
+                return energy;
+            };
+
+            Vector[] localGradValue = new Vector[3];
+            GradDelegate globalGradient = delegate(double[] x, double[] result)
+            {
+                Array.Clear(result, 0, result.Length);
+                foreach (int[] face in faces)
+                {
+                    // TODO: Refactor, extract converting methods.
+                    for (int i = 0; i < face.Length; i++)
+                    {
+                        int index = face[i];
+                        if (index >= 0)
+                        {
+                            points[i] = new Point(x[3 * index], x[3 * index + 1], x[3 * index + 2]);
+                        }
+                        else
+                        {
+                            points[i] = constVertices[-index - 1].Point;
+                        }
+                    }
+                    localGradient(points, localGradValue);
+                    double weight = points[0].AreaTo(points[1], points[2]);
+                    weight = 1;
+                    for (int i = 0; i < face.Length; i++)
+                    {
+                        int index = face[i];
+                        if (index >= 0)
+                        {
+                            result[3 * index] += weight * localGradValue[i].x;
+                            result[3 * index + 1] += weight * localGradValue[i].y;
+                            result[3 * index + 2] += weight * localGradValue[i].z;
+                        }
+                    }
+                }
+            };
+
+            double[] buffer = new double[3 * verticesArray.Length];
+            for (int i = 0; i < verticesArray.Length; i++)
+            {
+                Point point = verticesArray[i].Point;
+                buffer[3 * i] = point.X;
+                buffer[3 * i + 1] = point.Y;
+                buffer[3 * i + 2] = point.Z;
+            }
+
+            FunctionOptimization.GradientDescent(globalEnergy, globalGradient, buffer, 1e-8, 300);
+
+            for (int i = 0; i < verticesArray.Length; i++)
+            {
+                verticesArray[i].Point = new Point(buffer[3 * i], buffer[3 * i + 1], buffer[3 * i + 2]);
+            }
+        }
+
+        private static void GetLocalFunctions(IImplicitSurface surface, out Func<Point[], double> faceEnergy, out LocalGradDelegate localGradient)
+        {
+            faceEnergy =
+    TriangleImplicitApproximations.GetApproximation(surface.Eval, "square");
+
+            QuadraticForm quadraticForm = surface as QuadraticForm;
+            if (quadraticForm != null)
+            {
+                faceEnergy = quadraticForm.FaceDistance;
+            }
+            CompactQuadraticForm cqf = surface as CompactQuadraticForm;
+            if (cqf != null)
+            {
+                faceEnergy = cqf.FaceDistance;
+            }
+
+            localGradient = LocalGradientProvider.GetNumericalGradient2(faceEnergy, 1e-6);
+
+            if (cqf != null)
+            {
+                localGradient = delegate(Point[] facePoints, Vector[] result)
+                {
+                    double[] grad = cqf.GradOfFaceDistance(facePoints);
+                    result[0] = new Vector(grad[0], grad[1], grad[2]);
+                    result[1] = new Vector(grad[3], grad[4], grad[5]);
+                    result[2] = new Vector(grad[6], grad[7], grad[8]);
+                };
+            }
+        }
+
         public static void ImproveVertexPositions(Mesh mesh, IImplicitSurface surface)
         {
             Vertex[] vertices = mesh.Vertices.ToArray();
@@ -27,23 +163,12 @@ namespace Matveev.Mtk.Library
                 }
             }
             Func<Vertex, int> indexSelector = vertex => Array.IndexOf(vertices, vertex);
-            List<int[]> faces =               
-                new List<int[]>(mesh.Faces.Select(face => face.Vertices.Select(indexSelector).ToArray()));
+            int[][] faces = mesh.Faces.Select(face => face.Vertices.Select(indexSelector).ToArray()).ToArray();
 
-            Func<Point[], double> faceEnergy =
-                TriangleImplicitApproximations.GetApproximation(surface.Eval, "square");
-
-            QuadraticForm quadraticForm = surface as QuadraticForm;
-            if (quadraticForm != null)
-            {
-                faceEnergy = quadraticForm.FaceDistance;
-            }
-            CompactQuadraticForm cqf = surface as CompactQuadraticForm;
-            if (cqf != null)
-            {
-                faceEnergy = cqf.FaceDistance;
-            }
-
+            Func<Point[], double> faceEnergy;
+            LocalGradDelegate localGradient;
+            GetLocalFunctions(surface, out faceEnergy, out localGradient);
+            
             Point[] points = new Point[3];
             Func<double[], double> globalEnergy = delegate(double[] x)
             {
@@ -64,19 +189,6 @@ namespace Matveev.Mtk.Library
 
                 return energy;
             };
-
-            LocalGradDelegate localGradient = LocalGradientProvider.GetNumericalGradient2(faceEnergy, 1e-6);
-
-            if (cqf != null)
-            {
-                localGradient = delegate(Point[] facePoints, Vector[] result)
-                {
-                    double[] grad = cqf.GradOfFaceDistance(points);
-                    result[0] = new Vector(grad[0], grad[1], grad[2]);
-                    result[1] = new Vector(grad[3], grad[4], grad[5]);
-                    result[2] = new Vector(grad[6], grad[7], grad[8]);
-                };
-            }
 
             Vector[] localGradValue = new Vector[3];
             GradDelegate globalGradient = delegate(double[] x, double[] result)
@@ -186,9 +298,10 @@ namespace Matveev.Mtk.Library
                         Mesh submesh2 = submesh.Clone(edgeMap2);
                         Edge smCandidat2 = edgeMap2[smCandidat];
 
+                        MeshPart smResult;
                         try
                         {
-                            MeshPart smResult = transform.Execute(smCandidat2);
+                            smResult = transform.Execute(smCandidat2);
                         }
                         catch
                         {
@@ -200,7 +313,7 @@ namespace Matveev.Mtk.Library
                             continue;
                         }
 
-                        ImproveVertexPositions(submesh2, field);
+                        ImproveVertexPositions(smResult.GetVertices(0), field);
 
                         E2 = energy.Eval(submesh2);
 
@@ -217,11 +330,15 @@ namespace Matveev.Mtk.Library
                         {
                             numbersOfUses.Add(transform, 1);
                         }
+                        /*foreach (Edge edge in edgeMap.Keys)
+                        {
+                            candidats.RemoveAll(e => e == edge);
+                        }*/
                         candidats.RemoveAll(edgeMap.ContainsKey);
 
                         MeshPart result = transform.Execute(candidat);
 
-                        // TODO: Add local ImproveVertexPositions call here
+                        ImproveVertexPositions(result.GetVertices(0), field);
                         candidats.AddRange(result.GetEdges(1));
                         changed = true;
                         break;

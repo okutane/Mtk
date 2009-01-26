@@ -120,5 +120,14 @@ namespace Matveev.Mtk.Tests
 
             YamlSerializerTest.TestSerialize("ImproveVertexPositionsSphere.yaml", sphereMesh);
         }
+
+        [Test]
+        public void ImproveVertexPositionsHP()
+        {
+            IImplicitSurface surface = QuadraticForm.ParabolicHyperboloid;
+            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, surface, -1, 1, -1, 1, -1, 1, 3, 3, 3);
+            OptimizeMesh.ImproveVertexPositions(mesh.Vertices.Where(v => v.Type == VertexType.Internal), surface);
+            YamlSerializerTest.TestSerialize("ImproveVertexPositionsHP.yaml", mesh);
+        }
     }
 }
