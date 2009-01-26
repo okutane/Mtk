@@ -1,11 +1,10 @@
-// Face.cs
-
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Matveev.Mtk.Core
 {
-    public abstract class Face
+    public abstract class Face : MeshPart
     {
         public abstract IEnumerable<Vertex> Vertices
         {
@@ -35,6 +34,28 @@ namespace Matveev.Mtk.Core
             }
 
             return "[" + string.Join(",", vertices.ToArray()) + "]";
+        }
+
+        public override Mesh Mesh
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override Vertex[] GetVertices(int radius)
+        {
+            if (radius == 0)
+            {
+                return Vertices.ToArray();
+            }
+            throw new NotImplementedException();
+        }
+
+        public override Edge[] GetEdges(int radius)
+        {
+            throw new NotImplementedException();
         }
     }
 }
