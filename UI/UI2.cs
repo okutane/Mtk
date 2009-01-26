@@ -24,7 +24,9 @@ namespace UI
 
         private IImplicitSurface _field;
 
-        private object _selection;
+        private MeshPart _selection;
+
+        private Button btnImprovePositions;
 
         int N = 2;
         double epsilon = 1e-2;//max point-to-surface range
@@ -45,6 +47,15 @@ namespace UI
             ListVertexActions();
             ListEdgeActions();
             ListFaceActions();
+
+            btnImprovePositions = new Button();
+            btnImprovePositions.Text = "Improve position";
+            btnImprovePositions.Click += delegate(object sender, EventArgs e)
+            {
+                OptimizeMesh.ImproveVertexPositions(_selection.GetVertices(0), _field);
+                Selection = _selection;
+                Invalidate(true);
+            };
 
             Selection = null;
         }
@@ -340,7 +351,7 @@ namespace UI
             meshActions.Add(txtMeshInfo);
         }
 
-        private object Selection
+        private MeshPart Selection
         {
             get
             {
@@ -351,13 +362,17 @@ namespace UI
                 panelActions.Controls.Clear();
                 _selection = value;
                 if (_selection == null)
+                {
                     panelActions.Controls.AddRange(meshActions.ToArray());
-                else if (_selection is Vertex)
+                    return;
+                }
+                if (_selection is Vertex)
                     panelActions.Controls.AddRange(vertActions.ToArray());
                 else if (_selection is Edge)
                     panelActions.Controls.AddRange(edgeActions.ToArray());
                 else if (_selection is Face)
                     panelActions.Controls.AddRange(faceActions.ToArray());
+                panelActions.Controls.Add(btnImprovePositions);
             }
         }
 
