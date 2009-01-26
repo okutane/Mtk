@@ -29,7 +29,7 @@ namespace Matveev.Mtk.Tests
                         suite.Add(type.GetConstructor(Type.EmptyTypes).Invoke(null));
                 }
 
-                suite.Add(PolygonizationSuite.Suite);
+                //suite.Add(PolygonizationSuite.Suite);
                 return suite;
             }
         }
