@@ -1,9 +1,11 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
+using Matveev.Common;
+
 namespace Matveev.Mtk.Core
 {
-    public struct Vector
+    public struct Vector : IAdditable<Vector, Vector>, ISizeable
     {
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "x")]
         public double x;
@@ -118,5 +120,23 @@ namespace Matveev.Mtk.Core
         {
             return 0;
         }
+
+        #region ISizeable Members
+
+        public double Size()
+        {
+            return Norm;
+        }
+
+        #endregion
+
+        #region IAdditable<Vector,Vector> Members
+
+        public Vector Add(Vector other, double weight)
+        {
+            return this + weight * other;
+        }
+
+        #endregion
     }
 }
