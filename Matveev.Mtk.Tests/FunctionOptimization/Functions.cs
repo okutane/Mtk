@@ -3,15 +3,64 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Matveev.Common;
+
 namespace Matveev.Mtk.Tests.FunctionOptimization
 {
-    public interface ITestFunction
+    struct MyDouble : IAdditable<MyDouble, MyDouble>, ISubtractable<MyDouble, MyDouble>, ISizeable
     {
-        double Function(double[] x);
+        private readonly double _value;
 
-        void Gradient(double[] x, double[] result);
+        private MyDouble(double value)
+        {
+            _value = value;
+        }
 
-        double[,] Hessian(double[] x);
+        public static implicit operator double(MyDouble value)
+        {
+            return value._value;
+        }
+
+        public static implicit operator MyDouble(double value)
+        {
+            return new MyDouble(value);
+        }
+
+        #region IAdditable<Double,Double> Members
+
+        public MyDouble Add(MyDouble other, double weight)
+        {
+            return _value + weight * other;
+        }
+
+        #endregion
+
+        #region ISubtractable<Double,Double> Members
+
+        public MyDouble Subtract(MyDouble other)
+        {
+            return _value - other._value;
+        }
+
+        #endregion
+
+        #region ISizeable Members
+
+        public double Size()
+        {
+            return Math.Abs(_value);
+        }
+
+        #endregion
+    }
+
+    interface ITestFunction
+    {
+        double Function(MyDouble[] x);
+
+        void Gradient(MyDouble[] x, MyDouble[] result);
+
+        MyDouble[,] Hessian(MyDouble[] x);
 
         double[] Minimum
         {
@@ -39,7 +88,7 @@ namespace Matveev.Mtk.Tests.FunctionOptimization
         }
     }
 
-    public class Ellipse : ITestFunction
+    class Ellipse : ITestFunction
     {
         public double[] Minimum
         {
@@ -49,20 +98,20 @@ namespace Matveev.Mtk.Tests.FunctionOptimization
             }
         }
 
-        public double Function(double[] x)
+        public double Function(MyDouble[] x)
         {
             return Math.Pow(x[0], 2) + Math.Pow(x[1] / 2, 2);
         }
 
-        public void Gradient(double[] x, double[] result)
+        public void Gradient(MyDouble[] x, MyDouble[] result)
         {
             result[0] = 2 * x[0];
             result[1] = x[1] / 2;
         }
 
-        public double[,] Hessian(double[] x)
+        public MyDouble[,] Hessian(MyDouble[] x)
         {
-            return new double[,] { { 2, 0 }, { 0, 0.5 } };
+            return new MyDouble[,] { { 2, 0 }, { 0, 0.5 } };
         }
 
         public double MinX
@@ -98,7 +147,7 @@ namespace Matveev.Mtk.Tests.FunctionOptimization
         }
     }
 
-    public class EllipseQuad : ITestFunction
+    class EllipseQuad : ITestFunction
     {
         #region ITestFunction Members
 
@@ -110,20 +159,20 @@ namespace Matveev.Mtk.Tests.FunctionOptimization
             }
         }
 
-        public double Function(double[] x)
+        public double Function(MyDouble[] x)
         {
             return Math.Pow(x[0], 4) + Math.Pow(x[1] / 2, 4);
         }
 
-        public void Gradient(double[] x, double[] result)
+        public void Gradient(MyDouble[] x, MyDouble[] result)
         {
             result[0] = 4 * Math.Pow(x[0], 3);
             result[1] = Math.Pow(x[1], 3) / 4;
         }
 
-        public double[,] Hessian(double[] x)
+        public MyDouble[,] Hessian(MyDouble[] x)
         {
-            return new double[,] { { 12 * Math.Pow(x[0], 2), 0 }, { 0, 3 * Math.Pow(x[1], 2) / 4 } };
+            return new MyDouble[,] { { 12 * Math.Pow(x[0], 2), 0 }, { 0, 3 * Math.Pow(x[1], 2) / 4 } };
         }
 
         public double MinX
@@ -161,7 +210,7 @@ namespace Matveev.Mtk.Tests.FunctionOptimization
         #endregion
     }
 
-    public class Rosenbrock : ITestFunction
+    class Rosenbrock : ITestFunction
     {
         #region ITestFunction Members
 
@@ -173,20 +222,20 @@ namespace Matveev.Mtk.Tests.FunctionOptimization
             }
         }
  
-        public double Function(double[] x)
+        public double Function(MyDouble[] x)
         {
             return Math.Pow(1 - x[0], 2) + 100 * Math.Pow(x[1] - x[0] * x[0], 2);
         }
 
-        public void Gradient(double[] x, double[] result)
+        public void Gradient(MyDouble[] x, MyDouble[] result)
         {
             result[0] = 2 * x[0] - 2 - 400 * (x[1] - x[0] * x[0]);
             result[1] = 200 * (x[1] - x[0] * x[0]);
         }
 
-        public double[,] Hessian(double[] x)
+        public MyDouble[,] Hessian(MyDouble[] x)
         {
-            return new double[,] { { 2 + 1200 * x[0] * x[0] - 400 * x[1], -400 * x[0] }, { -400 * x[0], 200 } };
+            return new MyDouble[,] { { 2 + 1200 * x[0] * x[0] - 400 * x[1], -400 * x[0] }, { -400 * x[0], 200 } };
         }
         
         public double MinX

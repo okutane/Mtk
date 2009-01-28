@@ -4,6 +4,7 @@ using System.Text;
 
 using NUnit.Framework;
 
+using Matveev.Common;
 using Matveev.Mtk.Tests;
 using Matveev.Mtk.Tests.FunctionOptimization;
 
@@ -15,15 +16,16 @@ namespace Matveev.Mtk.Library.Tests
         [Test]
         public void SquareTest()
         {
-            double[] x = new double[] { 0.1 };
-            Func<double[], double> f = a => Math.Pow(a[0] - 1, 2);
-            GradDelegate grad = (a, result) => result[0] = 2 * (a[0] - 1);
+            MyDouble[] x = new MyDouble[] { 0.1 };
+            Func<MyDouble[], double> f = a => Math.Pow(a[0] - 1, 2);
+            GradientDelegate<MyDouble, MyDouble> grad = (a, result) => result[0] = 2 * (a[0] - 1);
 
-            List<double[]> points = new List<double[]>();
+            // WTF??!!
+            List<MyDouble[]> points = new List<MyDouble[]>();
             for (int i = 0; i < 100; i++)
             {
-                points.Add((double[])x.Clone());
-                FunctionOptimization.GradientDescent(f, grad, x, 1e-9, 1);
+                points.Add((MyDouble[])x.Clone());
+                FunctionOptimization<MyDouble, MyDouble>.GradientDescent(f, grad, x, 1e-9, 1);
             }
             Assert.AreEqual(1, x[0], 1e-4);
         }
@@ -31,16 +33,16 @@ namespace Matveev.Mtk.Library.Tests
         [Test]
         public void CircleTest()
         {
-            double[] x = new double[] { 0.1, 0.1 };
-            Func<double[], double> implicitCircle = a => a[0] * a[0] + a[1] + a[1] - 1;
-            Func<double[], double> f = a => Math.Pow(implicitCircle(a), 2);
-            GradDelegate grad = (a, result) =>
+            MyDouble[] x = new MyDouble[] { 0.1, 0.1 };
+            Func<MyDouble[], double> implicitCircle = a => a[0] * a[0] + a[1] + a[1] - 1;
+            Func<MyDouble[], double> f = a => Math.Pow(implicitCircle(a), 2);
+            GradientDelegate<MyDouble, MyDouble> grad = (a, result) =>
             {
                 result[0] = 2 * a[0] * implicitCircle(a);
                 result[1] = 2 * a[1] * implicitCircle(a);
             };
 
-            FunctionOptimization.GradientDescent(f, grad, x, 1e-4, 100);
+            FunctionOptimization<MyDouble, MyDouble>.GradientDescent(f, grad, x, 1e-4, 100);
             Assert.AreEqual(0, f(x), 1e-4);
         }
 
@@ -48,8 +50,8 @@ namespace Matveev.Mtk.Library.Tests
         public void RosenbrockTest()
         {
             ITestFunction function = new Rosenbrock();
-            double[] x = new double[] { 0, 0 };
-            FunctionOptimization.GradientDescent(function.Function, function.Gradient, x, 0, 10000);
+            MyDouble[] x = new MyDouble[] { 0, 0 };
+            FunctionOptimization<MyDouble, MyDouble>.GradientDescent(function.Function, function.Gradient, x, 0, 10000);
             double[] expected = function.Minimum;
             Assert.AreEqual(0, function.Function(x), 1e-4, "f(x)");
             Assert.AreEqual(expected[0], x[0], 1e-2, "x[0]");
@@ -109,7 +111,7 @@ namespace Matveev.Mtk.Library.Tests
                 return cg0;
             };
 
-            Func<double[], double> globalValue = delegate(double[] x)
+            Func<MyDouble[], double> globalValue = delegate(MyDouble[] x)
             {
                 double result = 0;
 
@@ -123,7 +125,7 @@ namespace Matveev.Mtk.Library.Tests
                 return result;
             };
 
-            GradDelegate globalGrad = delegate(double[] x, double[] result)
+            GradientDelegate<MyDouble, MyDouble> globalGrad = delegate(MyDouble[] x, MyDouble[] result)
             {
                 int n = x.Length / 2;
                 for (int i = 0; i < n; i++)
@@ -136,8 +138,8 @@ namespace Matveev.Mtk.Library.Tests
                     result[2 * ((i + 1) % n) + 1] += grad[3];
                 }
             };
-            double[] arg = { 1, 0, 0, 1, -1, 0, 0, -1 };
-            FunctionOptimization.GradientDescent(globalValue, globalGrad, arg, 0, 10000);
+            MyDouble[] arg = { 1, 0, 0, 1, -1, 0, 0, -1 };
+            FunctionOptimization<MyDouble, MyDouble>.GradientDescent(globalValue, globalGrad, arg, 0, 10000);
             Assert.AreEqual(0.19, globalValue(arg), 1e-3);
         }
     }
