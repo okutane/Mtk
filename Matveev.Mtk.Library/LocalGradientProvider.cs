@@ -37,7 +37,8 @@ namespace Matveev.Mtk.Library
             };
         }
 
-        public static LocalGradDelegate GetNumericalGradient2(Func<Point[], double> localEnergy, double h)
+        public static GradientDelegate<Point, Vector> GetNumericalGradient2(Func<Point[], double> localEnergy,
+            double h)
         {
             return delegate(Point[] points, Vector[] result)
             {

@@ -6,7 +6,7 @@ using System.Text;
 using NUnit.Framework;
 
 using Matveev.Mtk.Library;
-using Optimization = Matveev.Mtk.Library.FunctionOptimization;
+using Optimization = Matveev.Mtk.Library.FunctionOptimization<double, double>;
 using Matveev.Mtk.Tests.FunctionOptimization;
 
 namespace Matveev.Mtk.Tests

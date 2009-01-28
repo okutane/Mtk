@@ -10,8 +10,6 @@ using Matveev.Mtk.Library.Utilities;
 
 namespace Matveev.Mtk.Library
 {
-    public delegate void LocalGradDelegate(Point[] points, Vector[] result);
-
     public static class OptimizeMesh
     {
         public static void ImproveVertexPositions(IEnumerable<Vertex> vertices, IImplicitSurface surface)
@@ -37,11 +35,11 @@ namespace Matveev.Mtk.Library
             int[][] faces = facesCollection.Select(f => f.Vertices.Select(indexSelector).ToArray()).ToArray();
 
             Func<Point[], double> faceEnergy;
-            LocalGradDelegate localGradient;
+            GradientDelegate<Point, Vector> localGradient;
             GetLocalFunctions(surface, out faceEnergy, out localGradient);
 
             Point[] points = new Point[3];
-            Func<double[], double> globalEnergy = delegate(double[] x)
+            Func<Point[], double> globalEnergy = delegate(Point[] x)
             {
                 double energy = 0;
 
@@ -53,7 +51,7 @@ namespace Matveev.Mtk.Library
                         int index = face[i];
                         if (index >= 0)
                         {
-                            points[i] = new Point(x[3 * index], x[3 * index + 1], x[3 * index + 2]);
+                            points[i] = x[index];
                         }
                         else
                         {
@@ -69,7 +67,7 @@ namespace Matveev.Mtk.Library
             };
 
             Vector[] localGradValue = new Vector[3];
-            GradDelegate globalGradient = delegate(double[] x, double[] result)
+            GradientDelegate<Point, Vector> globalGradient = delegate(Point[] x, Vector[] result)
             {
                 Array.Clear(result, 0, result.Length);
                 foreach (int[] face in faces)
@@ -80,7 +78,7 @@ namespace Matveev.Mtk.Library
                         int index = face[i];
                         if (index >= 0)
                         {
-                            points[i] = new Point(x[3 * index], x[3 * index + 1], x[3 * index + 2]);
+                            points[i] = x[index];
                         }
                         else
                         {
@@ -95,32 +93,24 @@ namespace Matveev.Mtk.Library
                         int index = face[i];
                         if (index >= 0)
                         {
-                            result[3 * index] += weight * localGradValue[i].x;
-                            result[3 * index + 1] += weight * localGradValue[i].y;
-                            result[3 * index + 2] += weight * localGradValue[i].z;
+                            result[index] = result[index].Add(localGradValue[i], weight);
                         }
                     }
                 }
             };
 
-            double[] buffer = new double[3 * verticesArray.Length];
-            for (int i = 0; i < verticesArray.Length; i++)
-            {
-                Point point = verticesArray[i].Point;
-                buffer[3 * i] = point.X;
-                buffer[3 * i + 1] = point.Y;
-                buffer[3 * i + 2] = point.Z;
-            }
+            Point[] buffer = verticesArray.Select(v => v.Point).ToArray();
 
-            FunctionOptimization.GradientDescent(globalEnergy, globalGradient, buffer, 1e-8, 300);
+            FunctionOptimization<Point, Vector>.GradientDescent(globalEnergy, globalGradient, buffer, 1e-8, 300);
 
             for (int i = 0; i < verticesArray.Length; i++)
             {
-                verticesArray[i].Point = new Point(buffer[3 * i], buffer[3 * i + 1], buffer[3 * i + 2]);
+                verticesArray[i].Point = buffer[i];
             }
         }
 
-        private static void GetLocalFunctions(IImplicitSurface surface, out Func<Point[], double> faceEnergy, out LocalGradDelegate localGradient)
+        private static void GetLocalFunctions(IImplicitSurface surface, out Func<Point[], double> faceEnergy,
+            out GradientDelegate<Point, Vector> localGradient)
         {
             faceEnergy =
     TriangleImplicitApproximations.GetApproximation(surface.Eval, "square");
@@ -166,11 +156,11 @@ namespace Matveev.Mtk.Library
             int[][] faces = mesh.Faces.Select(face => face.Vertices.Select(indexSelector).ToArray()).ToArray();
 
             Func<Point[], double> faceEnergy;
-            LocalGradDelegate localGradient;
+            GradientDelegate<Point, Vector> localGradient;
             GetLocalFunctions(surface, out faceEnergy, out localGradient);
             
             Point[] points = new Point[3];
-            Func<double[], double> globalEnergy = delegate(double[] x)
+            Func<Point[], double> globalEnergy = delegate(Point[] x)
             {
                 double energy = 0;
 
@@ -180,7 +170,7 @@ namespace Matveev.Mtk.Library
                     for (int i = 0; i < points.Length; i++)
                     {
                         int index = face[i];
-                        points[i] = new Point(x[3 * index], x[3 * index + 1], x[3 * index + 2]);
+                        points[i] = x[index];
                     }
                     double weight = points[0].AreaTo(points[1], points[2]);
                     weight = 1;
@@ -191,7 +181,7 @@ namespace Matveev.Mtk.Library
             };
 
             Vector[] localGradValue = new Vector[3];
-            GradDelegate globalGradient = delegate(double[] x, double[] result)
+            GradientDelegate<Point, Vector> globalGradient = delegate(Point[] x, Vector[] result)
             {
                 Array.Clear(result, 0, result.Length);
                 foreach (int[] face in faces)
@@ -200,7 +190,7 @@ namespace Matveev.Mtk.Library
                     for (int i = 0; i < face.Length; i++)
                     {
                         int index = face[i];
-                        points[i] = new Point(x[3 * index], x[3 * index + 1], x[3 * index + 2]);
+                        points[i] = x[index];
                     }
                     localGradient(points, localGradValue);
                     double weight = points[0].AreaTo(points[1], points[2]);
@@ -208,34 +198,22 @@ namespace Matveev.Mtk.Library
                     for (int i = 0; i < face.Length; i++)
                     {
                         int index = face[i];
-                        result[3 * index] += weight * localGradValue[i].x;
-                        result[3 * index + 1] += weight * localGradValue[i].y;
-                        result[3 * index + 2] += weight * localGradValue[i].z;
+                        result[index] = result[index].Add(localGradValue[i], weight);
                     }
                 }
                 foreach (int fixedPoint in fixedPoints)
                 {
-                    for (int i = 0; i < 3; i++)
-                    {
-                        result[3 * fixedPoint + i] = 0;
-                    }
+                    result[fixedPoint] = new Vector();
                 }
             };
 
-            double[] buffer = new double[3 * vertices.Length];
-            for (int i = 0; i < vertices.Length; i++)
-            {
-                Point point = vertices[i].Point;
-                buffer[3 * i] = point.X;
-                buffer[3 * i + 1] = point.Y;
-                buffer[3 * i + 2] = point.Z;
-            }
+            Point[] buffer = vertices.Select(v => v.Point).ToArray();
 
-            FunctionOptimization.GradientDescent(globalEnergy, globalGradient, buffer, 1e-8, 300);
+            FunctionOptimization<Point, Vector>.GradientDescent(globalEnergy, globalGradient, buffer, 1e-8, 300);
 
             for (int i = 0; i < vertices.Length; i++)
             {
-                vertices[i].Point = new Point(buffer[3 * i], buffer[3 * i + 1], buffer[3 * i + 2]);
+                vertices[i].Point = buffer[i];
             }
         }
 

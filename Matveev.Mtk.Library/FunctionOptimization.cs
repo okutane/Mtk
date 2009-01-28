@@ -7,21 +7,22 @@ using Matveev.Common;
 
 namespace Matveev.Mtk.Library
 {
-    public delegate void GradDelegate(double[] argument, double[] result);
+    public delegate void GradientDelegate<ArgType, DiffType>(ArgType[] arguments, DiffType[] result);
 
-    public static class FunctionOptimization
+    public static class FunctionOptimization<ArgType, DiffType>
+        where ArgType : IAdditable<DiffType, ArgType>, ISubtractable<ArgType, DiffType>
+        where DiffType : ISizeable
     {
-
-        public interface ILineSearch
+        private interface ILineSearch
         {
-            void Perform(Func<double[], double> f, GradDelegate grad, double[] x0,
-                double[] grad0, double[] direction, double[] x, ref double f0);
+            void Perform(Func<ArgType[], double> f, GradientDelegate<ArgType, DiffType> grad, ArgType[] x0,
+                DiffType[] grad0, DiffType[] direction, ArgType[] x, ref double f0);
         }
 
-        public class SimpleSearch : ILineSearch
+        private class SimpleSearch : ILineSearch
         {
-            public void Perform(Func<double[], double> f, GradDelegate grad, double[] x0,
-                double[] grad0, double[] direction, double[] x, ref double f0)
+            public void Perform(Func<ArgType[], double> f, GradientDelegate<ArgType, DiffType> grad, ArgType[] x0,
+                DiffType[] grad0, DiffType[] direction, ArgType[] x, ref double f0)
             {
                 double t = -1;
             calc:
@@ -44,10 +45,10 @@ namespace Matveev.Mtk.Library
 
         public class LineSearch : ILineSearch
         {
-            public void Perform(Func<double[], double> f, GradDelegate grad, double[] x0,
-                double[] grad0, double[] direction, double[] x, ref double f0)
+            public void Perform(Func<ArgType[], double> f, GradientDelegate<ArgType, DiffType> grad, ArgType[] x0,
+                DiffType[] grad0, DiffType[] direction, ArgType[] x, ref double f0)
             {
-                double[] arg = new double[x.Length];
+                ArgType[] arg = new ArgType[x.Length];
                 Func<double, double> phi = delegate(double alpha)
                 {
                     AddVector(arg, x0, direction, alpha, x0.Length);
@@ -59,12 +60,13 @@ namespace Matveev.Mtk.Library
             }
         }
 
-        public static void GradientDescent(Func<double[], double> f, GradDelegate grad, double[] x,
+        public static void GradientDescent(Func<ArgType[], double> f,
+            GradientDelegate<ArgType, DiffType> grad, ArgType[] x,
             double eps, int maxIterations)
         {
             int n = x.Length;
-            double[] x0 = new double[n];
-            double[] grad0 = new double[n];
+            ArgType[] x0 = new ArgType[n];
+            DiffType[] grad0 = new DiffType[n];
             x.CopyTo(x0, 0);
             double f0 = f(x);
             int k = 0;
@@ -77,27 +79,28 @@ namespace Matveev.Mtk.Library
                 change = 0;
                 for (int i = 0; i < n; i++)
                 {
-                    change += Math.Pow(x[i] - x0[i], 2);
+                    DiffType difference = x[i].Subtract(x0[i]);
+                    change += difference.Size();
                 }
                 x.CopyTo(x0, 0);
             }
-            while (k++ < maxIterations && change > eps);
-        }
+            while (k++ < maxIterations /*&& change > eps*/);
+}
 
-        public static void NewtonMethod(Func<double[], double> f, GradDelegate grad,
-            Func<double[], double[,]> hessian, double[] x, double eps, int maxIterations)
+        public static void NewtonMethod(Func<ArgType[], double> f, GradientDelegate<ArgType, DiffType> grad,
+            Func<ArgType[], DiffType[,]> hessian, ArgType[] x, double eps, int maxIterations)
         {
             int n = x.Length;
-            double[] x0 = new double[n];
-            double[] grad0 = new double[n];
+            ArgType[] x0 = new ArgType[n];
+            DiffType[] grad0 = new DiffType[n];
             x.CopyTo(x0, 0);
             double f0 = f(x);
             int k = 0;
             while (f0 > eps && k++ < maxIterations)
             {
-                grad(x, x0);
-                double[,] hessian0 = hessian(x0);
-                Matrix b = new Matrix(n, 1);
+                grad(x, grad0);
+                DiffType[,] hessian0 = hessian(x0);
+                /*Matrix b = new Matrix(n, 1);
                 for (int i = 0; i < n; i++)
                 {
                     b[i, 0] = grad0[i];
@@ -110,12 +113,12 @@ namespace Matveev.Mtk.Library
                         h[i, j] = hessian0[i, j];
                     }
                 }
-                LinSolve.Gauss(h, b);
-                double[] direction = new double[n];
-                for (int i = 0; i < n; i++)
+                LinSolve.Gauss(h, b);*/
+                DiffType[] direction = new DiffType[n];
+                /*for (int i = 0; i < n; i++)
                 {
                     direction[i] = b[i, 0]; // TODO: Introduce Matrix adapter for double[].
-                }
+                }*/
                 ILineSearch search = new LineSearch();
                 search.Perform(f, grad, x0, grad0, direction, x, ref f0);
                 x.CopyTo(x0, 0);
@@ -132,11 +135,11 @@ namespace Matveev.Mtk.Library
             return result;
         }
 
-        private static void AddVector(double[] dest, double[] src, double[] addee, double t, int n)
+        private static void AddVector(ArgType[] dest, ArgType[] src, DiffType[] addee, double t, int n)
         {
             for (int i = 0; i < n; i++)
             {
-                dest[i] = src[i] + t * addee[i];
+                dest[i] = src[i].Add(addee[i], t);
             }
         }
     }

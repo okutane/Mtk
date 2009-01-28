@@ -9,7 +9,7 @@ using Matveev.Common;
 namespace Matveev.Mtk.Core
 {
     [StructLayout(LayoutKind.Explicit)]
-    public unsafe struct Point : IPoint<Point>
+    public unsafe struct Point : IPoint<Point>, IAdditable<Vector, Point>, ISubtractable<Point, Vector>
     {
         [FieldOffset(0)]
         public double X;
@@ -152,5 +152,23 @@ namespace Matveev.Mtk.Core
         #endregion
 
         public readonly static Point ORIGIN = new Point(0, 0, 0);
+
+        #region IAdditable<Vector,Point> Members
+
+        public Point Add(Vector other, double weight)
+        {
+            return this + weight * other;
+        }
+
+        #endregion
+
+        #region ISubtractable<Point,Vector> Members
+
+        public Vector Subtract(Point other)
+        {
+            return this - other;
+        }
+
+        #endregion
     }
 }
