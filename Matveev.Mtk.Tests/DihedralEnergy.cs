@@ -25,7 +25,10 @@ namespace Matveev.Mtk.Library.Tests
             mesh.CreateFace(v1, v2, v3);
             mesh.CreateFace(v3, v2, v4);
 
-            Assert.AreEqual(0.0, DihedralAngle.Instance.Evaluate(mesh.Edges.Single(edge => edge.Pair != null)));
+            foreach (Edge edge in mesh.Edges.Where(e => e.Pair != null))
+            {
+                Assert.AreEqual(0.0, DihedralAngle.Instance.Evaluate(edge), edge.ToString());
+            }
         }
     }
 }
