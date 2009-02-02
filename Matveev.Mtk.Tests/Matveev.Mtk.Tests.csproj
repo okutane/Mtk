@@ -76,7 +76,7 @@
     <Compile Include="HeaMeshTest.cs" />
     <Compile Include="HEMeshTest.cs" />
     <Compile Include="HEVertexTest.cs" />
-    <None Include="ImproveVertexPositionsTests.cs" />
+    <Compile Include="ImproveVertexPositionsTests.cs" />
     <Compile Include="IntegrationTests.cs" />
     <Compile Include="MeshTest.cs" />
     <Compile Include="OneDimensionalOptimizationTest.cs" />
