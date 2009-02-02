@@ -24,7 +24,7 @@ namespace Matveev.Mtk.Tests
             }
         }
 
-        public static Vertex FindVertex(Mesh mesh, double x, double y)
+        public static Vertex FindVertex(this Mesh mesh, double x, double y)
         {
             return mesh.Vertices.Single(vertex => vertex.Point == new Point(x, y, 0));
         }

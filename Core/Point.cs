@@ -132,7 +132,7 @@ namespace Matveev.Mtk.Core
 
         public double DistanceTo(Point p1)
         {
-            throw new NotImplementedException();
+            return (p1 - this).Norm;
         }
 
         public double AreaTo(Point p1, Point p2)
