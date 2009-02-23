@@ -192,7 +192,7 @@ namespace OglVisualizer
 			_theta = _phi = 0;
             _lightDirection.x = 0;
             _lightDirection.y = 0;
-            _lightDirection.z = 1;
+            _lightDirection.z = -1;
 		}
 
         Ray RayThroughScreen(int x, int y)
@@ -221,43 +221,61 @@ namespace OglVisualizer
             return result;
         }
     private:
-        static void Reshape(int w, int h)
-        {
-            glViewport(0,0,(GLsizei) w, (GLsizei) h);
-            glMatrixMode(GL_PROJECTION);
-            glLoadIdentity();
-            if (w<=h) 
-                glOrtho(-1.5,1.5,-1.5*(GLfloat)h/(GLfloat)w,1.5*(GLfloat)h/(GLfloat)w,-10.0,10.0);
-            else
-                glOrtho(-1.5*(GLfloat)w/(GLfloat)h,1.5*(GLfloat)w/(GLfloat)h,-1.5,1.5,-10.0,10.0);
-            glMatrixMode(GL_MODELVIEW);
-            glLoadIdentity();
-        }
+		static void Reshape(int w, int h)
+		{
+			float diameter = System::Math::Sqrt(3);
+			glViewport(0, 0, (GLsizei)w, (GLsizei)h);
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			GLdouble zNear = 1;
+			GLdouble zFar = zNear + diameter * 2;
+			GLdouble left = -diameter;
+			GLdouble right = diameter;
+			GLdouble top = -diameter;
+			GLdouble bottom = diameter;
+			double aspect = (double)w / (double)h;
+			if (aspect < 1)
+			{
+				bottom /= aspect;
+				top /= aspect;
+			}
+			else
+			{
+				left *= aspect;
+				right *= aspect;
+			}
+			glOrtho(left, right, bottom, top, zNear, zFar);
+			glMatrixMode(GL_MODELVIEW);
+			glLoadIdentity();
+		}
 
-        static void PolarView(GLdouble distance, GLdouble twist, GLdouble elevation)
-        {
-            double centerx, centery, centerz;
-            double eyex, eyey, eyez;
+		static void PolarView(GLdouble twist, GLdouble elevation)
+		{
+			float diameter = System::Math::Sqrt(3);
+			double distance = diameter * 2;
+			double centerx, centery, centerz;
+			double eyex, eyey, eyez;
 
-            eyex = distance * Cos(-twist) * Cos(elevation);
-            eyey = distance * Sin(-twist) * Cos(elevation);
-            eyez = distance * Sin(elevation);
-            centerx = centery = centerz = 0;
+			eyex = distance * Cos(twist) * Cos(elevation);
+			eyey = distance * Sin(twist) * Cos(elevation);
+			eyez = distance * Sin(elevation);
+			centerx = centery = centerz = 0;
 
-            gluLookAt(eyex, eyey, eyez, centerx, centery, centerz, 0,0,1);
-        } 
+			gluLookAt(eyex, eyey, eyez, centerx, centery, centerz, 0, 0, 1);
+		} 
 	protected:
 		virtual void OnPaint(System::Windows::Forms::PaintEventArgs ^e) override
 		{
             glEnable(GL_CULL_FACE);
+            glEnable(GL_DEPTH_TEST);
+			
             if(_enableLightning)
             {
                 glEnable(GL_LIGHTING);
                 glEnable(GL_LIGHT0);
-                glEnable(GL_DEPTH_TEST);
                 glClearColor(0, 0, 0, 1);
                 glClearColor(BackColor.R / 255.0f, BackColor.G / 255.0f, BackColor.B / 255.0f, 1);
-                glPolygonMode(GL_FRONT, GL_FILL);
+				glPolygonMode(GL_FRONT, GL_FILL);
 
                 GLfloat lightPosition[] = {(float)_lightDirection.x, (float)_lightDirection.y,
 					(float)_lightDirection.z, 0};
@@ -267,7 +285,7 @@ namespace OglVisualizer
             {
                 glDisable(GL_LIGHTING);
                 glDisable(GL_LIGHT0);
-                glPolygonMode(GL_FRONT, GL_LINE);
+				glPolygonMode(GL_FRONT, GL_LINE);
                 glClearColor(BackColor.R / 255.0f, BackColor.G / 255.0f, BackColor.B / 255.0f, 1);
             }
 			
@@ -276,7 +294,7 @@ namespace OglVisualizer
             glLoadIdentity();
 
             //Camera setup
-            PolarView(5, _phi, _theta);
+			PolarView(_phi, _theta);
 
 			if(_mesh)
 			{                
@@ -404,7 +422,9 @@ namespace OglVisualizer
 			}
 
             if(!SwapBuffers(hdc))
+			{
 				throw gcnew Exception("Couldn't swap buffers!");            
+			}
 		}
 
 		static void PutVertex(Point ^point)
