@@ -68,11 +68,11 @@ namespace Matveev.Mtk.Library.Fields
              * int(int(f(u, v)^2, v = 0..1-u), u = 0..1), where f is defined as follows:
              * f(u, v) := a1 * u^2 + a2 * v^2 + a3 * u * v + b1 * u + b2 * v + c
              */
-            double faceDistance = 2 * (b2 * a3 / 0.30e2 + b2 * b2 / 0.12e2 + c * c / 0.2e1 + a2 * a2 / 0.30e2
-                + b2 * a2 / 0.10e2 + a3 * a2 / 0.60e2 + c * a2 / 0.6e1 + b1 * a2 / 0.30e2 + a1 * a2 / 0.90e2
-                + a3 * a3 / 0.180e3 + c * b2 / 0.3e1 + c * a3 / 0.12e2 + b1 * b2 / 0.12e2 + b1 * a3 / 0.30e2
-                + a1 * b2 / 0.30e2 + a1 * a3 / 0.60e2 + c * b1 / 0.3e1 + c * a1 / 0.6e1 + b1 * b1 / 0.12e2
-                + b1 * a1 / 0.10e2 + a1 * a1 / 0.30e2);
+            double a1pa2 = a1 + a2;
+            double b1pb2 = b1 + b2;
+            double faceDistance = 2 * ((b1 * b1 + b2 * b2 + b1 * b2 + c * a3) / 12 + c * c / 2
+                + (a1 * a1 + a2 * a2 + b1 * a2 + b2 * a1 + b1pb2 * a3) / 30 + (b1 * a1 + b2 * a2) / 10
+                + a1 * a2 / 90 + a3 * a3 / 180 + a1pa2 * a3 / 60 + c * b1pb2 / 3 + c * a1pa2 / 6);
 
             return faceDistance;
         }
