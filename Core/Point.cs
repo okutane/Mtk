@@ -126,7 +126,7 @@ namespace Matveev.Mtk.Core
         {
             double r = 1 - u - v;
 
-            return new Point(X * r + p1.X * u + p1.X * v,
+            return new Point(X * r + p1.X * u + p2.X * v,
                 Y * r + p1.Y * u + p2.Y * v, Z * r + p1.Z * u + p2.Z * v);
         }
 
