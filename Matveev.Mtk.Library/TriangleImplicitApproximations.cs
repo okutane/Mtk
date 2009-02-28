@@ -38,11 +38,13 @@ namespace Matveev.Mtk.Library
         {
             return delegate(Point[] points)
             {
-                double[] f = points.Select(function).ToArray();
-                // TODO: Why Array.ConvertAll(points, function) is not working here?
-                double sum = Math.Pow(f[0], 0.2e1) + f[0] * f[1] + f[0] * f[2] + Math.Pow(f[1], 0.2e1) 
-                    + f[1] * f[2] + Math.Pow(f[2], 0.2e1);
-                return (sum / 12) * points[0].AreaTo(points[1], points[2]);
+                double f0 = function(points[0]);
+                double f1 = function(points[1]);
+                double f2 = function(points[2]);
+                double sum = f0 * f0 + f0 * f1 + f0 * f2 + f1 * f1 + f1 * f2 + f2 * f2;
+                sum /= 6;
+                return sum;
+                return sum * points[0].AreaTo(points[1], points[2]);
             };
         }
 
@@ -50,19 +52,19 @@ namespace Matveev.Mtk.Library
         {
             return delegate(Point[] points)
             {
-                double[] f = new double[6];
-                f[0] = function(points[0]);
-                f[1] = function(points[1]);
-                f[2] = function(points[2]);
-                f[3] = function(points[0].Interpolate(points[1], 0.5));
-                f[4] = function(points[0].Interpolate(points[2], 0.5));
-                f[5] = function(points[1].Interpolate(points[2], 0.5));
-                double sum = 0.3e1 * Math.Pow(f[1], 0.2e1) + 0.16e2 * f[3] * f[5] + 0.16e2 * Math.Pow(f[5], 0.2e1)
-                    + 0.16e2 * Math.Pow(f[3], 0.2e1) - f[1] * f[0] - f[1] * f[2] - 0.4e1 * f[1] * f[4]
-                    - 0.4e1 * f[5] * f[0] + 0.16e2 * f[5] * f[4] + 0.16e2 * Math.Pow(f[4], 0.2e1)
-                    - 0.4e1 * f[3] * f[2] + 0.16e2 * f[3] * f[4] - f[0] * f[2] + 0.3e1 * Math.Pow(f[2], 0.2e1)
-                    + 0.3e1 * Math.Pow(f[0], 0.2e1);
-                return (sum / 180) * points[0].AreaTo(points[1], points[2]);
+                double f0 = function(points[0]);
+                double f1 = function(points[1]);
+                double f2 = function(points[2]);
+                double f3 = function(points[0].Interpolate(points[1], 0.5));
+                double f4 = function(points[0].Interpolate(points[2], 0.5));
+                double f5 = function(points[1].Interpolate(points[2], 0.5));
+                double sum = 0.3e1 * f1 * f1 + 0.16e2 * f3 * f5 + 0.16e2 * f5 * f5
+                    + 0.16e2 * f3 * f3 - f1 * f0 - f1 * f2 - 0.4e1 * f1 * f4
+                    - 0.4e1 * f5 * f0 + 0.16e2 * f5 * f4 + 0.16e2 * f4 * f4
+                    - 0.4e1 * f3 * f2 + 0.16e2 * f3 * f4 - f0 * f2 + 0.3e1 * f2 * f2 + 0.3e1 * f0 * f0;
+                sum /= 90;
+                return sum;
+                return sum * points[0].AreaTo(points[1], points[2]);
             };
         }
 
@@ -71,33 +73,34 @@ namespace Matveev.Mtk.Library
             // TODO: Test.
             return delegate(Point[] points)
             {
-                double[] f = new double[10];
-                f[0] = function(points[0]);
-                f[1] = function(points[0].Interpolate(points[1], 1.0 / 3.0));
-                f[2] = function(points[0].Interpolate(points[1], 2.0 / 3.0));
-                f[3] = function(points[1]);
-                f[4] = function(points[0].Interpolate(points[2], 1.0 / 3.0));
-                f[5] = function(points[0].Interpolate(points[2], 2.0 / 3.0));
-                f[6] = function(points[2]);
-                f[7] = function(points[1].Interpolate(points[2], 2.0 / 3.0));
-                f[8] = function(points[1].Interpolate(points[2], 1.0 / 3.0));
-                f[9] = function(points[0].Interpolate(points[1], points[2], 1.0 / 3.0, 1.0 / 3.0));
-                double sum = 0.38e2 * Math.Pow(f[6], 0.2e1) - 0.135e3 * f[8] * f[5] - 0.54e2 * f[8] * f[4]
-                    - 0.135e3 * f[2] * f[7] + 0.38e2 * Math.Pow(f[3], 0.2e1) + 0.162e3 * f[9] * f[4]
-                    + 0.18e2 * f[0] * f[4] + 0.36e2 * f[9] * f[6] + 0.162e3 * f[9] * f[5] + 0.270e3 * f[7] * f[5]
-                    - 0.135e3 * f[7] * f[4] + 0.38e2 * Math.Pow(f[0], 0.2e1) + 0.18e2 * f[7] * f[6]
-                    + 0.162e3 * f[2] * f[9] + 0.11e2 * f[0] * f[6] + 0.270e3 * Math.Pow(f[2], 0.2e1)
-                    + 0.270e3 * Math.Pow(f[8], 0.2e1) + 0.972e3 * Math.Pow(f[9], 0.2e1) + 0.270e3 * f[2] * f[8]
-                    - 0.189e3 * f[1] * f[2] + 0.162e3 * f[1] * f[9] + 0.270e3 * Math.Pow(f[1], 0.2e1)
-                    + 0.162e3 * f[8] * f[9] - 0.189e3 * f[8] * f[7] + 0.18e2 * f[3] * f[2] + 0.36e2 * f[3] * f[9]
-                    - 0.135e3 * f[1] * f[8] - 0.54e2 * f[1] * f[7] + 0.18e2 * f[3] * f[8] - 0.135e3 * f[2] * f[4]
-                    - 0.54e2 * f[2] * f[5] + 0.162e3 * f[7] * f[9] + 0.27e2 * f[2] * f[6] + 0.11e2 * f[3] * f[6]
-                    + 0.27e2 * f[3] * f[5] + 0.27e2 * f[3] * f[4] + 0.27e2 * f[1] * f[6] - 0.135e3 * f[1] * f[5]
-                    + 0.270e3 * f[1] * f[4] + 0.270e3 * Math.Pow(f[7], 0.2e1) + 0.11e2 * f[3] * f[0]
-                    + 0.36e2 * f[0] * f[9] + 0.18e2 * f[0] * f[1] + 0.27e2 * f[0] * f[7] + 0.27e2 * f[0] * f[8]
-                    + 0.270e3 * Math.Pow(f[4], 0.2e1) + 0.270e3 * Math.Pow(f[5], 0.2e1) - 0.189e3 * f[5] * f[4]
-                    + 0.18e2 * f[6] * f[5];
-                return (sum / 6720) * points[0].AreaTo(points[1], points[2]);
+                double f0 = function(points[0]);
+                double f1 = function(points[0].Interpolate(points[1], 1.0 / 3.0));
+                double f2 = function(points[0].Interpolate(points[1], 2.0 / 3.0));
+                double f3 = function(points[1]);
+                double f4 = function(points[0].Interpolate(points[2], 1.0 / 3.0));
+                double f5 = function(points[0].Interpolate(points[2], 2.0 / 3.0));
+                double f6 = function(points[2]);
+                double f7 = function(points[1].Interpolate(points[2], 2.0 / 3.0));
+                double f8 = function(points[1].Interpolate(points[2], 1.0 / 3.0));
+                double f9 = function(points[0].Interpolate(points[1], points[2], 1.0 / 3.0, 1.0 / 3.0));
+                double sum = 0.38e2 * f6 * f6 - 0.135e3 * f8 * f5 - 0.54e2 * f8 * f4
+                    - 0.135e3 * f2 * f7 + 0.38e2 * f3 * f3 + 0.162e3 * f9 * f4
+                    + 0.18e2 * f0 * f4 + 0.36e2 * f9 * f6 + 0.162e3 * f9 * f5 + 0.270e3 * f7 * f5
+                    - 0.135e3 * f7 * f4 + 0.38e2 * f0 * f0 + 0.18e2 * f7 * f6
+                    + 0.162e3 * f2 * f9 + 0.11e2 * f0 * f6 + 0.270e3 * f2 * f2
+                    + 0.270e3 * f8 * f8 + 0.972e3 * f9 * f9 + 0.270e3 * f2 * f8
+                    - 0.189e3 * f1 * f2 + 0.162e3 * f1 * f9 + 0.270e3 * f1 * f1
+                    + 0.162e3 * f8 * f9 - 0.189e3 * f8 * f7 + 0.18e2 * f3 * f2 + 0.36e2 * f3 * f9
+                    - 0.135e3 * f1 * f8 - 0.54e2 * f1 * f7 + 0.18e2 * f3 * f8 - 0.135e3 * f2 * f4
+                    - 0.54e2 * f2 * f5 + 0.162e3 * f7 * f9 + 0.27e2 * f2 * f6 + 0.11e2 * f3 * f6
+                    + 0.27e2 * f3 * f5 + 0.27e2 * f3 * f4 + 0.27e2 * f1 * f6 - 0.135e3 * f1 * f5
+                    + 0.270e3 * f1 * f4 + 0.270e3 * f7 * f7 + 0.11e2 * f3 * f0
+                    + 0.36e2 * f0 * f9 + 0.18e2 * f0 * f1 + 0.27e2 * f0 * f7 + 0.27e2 * f0 * f8
+                    + 0.270e3 * f4 * f4 + 0.270e3 * f5 * f5 - 0.189e3 * f5 * f4
+                    + 0.18e2 * f6 * f5;
+                sum /= 3360;
+                return sum;
+                return sum * points[0].AreaTo(points[1], points[2]);
             };
         }
     }
