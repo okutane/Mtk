@@ -90,6 +90,7 @@
     <Compile Include="PolygonizationSuite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RayTest.cs" />
+    <Compile Include="TriangleImplicitApproximationsTests.cs" />
     <Compile Include="UMeshTestHelper.cs" />
     <Compile Include="UMeshTests.cs" />
     <Compile Include="YamlSerializerTest.cs" />
