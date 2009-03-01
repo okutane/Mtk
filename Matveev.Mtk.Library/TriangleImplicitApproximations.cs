@@ -70,7 +70,6 @@ namespace Matveev.Mtk.Library
 
         private static Func<Point[], double> GetCubicApproximation(Func<Point, double> function)
         {
-            // TODO: Test.
             return delegate(Point[] points)
             {
                 double f0 = function(points[0]);
