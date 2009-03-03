@@ -91,6 +91,7 @@
     <Compile Include="HEVertex.cs" />
     <Compile Include="HEVertexBase.cs" />
     <Compile Include="HoppeOptimization.cs" />
+    <Compile Include="IFaceEnergyProvider.cs" />
     <Compile Include="IImplicitSurfacePolygonizer.cs" />
     <Compile Include="OneDimensionalOptimization.cs" />
     <Compile Include="LocalGradientProvider.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="PositionOptimizers\TrierVertexPositionOptimizer.cs" />
     <Compile Include="PositionOptimizers\VertexPositionOptimizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Spherical.cs" />
     <Compile Include="SquareEdgeLength.cs" />
     <Compile Include="TetrahedronPolygonizer.cs" />
     <Compile Include="Tools.cs" />
