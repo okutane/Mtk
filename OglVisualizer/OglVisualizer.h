@@ -211,7 +211,7 @@ namespace OglVisualizer
 			double ox;
 			double oy;
 			double oz;
-			gluUnProject(x, y, 1, modelMatrix, projMatrix, viewport,
+			gluUnProject(x, y, -1, modelMatrix, projMatrix, viewport,
 				&ox, &oy, &oz);
 			result.origin = Point(ox, oy, oz);
 			gluUnProject(x, y, 0, modelMatrix, projMatrix, viewport, &ox, &oy, &oz);

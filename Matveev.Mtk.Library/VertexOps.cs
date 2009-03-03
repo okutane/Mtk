@@ -9,24 +9,28 @@ namespace Matveev.Mtk.Library
     {
         public static double Curvature(Vertex vert)
         {
-            if(vert.Type != VertexType.Internal)
+            if (vert.Type != VertexType.Internal)
+            {
                 throw new Exception("Can't calculate curvature of non internal vertex.");
+            }
 
-            List<Vector> v = new List<Vector>();
-            foreach(Vertex vert2 in vert.Adjacent)
-                v.Add(vert2.Point - vert.Point);
+            List<Vector> v = new List<Vector>(vert.Adjacent.Select(vert2 => vert2.Point - vert.Point));
 
             double angle = 0;
             int n = v.Count;
-            for(int i = 0 ; i < n ; i++)
+            for (int i = 0; i < n; i++)
+            {
                 angle += Math.Acos((v[i] * v[(i + 1) % n]) / (v[i].Norm * v[(i + 1) % n].Norm));
+            }
             return 2 * Math.PI - angle;
         }
 
         public static double ExternalCurvature(Vertex vert)
         {
-            if(vert.Type != VertexType.Internal)
+            if (vert.Type != VertexType.Internal)
+            {
                 throw new Exception("Can't calculate curvature of non internal vertex.");
+            }
 
             Plane plane = new Plane((Point)vert.Normal, vert.Normal);
 
@@ -39,7 +43,9 @@ namespace Matveev.Mtk.Library
                 {
                     if (LineIntersectionTest2d(uv[i][0], uv[i][1], uv[i + 1][0], uv[i + 1][1],
                         uv[j][0], uv[j][1], uv[(j + 1) % uv.Count][0], uv[(j + 1) % uv.Count][1]))
+                    {
                         return 1;
+                    }
                 }
             }
                        
@@ -88,8 +94,10 @@ namespace Matveev.Mtk.Library
             if(t > 0 && t < 1)
             {
                 t = (a11 * f2 - a21 * f1) / det;
-                if(t > 0 && t < 1)
+                if (t >= 1e-8 && (1 - t) >= 1e-8)
+                {
                     return true;
+                }
             }
             return false;
         }
