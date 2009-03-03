@@ -140,22 +140,27 @@ namespace UI
             txtVertInfo.Height = 250;
             txtVertInfo.ParentChanged += delegate(object sender, EventArgs e)
             {
-                if (Selection is Vertex)
+                Vertex selection = Selection as Vertex;
+                if (selection != null)
                 {
-                    txtVertInfo.Text = _selection.ToString() + LB;
+                    // TODO: Use StringWriter or StringBuilder here
+                    txtVertInfo.Text = selection.ToString() + LB;
                     txtVertInfo.Text += "Point:" + LB;
-                    txtVertInfo.Text += ((Vertex)_selection).Point + LB;
+                    txtVertInfo.Text += selection.Point + LB;
                     txtVertInfo.Text += "Normal:" + LB;
-                    txtVertInfo.Text += ((Vertex)_selection).Normal + LB;
+                    txtVertInfo.Text += selection.Normal + LB;
                     txtVertInfo.Text += "Field value:" + LB;
-                    txtVertInfo.Text += _field.Eval(((Vertex)_selection).Point) + LB;
+                    txtVertInfo.Text += _field.Eval(selection.Point) + LB;
                     try
                     {
-                        double curvature = VertexOps.Curvature(_selection as Vertex);
+                        double curvature = VertexOps.Curvature(selection);
                         txtVertInfo.Text += "Curvature:" + LB;
                         txtVertInfo.Text += curvature + LB;
+                        double sphereImageArea =
+                            Spherical.PolygonArea(selection.AdjacentFaces.Select(f => f.Normal).ToArray());
+                        txtVertInfo.Text += string.Format("Sphere image area:\n{0}\n", sphereImageArea);
                     }
-                    catch (Exception)
+                    catch
                     {
                     }
                 }
@@ -380,6 +385,7 @@ namespace UI
         {
             System.Windows.Forms.Application.Exit();
         }
+
         private int _x0, _y0;
         private double _theta0, _phi0;
         private bool rotating;
