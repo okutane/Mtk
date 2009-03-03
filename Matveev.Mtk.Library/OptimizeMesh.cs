@@ -35,17 +35,17 @@ namespace Matveev.Mtk.Library
                 normal[0] = Vector.Normalize(points[2] - points[0] ^ points[1] - points[0]);
                 return surfaceToMesh(points) + triangleNormalDifference(points);
             };*/
-            faceEnergy =
-                TriangleImplicitApproximations.GetApproximation(surface.Eval, "cubic");
-
-            localGradient = LocalGradientProvider.GetNumericalGradient2(faceEnergy, 1e-6);
-
-            IFaceEnergyProvider energyProvider = surface as IFaceEnergyProvider;
-            if (energyProvider != null)
+            IFaceEnergyProvider energyProvider = TriangleImplicitApproximations.GetApproximation(surface, "square");
+            if (true)
             {
-                faceEnergy = energyProvider.FaceEnergy;
-                localGradient = energyProvider.FaceEnergyGradient;
+                IFaceEnergyProvider preciseEnergyProvider = surface as IFaceEnergyProvider;
+                if (preciseEnergyProvider != null)
+                {
+                    energyProvider = preciseEnergyProvider;
+                }
             }
+            faceEnergy = energyProvider.FaceEnergy;
+            localGradient = energyProvider.FaceEnergyGradient;
         }
 
         public static void ImproveVertexPositions(IEnumerable<Vertex> vertices, Func<Point[], double> faceValue,
@@ -133,7 +133,7 @@ namespace Matveev.Mtk.Library
             Dictionary<EdgeTransform, int> numbersOfUses = new Dictionary<EdgeTransform, int>();
 
             Func<Point[], double> faceEnergy =
-                TriangleImplicitApproximations.GetApproximation(field.Eval, "square");
+                TriangleImplicitApproximations.GetApproximation(field, "square").FaceEnergy;
             if (field is QuadraticForm)
             {
                 faceEnergy = ((QuadraticForm)field).FaceDistance;

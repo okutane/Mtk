@@ -9,7 +9,7 @@ namespace Matveev.Mtk.Library
 {
     public static class TriangleImplicitApproximations
     {
-        private delegate Func<Point[], double> FactoryMethod(Func<Point, double> decorated);
+        private delegate IFaceEnergyProvider FactoryMethod(IImplicitSurface surface);
 
         private static readonly IDictionary<string, FactoryMethod> _FACTORY
             = new Dictionary<string, FactoryMethod>();
@@ -29,59 +29,109 @@ namespace Matveev.Mtk.Library
             }
         }
 
-        public static Func<Point[], double> GetApproximation(Func<Point, double> function, string approximationName)
+        public static IFaceEnergyProvider GetApproximation(IImplicitSurface surface, string approximationName)
         {
-            return _FACTORY[approximationName](function);
+            return _FACTORY[approximationName](surface);
         }
 
-        private static Func<Point[], double> GetLinearApproximation(Func<Point, double> function)
+        private static IFaceEnergyProvider GetLinearApproximation(IImplicitSurface surface)
         {
-            return delegate(Point[] points)
+            return new LinearApproximation(surface);
+        }
+
+        private static IFaceEnergyProvider GetSquareApproximation(IImplicitSurface surface)
+        {
+            return new SquareApproximation(surface);
+        }
+
+        private static IFaceEnergyProvider GetCubicApproximation(IImplicitSurface surface)
+        {
+            return new CubicApproximation(surface);
+        }
+
+        private abstract class ApproximationBase : IFaceEnergyProvider
+        {
+            protected readonly IImplicitSurface _surface;
+            private readonly GradientDelegate<Point, Vector> _localGradient;
+
+            protected ApproximationBase(IImplicitSurface surface)
             {
-                double f0 = function(points[0]);
-                double f1 = function(points[1]);
-                double f2 = function(points[2]);
+                _surface = surface;
+                _localGradient = LocalGradientProvider.GetNumericalGradient2(FaceEnergy, 1e-6);
+            }
+
+            #region IFaceEnergyProvider Members
+
+            public abstract double FaceEnergy(Point[] points);
+
+            public virtual void FaceEnergyGradient(Point[] points, Vector[] result)
+            {
+                _localGradient(points, result);
+            }
+
+            #endregion
+        }
+
+        private class LinearApproximation : ApproximationBase
+        {
+            public LinearApproximation(IImplicitSurface surface) : base(surface)
+            {
+            }
+
+            public override double FaceEnergy(Point[] points)
+            {
+                double f0 = _surface.Eval(points[0]);
+                double f1 = _surface.Eval(points[1]);
+                double f2 = _surface.Eval(points[2]);
                 double sum = f0 * f0 + f0 * f1 + f0 * f2 + f1 * f1 + f1 * f2 + f2 * f2;
                 sum /= 6;
                 return sum;
-                return sum * points[0].AreaTo(points[1], points[2]);
-            };
+            }
         }
 
-        private static Func<Point[], double> GetSquareApproximation(Func<Point, double> function)
+        private class SquareApproximation : ApproximationBase
         {
-            return delegate(Point[] points)
+            public SquareApproximation(IImplicitSurface surface)
+                : base(surface)
             {
-                double f0 = function(points[0]);
-                double f1 = function(points[1]);
-                double f2 = function(points[2]);
-                double f3 = function(points[0].Interpolate(points[1], 0.5));
-                double f4 = function(points[0].Interpolate(points[2], 0.5));
-                double f5 = function(points[1].Interpolate(points[2], 0.5));
+            }
+
+            public override double FaceEnergy(Point[] points)
+            {
+                double f0 = _surface.Eval(points[0]);
+                double f1 = _surface.Eval(points[1]);
+                double f2 = _surface.Eval(points[2]);
+                double f3 = _surface.Eval(points[0].Interpolate(points[1], 0.5));
+                double f4 = _surface.Eval(points[0].Interpolate(points[2], 0.5));
+                double f5 = _surface.Eval(points[1].Interpolate(points[2], 0.5));
                 double sum = 0.3e1 * f1 * f1 + 0.16e2 * f3 * f5 + 0.16e2 * f5 * f5
                     + 0.16e2 * f3 * f3 - f1 * f0 - f1 * f2 - 0.4e1 * f1 * f4
                     - 0.4e1 * f5 * f0 + 0.16e2 * f5 * f4 + 0.16e2 * f4 * f4
                     - 0.4e1 * f3 * f2 + 0.16e2 * f3 * f4 - f0 * f2 + 0.3e1 * f2 * f2 + 0.3e1 * f0 * f0;
                 sum /= 90;
                 return sum;
-                return sum * points[0].AreaTo(points[1], points[2]);
-            };
+            }
         }
 
-        private static Func<Point[], double> GetCubicApproximation(Func<Point, double> function)
+        private class CubicApproximation : ApproximationBase
         {
-            return delegate(Point[] points)
+            public CubicApproximation(IImplicitSurface surface)
+                : base(surface)
             {
-                double f0 = function(points[0]);
-                double f1 = function(points[0].Interpolate(points[1], 1.0 / 3.0));
-                double f2 = function(points[0].Interpolate(points[1], 2.0 / 3.0));
-                double f3 = function(points[1]);
-                double f4 = function(points[0].Interpolate(points[2], 1.0 / 3.0));
-                double f5 = function(points[0].Interpolate(points[2], 2.0 / 3.0));
-                double f6 = function(points[2]);
-                double f7 = function(points[1].Interpolate(points[2], 2.0 / 3.0));
-                double f8 = function(points[1].Interpolate(points[2], 1.0 / 3.0));
-                double f9 = function(points[0].Interpolate(points[1], points[2], 1.0 / 3.0, 1.0 / 3.0));
+            }
+
+            public override double FaceEnergy(Point[] points)
+            {
+                double f0 = _surface.Eval(points[0]);
+                double f1 = _surface.Eval(points[0].Interpolate(points[1], 1.0 / 3.0));
+                double f2 = _surface.Eval(points[0].Interpolate(points[1], 2.0 / 3.0));
+                double f3 = _surface.Eval(points[1]);
+                double f4 = _surface.Eval(points[0].Interpolate(points[2], 1.0 / 3.0));
+                double f5 = _surface.Eval(points[0].Interpolate(points[2], 2.0 / 3.0));
+                double f6 = _surface.Eval(points[2]);
+                double f7 = _surface.Eval(points[1].Interpolate(points[2], 2.0 / 3.0));
+                double f8 = _surface.Eval(points[1].Interpolate(points[2], 1.0 / 3.0));
+                double f9 = _surface.Eval(points[0].Interpolate(points[1], points[2], 1.0 / 3.0, 1.0 / 3.0));
                 double sum = 0.38e2 * f6 * f6 - 0.135e3 * f8 * f5 - 0.54e2 * f8 * f4
                     - 0.135e3 * f2 * f7 + 0.38e2 * f3 * f3 + 0.162e3 * f9 * f4
                     + 0.18e2 * f0 * f4 + 0.36e2 * f9 * f6 + 0.162e3 * f9 * f5 + 0.270e3 * f7 * f5
@@ -99,8 +149,7 @@ namespace Matveev.Mtk.Library
                     + 0.18e2 * f6 * f5;
                 sum /= 3360;
                 return sum;
-                return sum * points[0].AreaTo(points[1], points[2]);
-            };
+            }
         }
     }
 }
