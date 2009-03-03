@@ -9,16 +9,16 @@ namespace Matveev.Mtk.Library
 {
     static class LocalGradientProvider
     {
-        public static Func<Point[], Vector[]> GetNumericalGradient(Func<Point[], double> localEnergy)
+        public static GradientDelegate<Point, Vector> GetNumericalGradient(Func<Point[], double> localEnergy)
         {
             return GetNumericalGradient(localEnergy, 1e-3);
         }
 
-        public static Func<Point[], Vector[]> GetNumericalGradient(Func<Point[], double> localEnergy, double h)
+        public static GradientDelegate<Point, Vector> GetNumericalGradient(Func<Point[], double> localEnergy,
+            double h)
         {
-            return delegate(Point[] points)
+            return delegate(Point[] points, Vector[] result)
             {
-                Vector[] result = new Vector[points.Length];
                 for (int i = 0; i < points.Length; i++)
                 {
                     for (int j = 0; j < 3; j++)
@@ -32,8 +32,6 @@ namespace Matveev.Mtk.Library
                         result[i][j] = (energyNext - energyPrev) / (2 * h);
                     }
                 }
-
-                return result;
             };
         }
 

@@ -52,7 +52,7 @@ namespace Matveev.Mtk.Tests
             CompactQuadraticForm constant = new CompactQuadraticForm(new double[3, 3], new double[3], 1);
             for (int i = 0; i < 3; i++)
             {
-                Assert.AreEqual(1, constant.FaceDistance(triangle));
+                Assert.AreEqual(1, constant.FaceEnergy(triangle));
                 CollectionAssert.AreEqual(new double[9], constant.GradOfFaceDistance(triangle));
                 Point tmp = triangle[0];
                 triangle[0] = triangle[1];
@@ -68,7 +68,7 @@ namespace Matveev.Mtk.Tests
                 0);
             for (int i = 0; i < 3; i++)
             {
-                Assert.AreEqual(4, onlyLinear.FaceDistance(triangle));
+                Assert.AreEqual(4, onlyLinear.FaceEnergy(triangle));
                 CollectionAssert.AreEqual(new double[] { 0, 0, 4.0 / 3, 0, 0, 4.0 / 3, 0, 0, 4.0 / 3 },
                     onlyLinear.GradOfFaceDistance(triangle), new MyComparer());
                 Point tmp = triangle[0];
@@ -84,7 +84,7 @@ namespace Matveev.Mtk.Tests
             CompactQuadraticForm linear = new CompactQuadraticForm(new double[3, 3], new double[] { 0, 0, 1 }, 1);
             for (int i = 0; i < 3; i++)
             {
-                Assert.AreEqual(9, linear.FaceDistance(triangle));
+                Assert.AreEqual(9, linear.FaceEnergy(triangle));
                 CollectionAssert.AreEqual(new double[] { 0, 0, 2, 0, 0, 2, 0, 0, 2 },
                     linear.GradOfFaceDistance(triangle));
                 Point tmp = triangle[0];
@@ -101,7 +101,7 @@ namespace Matveev.Mtk.Tests
                 new double[,] { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 1 } }, new double[3], 1);
             for (int i = 0; i < 3; i++)
             {
-                Assert.AreEqual(25, field.FaceDistance(triangle));
+                Assert.AreEqual(25, field.FaceEnergy(triangle));
                 Point tmp = triangle[0];
                 triangle[0] = triangle[1];
                 triangle[1] = triangle[2];
@@ -114,7 +114,7 @@ namespace Matveev.Mtk.Tests
         {
             for (int i = 0; i < 3; i++)
             {
-                Assert.AreEqual(16, _SQUARE.FaceDistance(triangle));
+                Assert.AreEqual(16, _SQUARE.FaceEnergy(triangle));
                 CollectionAssert.AreEqual(new double[] { 0, 0, 32.0 / 3, 0, 0, 32.0 / 3, 0, 0, 32.0 / 3 },
                     _SQUARE.GradOfFaceDistance(triangle), new MyComparer());
                 Point tmp = triangle[0];
@@ -129,7 +129,7 @@ namespace Matveev.Mtk.Tests
         {
             for (int i = 0; i < 3; i++)
             {
-                Assert.AreEqual(25, _COMPLEX.FaceDistance(triangle),
+                Assert.AreEqual(25, _COMPLEX.FaceEnergy(triangle),
                     string.Format("p0={0}, p1={1}, p2={2}", triangle[0], triangle[1], triangle[2]));
                 Point tmp = triangle[0];
                 triangle[0] = triangle[1];

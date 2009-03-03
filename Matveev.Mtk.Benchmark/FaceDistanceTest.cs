@@ -24,7 +24,7 @@ namespace Matveev.Mtk.Benchmark
                 stopwatch.Start();
                 for (int i = 0; i < 1000000; i++)
                 {
-                    measured.FaceDistance(points);
+                    measured.FaceEnergy(points);
                 }
                 stopwatch.Stop();
                 Console.WriteLine("Run {0} finished after {1} ms.", run, stopwatch.ElapsedMilliseconds);
