@@ -88,6 +88,10 @@ namespace Matveev.Mtk.Core
         {
             Vector result;
             double norm = vector.Norm;
+            if (norm == 0)
+            {
+                return vector;
+            }
             result.x = vector.x / norm;
             result.y = vector.y / norm;
             result.z = vector.z / norm;
