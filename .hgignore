@@ -1,4 +1,8 @@
 syntax: glob
+UI\bin\Debug-Profiled/*.eqconfig
+*.eqlog
+UI\bin\Debug-Profiled/*.config
+*.log
 UI\obj\Release/*.resources
 Matveev.Mtk.Tests\YamlActual/*.yaml
 UI\bin\Debug (Profiled)/*.config
