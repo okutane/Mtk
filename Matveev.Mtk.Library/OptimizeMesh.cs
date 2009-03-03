@@ -23,31 +23,28 @@ namespace Matveev.Mtk.Library
         private static void GetLocalFunctions(IImplicitSurface surface, out Func<Point[], double> faceEnergy,
             out GradientDelegate<Point, Vector> localGradient)
         {
-            faceEnergy =
-                TriangleImplicitApproximations.GetApproximation(surface.Eval, "square");
+            /*Func<Point[], double> surfaceToMesh = TriangleImplicitApproximations.GetApproximation(surface.Eval,
+                "square");
 
-            QuadraticForm quadraticForm = surface as QuadraticForm;
-            if (quadraticForm != null)
+            Vector[] normal = new Vector[1];
+            Func<Point, double> normalDifference = p => (Vector.Normalize(surface.Grad(p)) - normal[0]).Norm;
+            Func<Point[], double> triangleNormalDifference =
+                TriangleImplicitApproximations.GetApproximation(normalDifference, "square");
+            faceEnergy = delegate(Point[] points)
             {
-                faceEnergy = quadraticForm.FaceDistance;
-            }
-            CompactQuadraticForm cqf = surface as CompactQuadraticForm;
-            if (cqf != null)
-            {
-                faceEnergy = cqf.FaceDistance;
-            }
+                normal[0] = Vector.Normalize(points[2] - points[0] ^ points[1] - points[0]);
+                return surfaceToMesh(points) + triangleNormalDifference(points);
+            };*/
+            faceEnergy =
+                TriangleImplicitApproximations.GetApproximation(surface.Eval, "cubic");
 
             localGradient = LocalGradientProvider.GetNumericalGradient2(faceEnergy, 1e-6);
 
-            if (cqf != null)
+            IFaceEnergyProvider energyProvider = surface as IFaceEnergyProvider;
+            if (energyProvider != null)
             {
-                localGradient = delegate(Point[] facePoints, Vector[] result)
-                {
-                    double[] grad = cqf.GradOfFaceDistance(facePoints);
-                    result[0] = new Vector(grad[0], grad[1], grad[2]);
-                    result[1] = new Vector(grad[3], grad[4], grad[5]);
-                    result[2] = new Vector(grad[6], grad[7], grad[8]);
-                };
+                faceEnergy = energyProvider.FaceEnergy;
+                localGradient = energyProvider.FaceEnergyGradient;
             }
         }
 
@@ -61,6 +58,20 @@ namespace Matveev.Mtk.Library
                 int index = Array.IndexOf(verticesArray, vertex);
                 if (index >= 0)
                 {
+                    if (vertex.Type == VertexType.Boundary)
+                    {
+                        bool[] locks = new bool[3];
+                        for (int i = 0; i < 3; i++)
+                        {
+                            Vector direction = new Vector(0, 0, 0);
+                            direction[i] = 1;
+                            if (!Configuration.BoundingBox.IsMovable(vertex, direction))
+                            {
+                                locks[i] = true;
+                            }
+                        }
+                        return new ConstrainedPointStrategy(index, locks);
+                    }
                     return new NormalPointStrategy(index);
                 }
                 return new FixedPointStrategy(vertex.Point);
@@ -112,7 +123,7 @@ namespace Matveev.Mtk.Library
 
         public static void ImproveVertexPositions(Mesh mesh, IImplicitSurface surface)
         {
-            ImproveVertexPositions(mesh.Vertices.Where(v => v.Type == VertexType.Internal), surface);
+            ImproveVertexPositions(mesh.Vertices, surface);
         }
 
         public static void OptimizeImplicit(Mesh mesh, IImplicitSurface field, double epsilon, double alpha)
@@ -279,6 +290,38 @@ namespace Matveev.Mtk.Library
             public void AddVector(Vector[] result, Vector vector)
             {
                 result[_index] += vector;
+            }
+
+            #endregion
+        }
+
+        private class ConstrainedPointStrategy : IPointStrategy
+        {
+            private readonly int _index;
+            private readonly bool[] _locks;
+
+            public ConstrainedPointStrategy(int index, bool[] locks)
+            {
+                _index = index;
+                _locks = locks;
+            }
+
+            #region IPointStrategy Members
+
+            public Point GetPoint(Point[] points)
+            {
+                return points[_index];
+            }
+
+            public void AddVector(Vector[] result, Vector vector)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    if (!_locks[i])
+                    {
+                        result[_index][i] += vector[i];
+                    }
+                }
             }
 
             #endregion
