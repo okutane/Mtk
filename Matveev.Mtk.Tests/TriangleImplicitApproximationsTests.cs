@@ -20,36 +20,67 @@ namespace Matveev.Mtk.Tests
         public void Const(
             [ValueSource(typeof(TriangleImplicitApproximations), "AvailableApproximations")]string name)
         {
-            Func<Point, double> function = p => 1;
-            Func<Point[], double> approximation = TriangleImplicitApproximations.GetApproximation(function, name);
-            Assert.AreEqual(1, approximation(_TRIANGLE1));
+            TestApproximation(name, p => 1, 1);
         }
 
         [Test]
         public void Linear(
             [ValueSource(typeof(TriangleImplicitApproximations), "AvailableApproximations")]string name)
         {
-            Func<Point, double> function = p => 1 + p.X;
-            Func<Point[], double> approximation = TriangleImplicitApproximations.GetApproximation(function, name);
-            Assert.AreEqual(6.0 + 1.0 / 3.0, approximation(_TRIANGLE1));
+            TestApproximation(name, p => 1 + p.X, 6.0 + 1.0 / 3.0);
         }
 
         [Test]
-        public void Square(
-            [Values("square", "cubic")]string name)
+        public void Square([Values("square", "cubic")]string name)
         {
-            Func<Point, double> function = p => 1 + p.X + p.Y * p.Y;
-            Func<Point[], double> approximation = TriangleImplicitApproximations.GetApproximation(function, name);
-            Assert.AreEqual(257 / 15.0, approximation(_TRIANGLE1));
+            TestApproximation(name, p => 1 + p.X + p.Y * p.Y,257 / 15.0);
         }
 
         [Test]
-        public void Cubic(
-            [Values("cubic")]string name)
+        public void Cubic([Values("cubic")]string name)
         {
-            Func<Point, double> function = p => 1 + p.X + p.Y * p.Y + 3 * p.X * p.Y * p.Y;
-            Func<Point[], double> approximation = TriangleImplicitApproximations.GetApproximation(function, name);
-            Assert.AreEqual(8423 / 105.0, approximation(_TRIANGLE1), 1e-10);
+            TestApproximation(name, p => 1 + p.X + p.Y * p.Y + 3 * p.X * p.Y * p.Y, 8423 / 105.0, 1e-10);
         }
+
+        private static void TestApproximation(string name, Func<Point, double> function, double expected)
+        {
+            TestApproximation(name, function, expected, 0);
+        }
+
+        private static void TestApproximation(string name, Func<Point, double> function, double expected,
+            double delta)
+        {
+            IImplicitSurface surface = new DelegateField
+            {
+                EvalFunc = function
+            };
+            Func<Point[], double> approximation =
+                TriangleImplicitApproximations.GetApproximation(surface, name).FaceEnergy;
+            Assert.AreEqual(expected, approximation(_TRIANGLE1), delta);
+        }
+
+        private class DelegateField : IImplicitSurface
+        {
+            public Func<Point, double> EvalFunc
+            {
+                get;
+                set;
+            }
+
+            #region IImplicitSurface Members
+
+            public double Eval(Point p)
+            {
+                return EvalFunc(p);
+            }
+
+            public Vector Grad(Point p)
+            {
+                throw new NotImplementedException();
+            }
+
+            #endregion
+        }
+
     }
 }
