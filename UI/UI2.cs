@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+using Color = System.Drawing.Color;
+
 using Matveev.Common;
 using Matveev.Mtk.Core;
 using Matveev.Mtk.Library;
@@ -531,8 +533,8 @@ namespace UI
 
         private void enableLightingToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            visualizer.EnableLightning =
-                enableLightingToolStripMenuItem.Checked = !enableLightingToolStripMenuItem.Checked;
+            //visualizer.EnableLightning =
+                //enableLightingToolStripMenuItem.Checked = !enableLightingToolStripMenuItem.Checked;
         }
 
         #region Draw points menu handlers
@@ -566,14 +568,22 @@ namespace UI
         {
             useFaceNormalsToolStripMenuItem.Checked = false;
             useVertexNormalsToolStripMenuItem.Checked = true;
-            visualizer.NormalsToUse = OglVisualizer.NormalsType.VertexNormals;
+            visualizer.VertexColorEvaluator = delegate(Vertex vertex)
+            {
+                int value = Math.Max(0, (int)(255 * -0.75 * vertex.Normal.z));
+                return Color.FromArgb(value, value, value);
+            };
         }
 
         private void useFaceNormalsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             useFaceNormalsToolStripMenuItem.Checked = true;
             useVertexNormalsToolStripMenuItem.Checked = false;
-            visualizer.NormalsToUse = OglVisualizer.NormalsType.FaceNormals;
+            visualizer.FaceColorEvaluator = delegate(Face face)
+            {
+                int value = Math.Max(0, (int)(255 * -0.75 * face.Normal.z));
+                return Color.FromArgb(value, value, value);
+            };
         }
 
         #endregion
