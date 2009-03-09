@@ -241,10 +241,8 @@ namespace UI
             this.visualizer.BackColor = System.Drawing.Color.White;
             this.visualizer.DrawFaceNormals = false;
             this.visualizer.DrawPoints = OglVisualizer.DrawPoints.DoNotDraw;
-            this.visualizer.EnableLightning = false;
             this.visualizer.Location = new System.Drawing.Point(0, 63);
             this.visualizer.Name = "visualizer";
-            this.visualizer.NormalsToUse = OglVisualizer.NormalsType.VertexNormals;
             this.visualizer.Phi = 0;
             this.visualizer.Size = new System.Drawing.Size(460, 372);
             this.visualizer.TabIndex = 3;

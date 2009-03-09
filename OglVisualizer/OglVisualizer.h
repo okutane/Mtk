@@ -28,22 +28,24 @@ inline double Cos(double x)
 }
 
 namespace OglVisualizer
-{
-    public ref class Visualizer : public System::Windows::Forms::UserControl
-	{	
+{	
+	public delegate System::Drawing::Color FaceColorEvaluatorDelegate(Face ^face);
+	public delegate System::Drawing::Color VertexColorEvaluatorDelegate(Vertex ^vertex);
+    
+	public ref class Visualizer : public System::Windows::Forms::UserControl
+	{
 	private:
 		HDC hdc;
 		HGLRC hrc;
 
         Mesh ^_mesh;
-        NormalsType _normalsType; //normals to use
         Point ^_translate; //translate vector
         double _phi, _theta; //polar coords;
-        Vector _lightDirection; //light direction
 
 		DrawPoints _drawPoints;
         bool _drawFaceNormals;
-        bool _enableLightning;
+		FaceColorEvaluatorDelegate ^_faceColorEvaluator;
+		VertexColorEvaluatorDelegate ^_vertexColorEvaluator;
 
         IEnumerable<Vertex^> ^_vertsMarked;
         Edge ^_edgeSelected;
@@ -102,19 +104,6 @@ namespace OglVisualizer
             }
         }
 
-        property NormalsType NormalsToUse
-        {
-            NormalsType get()
-            {
-                return _normalsType;
-            }
-            void set(NormalsType normalsType)
-            {
-                _normalsType = normalsType;
-                Invalidate();
-            }
-        }
-		
 		property DrawPoints DrawPoints
 		{
             OglVisualizer::DrawPoints get()
@@ -141,19 +130,34 @@ namespace OglVisualizer
             }
         }
 
-        property bool EnableLightning
-        {
-            bool get()
-            {
-                return _enableLightning;
-            }
-            void set(bool value)
-            {
-                _enableLightning = value;
-                Invalidate();
-            }
-        }
-		
+		property FaceColorEvaluatorDelegate ^FaceColorEvaluator
+		{
+			FaceColorEvaluatorDelegate ^get()
+			{
+				return _faceColorEvaluator;
+			}
+			void set(FaceColorEvaluatorDelegate ^value)
+			{
+				_faceColorEvaluator = value;
+				_vertexColorEvaluator = nullptr;
+				Invalidate();
+			}
+		}
+
+		property VertexColorEvaluatorDelegate ^VertexColorEvaluator
+		{
+			VertexColorEvaluatorDelegate ^get()
+			{
+				return _vertexColorEvaluator;
+			}
+			void set(VertexColorEvaluatorDelegate ^value)
+			{
+				_vertexColorEvaluator = value;
+				_faceColorEvaluator = nullptr;
+				Invalidate();
+			}
+		}
+
         property IEnumerable<Vertex^> ^MarkedVerts
 		{
             void set(IEnumerable<Vertex^> ^value)
@@ -190,9 +194,8 @@ namespace OglVisualizer
 		{
 			_translate = gcnew Point(0, 0, 0);
 			_theta = _phi = 0;
-            _lightDirection.x = 0;
-            _lightDirection.y = 0;
-            _lightDirection.z = -1;
+			_faceColorEvaluator = nullptr;
+			_vertexColorEvaluator = nullptr;
 		}
 
         Ray RayThroughScreen(int x, int y)
@@ -269,22 +272,13 @@ namespace OglVisualizer
             glEnable(GL_CULL_FACE);
             glEnable(GL_DEPTH_TEST);
 			
-            if(_enableLightning)
+			if(_vertexColorEvaluator || _faceColorEvaluator)
             {
-                glEnable(GL_LIGHTING);
-                glEnable(GL_LIGHT0);
-                glClearColor(0, 0, 0, 1);
                 glClearColor(BackColor.R / 255.0f, BackColor.G / 255.0f, BackColor.B / 255.0f, 1);
 				glPolygonMode(GL_FRONT, GL_FILL);
-
-                GLfloat lightPosition[] = {(float)_lightDirection.x, (float)_lightDirection.y,
-					(float)_lightDirection.z, 0};
-                glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
             }
             else
             {
-                glDisable(GL_LIGHTING);
-                glDisable(GL_LIGHT0);
 				glPolygonMode(GL_FRONT, GL_LINE);
                 glClearColor(BackColor.R / 255.0f, BackColor.G / 255.0f, BackColor.B / 255.0f, 1);
             }
@@ -302,12 +296,18 @@ namespace OglVisualizer
                 glBegin(GL_TRIANGLES);
                 for each(Matveev::Mtk::Core::Face ^face in _mesh->Faces)
                 {
-                    if(_enableLightning && _normalsType == NormalsType::FaceNormals)
-                        glNormal3d(face->Normal.x, face->Normal.y, face->Normal.z);
+					if(_faceColorEvaluator)
+					{
+						System::Drawing::Color color = _faceColorEvaluator(face);
+						glColor3ub(color.R, color.G, color.B);
+					}
                     for each(Matveev::Mtk::Core::Vertex ^vertex in face->Vertices)
                     {
-                        if(_enableLightning && _normalsType == NormalsType::VertexNormals)
-                            glNormal3d(vertex->Normal.x, vertex->Normal.y, vertex->Normal.z);
+						if(_vertexColorEvaluator)
+						{
+							System::Drawing::Color color = _vertexColorEvaluator(vertex);
+							glColor3ub(color.R, color.G, color.B);
+						}
                         PutVertex(vertex->Point);
                     }
                 }
