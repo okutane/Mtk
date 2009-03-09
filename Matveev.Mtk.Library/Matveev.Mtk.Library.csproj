@@ -78,6 +78,8 @@
     <Compile Include="FacePointProjection.cs" />
     <Compile Include="FieldFunction.cs" />
     <Compile Include="Fields\CompactQuadraticForm.cs" />
+    <Compile Include="Fields\MonkeySaddle.cs" />
+    <Compile Include="Fields\PiriformTeardrop.cs" />
     <Compile Include="Fields\Plane.cs" />
     <Compile Include="Fields\QuadraticForm.cs" />
     <Compile Include="Fields\Sphere.cs" />
