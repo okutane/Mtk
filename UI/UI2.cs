@@ -14,6 +14,7 @@ using Matveev.Mtk.Core;
 using Matveev.Mtk.Library;
 using Matveev.Mtk.Library.FaceFunctions;
 using Matveev.Mtk.Library.Fields;
+using Matveev.Mtk.Library.Utilities;
 
 namespace UI
 {
@@ -60,6 +61,33 @@ namespace UI
             };
 
             Selection = null;
+
+            var menu = toolStripMenuItem1;
+            menu.DropDownItems.Add("-");
+            List<ToolStripMenuItem> colorers = new List<ToolStripMenuItem>();
+            foreach (var item in Colorers.FaceColorers)
+            {
+                var colorer = item.Value;
+                colorers.Add(
+                    (ToolStripMenuItem)menu.DropDownItems.Add(item.Key, null, delegate(object sender, EventArgs e)
+                {
+                    colorers.ForEach(mi => mi.Checked = false);
+                    ((ToolStripMenuItem)sender).Checked = true;
+                    visualizer.FaceColorEvaluator = colorer;
+                }));
+            }
+            foreach (var item in Colorers.VertexColorers)
+            {
+                var colorer = item.Value;
+                colorers.Add(
+                    (ToolStripMenuItem)menu.DropDownItems.Add(item.Key, null, delegate(object sender, EventArgs e)
+                {
+                    colorers.ForEach(mi => mi.Checked = false);
+                    ((ToolStripMenuItem)sender).Checked = true;
+                    visualizer.VertexColorEvaluator = colorer;
+                }));
+            }
+            colorers[0].Checked = true;
         }
 
         private void ListFaceActions()
@@ -248,6 +276,7 @@ namespace UI
                 _mesh = polygonizer.Create(Configuration.MeshFactory, surface, -1, 1, -1, 1, -1, 1, N, N, N);
                 visualizer.Mesh = _mesh;
                 _field = surface;
+                Colorers.MaxArea = _mesh.Faces.Max(f => f.Area());
             };
             meshActions.Add(btnImplicit);
 
@@ -531,12 +560,6 @@ namespace UI
 
         #endregion
 
-        private void enableLightingToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //visualizer.EnableLightning =
-                //enableLightingToolStripMenuItem.Checked = !enableLightingToolStripMenuItem.Checked;
-        }
-
         #region Draw points menu handlers
 
         private void drawWithNormalsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -558,32 +581,6 @@ namespace UI
             drawToolStripMenuItem.Checked = drawWithNormalsToolStripMenuItem.Checked = false;
             doNotDrawToolStripMenuItem.Checked = true;
             visualizer.DrawPoints = OglVisualizer.DrawPoints.DoNotDraw;
-        }
-
-        #endregion
-
-        #region Normal selection menu handlers
-
-        private void useVertexNormalsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            useFaceNormalsToolStripMenuItem.Checked = false;
-            useVertexNormalsToolStripMenuItem.Checked = true;
-            visualizer.VertexColorEvaluator = delegate(Vertex vertex)
-            {
-                int value = Math.Max(0, (int)(255 * -0.75 * vertex.Normal.z));
-                return Color.FromArgb(value, value, value);
-            };
-        }
-
-        private void useFaceNormalsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            useFaceNormalsToolStripMenuItem.Checked = true;
-            useVertexNormalsToolStripMenuItem.Checked = false;
-            visualizer.FaceColorEvaluator = delegate(Face face)
-            {
-                int value = Math.Max(0, (int)(255 * -0.75 * face.Normal.z));
-                return Color.FromArgb(value, value, value);
-            };
         }
 
         #endregion
