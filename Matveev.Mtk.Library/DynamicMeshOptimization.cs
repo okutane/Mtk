@@ -10,17 +10,24 @@ namespace Matveev.Mtk.Library
 {
     public static class DynamicMeshOptimization
     {
+        private static Dictionary<Face, double> _AREAS;
+
         public static void Optimize(Mesh mesh, IImplicitSurface surface)
         {
+            _AREAS = new Dictionary<Face, double>();
             int n = 200;
             Vertex[] vertices = mesh.Vertices.Where(v => v.Type == VertexType.Internal).ToArray();
             Point[] newPoints = new Point[vertices.Length];
             while (n-- != 0)
             {
-                Dictionary<Face, double> areas = new Dictionary<Face, double>();
+                foreach (Face face in mesh.Faces)
+                {
+                    _AREAS[face] = face.Area();
+                }
                 for (int i = 0; i < vertices.Length; i++)
                 {
-                    double tau = 1.0 / (100 * vertices.Max(v => v.AdjacentFaces.Sum(f => f.Area()) * Math.Abs(surface.Eval(v.Point)) * surface.Grad(v.Point).Norm));
+                    double tau = 1.0 / (100 * vertices.Max(v => v.AdjacentFaces.Sum(f => _AREAS[f])
+                        * Math.Abs(surface.Eval(v.Point)) * surface.Grad(v.Point).Norm));
                     Vertex vertex = vertices[i];
                     newPoints[i] = vertex.Point
                         + DistanceOptimizationDirection(vertex, surface, tau)
@@ -32,11 +39,12 @@ namespace Matveev.Mtk.Library
                     vertices[i].Point = newPoints[i];
                 }
             }
+            _AREAS = null;
         }
 
         private static Vector DistanceOptimizationDirection(Vertex vertex, IImplicitSurface surface, double tau)
         {
-            return -2 * tau * vertex.AdjacentFaces.Sum(f => f.Area()) * surface.Eval(vertex.Point)
+            return -2 * tau * vertex.AdjacentFaces.Sum(f => _AREAS[f]) * surface.Eval(vertex.Point)
                 * surface.Grad(vertex.Point);
         }
 
@@ -50,8 +58,8 @@ namespace Matveev.Mtk.Library
                 Vector normal = Vector.Normalize(surface.Grad(centroid));
                 return (pc * normal) * normal;
             };
-            return (1 / vertex.AdjacentFaces.Sum(f => f.Area()))
-                * vertex.AdjacentFaces.Aggregate(new Vector(), (vector, face) => vector + face.Area() * v(face));
+            return (1 / vertex.AdjacentFaces.Sum(f => _AREAS[f]))
+                * vertex.AdjacentFaces.Aggregate(new Vector(), (vector, face) => vector + _AREAS[face] * v(face));
         }
 
         private static Vector RelaxationOptimizationDirection(Vertex vertex, IImplicitSurface surface)
