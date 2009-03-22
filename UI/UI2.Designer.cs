@@ -45,8 +45,12 @@ namespace UI
             this.drawWithNormalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.drawFaceNormalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelActions = new System.Windows.Forms.FlowLayoutPanel();
+            this.algorithmExecutionWorker = new System.ComponentModel.BackgroundWorker();
+            this.algorithmExecutionProgress = new System.Windows.Forms.ToolStripProgressBar();
             this.visualizer = new OglVisualizer.Visualizer();
+            this.cancelButton = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStrip1.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -103,6 +107,9 @@ namespace UI
             // 
             // statusStrip1
             // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.algorithmExecutionProgress,
+            this.cancelButton});
             this.statusStrip1.Location = new System.Drawing.Point(0, 435);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -196,6 +203,19 @@ namespace UI
             this.panelActions.Size = new System.Drawing.Size(174, 372);
             this.panelActions.TabIndex = 5;
             // 
+            // algorithmExecutionWorker
+            // 
+            this.algorithmExecutionWorker.WorkerReportsProgress = true;
+            this.algorithmExecutionWorker.WorkerSupportsCancellation = true;
+            this.algorithmExecutionWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.algorithmExecutionWorker_DoWork);
+            this.algorithmExecutionWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.algorithmExecutionWorker_RunWorkerCompleted);
+            this.algorithmExecutionWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.algorithmExecutionWorker_ProgressChanged);
+            // 
+            // algorithmExecutionProgress
+            // 
+            this.algorithmExecutionProgress.Name = "algorithmExecutionProgress";
+            this.algorithmExecutionProgress.Size = new System.Drawing.Size(100, 16);
+            // 
             // visualizer
             // 
             this.visualizer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -216,6 +236,16 @@ namespace UI
             this.visualizer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.visualizer_MouseDown);
             this.visualizer.MouseUp += new System.Windows.Forms.MouseEventHandler(this.visualizer_MouseUp);
             // 
+            // cancelButton
+            // 
+            this.cancelButton.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
+                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
+                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(43, 17);
+            this.cancelButton.Text = "Cancel";
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+            // 
             // UI2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -231,6 +261,8 @@ namespace UI
             this.Text = "UI2";
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -257,5 +289,8 @@ namespace UI
         private System.Windows.Forms.ToolStripMenuItem drawToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem drawWithNormalsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem drawFaceNormalsToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker algorithmExecutionWorker;
+        private System.Windows.Forms.ToolStripProgressBar algorithmExecutionProgress;
+        private System.Windows.Forms.ToolStripStatusLabel cancelButton;
     }
 }

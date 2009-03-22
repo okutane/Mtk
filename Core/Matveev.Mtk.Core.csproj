@@ -57,6 +57,7 @@
     <Compile Include="Abstract Mesh\Edge.cs" />
     <Compile Include="Abstract Mesh\Face.cs" />
     <Compile Include="Abstract Mesh\Mesh.cs" />
+    <Compile Include="IProgressMonitor.cs" />
     <Compile Include="ISimpleFactory.cs" />
     <Compile Include="IVertexConstraintsProvider.cs" />
     <Compile Include="Point.cs" />

@@ -12,14 +12,18 @@ namespace Matveev.Mtk.Library
     {
         private static Dictionary<Face, double> _AREAS;
 
-        public static void Optimize(Mesh mesh, IImplicitSurface surface)
+        public static void Optimize(Mesh mesh, IImplicitSurface surface,
+            IProgressMonitor monitor)
         {
+            int N = 100;
             _AREAS = new Dictionary<Face, double>();
-            int n = 200;
-            Vertex[] vertices = mesh.Vertices.Where(v => v.Type == VertexType.Internal).ToArray();
+            Vertex[] vertices =
+                mesh.Vertices.Where(v => v.Type == VertexType.Internal).ToArray();
             Point[] newPoints = new Point[vertices.Length];
-            while (n-- != 0)
+            for(int k = 0; k < N && !monitor.IsCancelled; k++)
             {
+                monitor.ReportProgress(100 * k / N);
+
                 foreach (Face face in mesh.Faces)
                 {
                     _AREAS[face] = face.Area();
