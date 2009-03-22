@@ -327,14 +327,25 @@ namespace UI
             };
             meshActions.Add(btnMeshToPoints);
 
-            Button btnHoppeOptimization = new Button();
-            btnHoppeOptimization.Text = "Hoppe";
-            btnHoppeOptimization.Click += delegate(object sender, EventArgs e)
             {
-                HoppeOptimization.OptimizeMesh(_mesh, this._points);
-            };
-            meshActions.Add(btnHoppeOptimization);
+                Button btnHoppeOptimization = new Button();
+                btnHoppeOptimization.Text = "Hoppe";
+                btnHoppeOptimization.Click += delegate(object sender, EventArgs e)
+                {
+                    HoppeOptimization.OptimizeMesh(_mesh, this._points);
+                };
+                meshActions.Add(btnHoppeOptimization);
+            }
 
+            {
+                Button btnDynamicOptimization = new Button();
+                btnDynamicOptimization.Text = "Dynamic";
+                btnDynamicOptimization.Click += delegate(object sender, EventArgs e)
+                {
+                    DynamicMeshOptimization.Optimize(_mesh, _field);
+                };
+                meshActions.Add(btnDynamicOptimization);
+            }
             Button btnMarkNonregular = new Button();
             btnMarkNonregular.Text = "Mark nonreg";
             btnMarkNonregular.Click += delegate(object sender, EventArgs e)
