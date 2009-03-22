@@ -342,7 +342,11 @@ namespace UI
                 btnDynamicOptimization.Text = "Dynamic";
                 btnDynamicOptimization.Click += delegate(object sender, EventArgs e)
                 {
-                    DynamicMeshOptimization.Optimize(_mesh, _field);
+                    Action<IProgressMonitor> action = delegate(IProgressMonitor pm)
+                    {
+                        DynamicMeshOptimization.Optimize(_mesh, _field, pm);
+                    };
+                    algorithmExecutionWorker.RunWorkerAsync(action);
                 };
                 meshActions.Add(btnDynamicOptimization);
             }
@@ -599,6 +603,29 @@ namespace UI
         private void drawFaceNormalsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             drawFaceNormalsToolStripMenuItem.Checked = visualizer.DrawFaceNormals = !visualizer.DrawFaceNormals;
+        }
+
+        private void algorithmExecutionWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            var algorithm = (Action<IProgressMonitor>)e.Argument;
+            algorithm(new BackgroundWorkerProgressMonitor(algorithmExecutionWorker));
+        }
+
+        private void algorithmExecutionWorker_ProgressChanged(object sender,
+            ProgressChangedEventArgs e)
+        {
+            algorithmExecutionProgress.Value = e.ProgressPercentage;
+        }
+
+        private void algorithmExecutionWorker_RunWorkerCompleted(object sender,
+            RunWorkerCompletedEventArgs e)
+        {
+            visualizer.Invalidate();
+        }
+
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            algorithmExecutionWorker.CancelAsync();
         }
     }
 }
