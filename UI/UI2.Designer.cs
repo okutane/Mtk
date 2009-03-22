@@ -44,10 +44,6 @@ namespace UI
             this.drawToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.drawWithNormalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.drawFaceNormalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.enableLightingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
-            this.useVertexNormalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.useFaceNormalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelActions = new System.Windows.Forms.FlowLayoutPanel();
             this.visualizer = new OglVisualizer.Visualizer();
             this.toolStrip1.SuspendLayout();
@@ -131,7 +127,7 @@ namespace UI
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // exitToolStripMenuItem
@@ -146,13 +142,9 @@ namespace UI
             this.toolStripMenuItem1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.drawPointsToolStripMenuItem,
-            this.drawFaceNormalsToolStripMenuItem,
-            this.enableLightingToolStripMenuItem,
-            this.toolStripMenuItem2,
-            this.useVertexNormalsToolStripMenuItem,
-            this.useFaceNormalsToolStripMenuItem});
+            this.drawFaceNormalsToolStripMenuItem});
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(44, 20);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(41, 20);
             this.toolStripMenuItem1.Text = "View";
             // 
             // drawPointsToolStripMenuItem
@@ -163,65 +155,36 @@ namespace UI
             this.drawToolStripMenuItem,
             this.drawWithNormalsToolStripMenuItem});
             this.drawPointsToolStripMenuItem.Name = "drawPointsToolStripMenuItem";
-            this.drawPointsToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.drawPointsToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.drawPointsToolStripMenuItem.Text = "Draw points";
             // 
             // doNotDrawToolStripMenuItem
             // 
             this.doNotDrawToolStripMenuItem.Name = "doNotDrawToolStripMenuItem";
-            this.doNotDrawToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.doNotDrawToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.doNotDrawToolStripMenuItem.Text = "Do not draw";
             this.doNotDrawToolStripMenuItem.Click += new System.EventHandler(this.doNotDrawToolStripMenuItem_Click);
             // 
             // drawToolStripMenuItem
             // 
             this.drawToolStripMenuItem.Name = "drawToolStripMenuItem";
-            this.drawToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.drawToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.drawToolStripMenuItem.Text = "Draw";
             this.drawToolStripMenuItem.Click += new System.EventHandler(this.drawToolStripMenuItem_Click);
             // 
             // drawWithNormalsToolStripMenuItem
             // 
             this.drawWithNormalsToolStripMenuItem.Name = "drawWithNormalsToolStripMenuItem";
-            this.drawWithNormalsToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.drawWithNormalsToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.drawWithNormalsToolStripMenuItem.Text = "Draw with normals";
             this.drawWithNormalsToolStripMenuItem.Click += new System.EventHandler(this.drawWithNormalsToolStripMenuItem_Click);
             // 
             // drawFaceNormalsToolStripMenuItem
             // 
             this.drawFaceNormalsToolStripMenuItem.Name = "drawFaceNormalsToolStripMenuItem";
-            this.drawFaceNormalsToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.drawFaceNormalsToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.drawFaceNormalsToolStripMenuItem.Text = "Draw face normals";
             this.drawFaceNormalsToolStripMenuItem.Click += new System.EventHandler(this.drawFaceNormalsToolStripMenuItem_Click);
-            // 
-            // enableLightingToolStripMenuItem
-            // 
-            this.enableLightingToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.enableLightingToolStripMenuItem.Name = "enableLightingToolStripMenuItem";
-            this.enableLightingToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.enableLightingToolStripMenuItem.Text = "Enable lighting";
-            this.enableLightingToolStripMenuItem.Click += new System.EventHandler(this.enableLightingToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(170, 6);
-            // 
-            // useVertexNormalsToolStripMenuItem
-            // 
-            this.useVertexNormalsToolStripMenuItem.Checked = true;
-            this.useVertexNormalsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.useVertexNormalsToolStripMenuItem.Name = "useVertexNormalsToolStripMenuItem";
-            this.useVertexNormalsToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.useVertexNormalsToolStripMenuItem.Text = "Use vertex normals";
-            this.useVertexNormalsToolStripMenuItem.Click += new System.EventHandler(this.useVertexNormalsToolStripMenuItem_Click);
-            // 
-            // useFaceNormalsToolStripMenuItem
-            // 
-            this.useFaceNormalsToolStripMenuItem.Name = "useFaceNormalsToolStripMenuItem";
-            this.useFaceNormalsToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.useFaceNormalsToolStripMenuItem.Text = "Use face normals";
-            this.useFaceNormalsToolStripMenuItem.Click += new System.EventHandler(this.useFaceNormalsToolStripMenuItem_Click);
             // 
             // panelActions
             // 
@@ -241,14 +204,16 @@ namespace UI
             this.visualizer.BackColor = System.Drawing.Color.White;
             this.visualizer.DrawFaceNormals = false;
             this.visualizer.DrawPoints = OglVisualizer.DrawPoints.DoNotDraw;
+            this.visualizer.FaceColorEvaluator = null;
             this.visualizer.Location = new System.Drawing.Point(0, 63);
             this.visualizer.Name = "visualizer";
             this.visualizer.Phi = 0;
             this.visualizer.Size = new System.Drawing.Size(460, 372);
             this.visualizer.TabIndex = 3;
             this.visualizer.Theta = 0;
-            this.visualizer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.visualizer_MouseDown);
+            this.visualizer.VertexColorEvaluator = null;
             this.visualizer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.visualizer_MouseMove);
+            this.visualizer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.visualizer_MouseDown);
             this.visualizer.MouseUp += new System.Windows.Forms.MouseEventHandler(this.visualizer_MouseUp);
             // 
             // UI2
@@ -288,13 +253,9 @@ namespace UI
         private System.Windows.Forms.FlowLayoutPanel panelActions;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem drawPointsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem enableLightingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem doNotDrawToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem drawToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem drawWithNormalsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem useVertexNormalsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem useFaceNormalsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem drawFaceNormalsToolStripMenuItem;
     }
 }
