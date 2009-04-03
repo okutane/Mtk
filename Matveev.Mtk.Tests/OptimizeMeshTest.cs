@@ -57,7 +57,7 @@ namespace Matveev.Mtk.Tests
         public void OptimizeImplicit()
         {
             IImplicitSurface surface = Plane.Sample;
-            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, surface, -1, 1, -1, 1, -1, 1, 3, 3, 3);
+            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, surface, Configuration.BoundingBox, 3, 3, 3);
 
             OptimizeMesh.OptimizeImplicit(mesh, surface, 1e-2, 1e-1);
 
@@ -69,7 +69,7 @@ namespace Matveev.Mtk.Tests
         public void OptimizeImplicitFlippedTriangles()
         {
             IImplicitSurface surface = Plane.Sample;
-            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, surface, -1, 1, -1, 1, -1, 1, 4, 4, 4);
+            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, surface, Configuration.BoundingBox, 4, 4, 4);
 
             OptimizeMesh.OptimizeImplicit(mesh, surface, 1e-2, 1e-1);
 
@@ -80,7 +80,8 @@ namespace Matveev.Mtk.Tests
         public void OptimizeImplicitExceptionTriangles()
         {
             IImplicitSurface surface = Plane.Sample;
-            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, surface, -1, 1, -1, 1, -1, 1, 12, 12, 12);
+            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, surface, Configuration.BoundingBox,
+                12, 12, 12);
 
             OptimizeMesh.OptimizeImplicit(mesh, surface, 1e-2, 1e-1);
 
@@ -93,7 +94,8 @@ namespace Matveev.Mtk.Tests
             List<EdgeTransform> transforms = new List<EdgeTransform>(Configuration.EdgeTransforms);
             try
             {
-                Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, Plane.Sample, -1, 1, -1, 1, -1, 1, 2, 2, 2);
+                Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, Plane.Sample, Configuration.BoundingBox,
+                    2, 2, 2);
                 TransformMock transform = new TransformMock();
                 Configuration.EdgeTransforms.Clear();
                 Configuration.EdgeTransforms.Add(transform);
@@ -114,9 +116,9 @@ namespace Matveev.Mtk.Tests
         [Test]
         public void ImproveVertexPositionsSphere()
         {
-            Mesh sphereMesh = MC.Instance.Create(Configuration.MeshFactory, Sphere.Sample, -1, 1, -1, 1, -1, 1,
-                2, 2, 2);
-            OptimizeMesh.ImproveVertexPositions(sphereMesh, Sphere.Sample);
+            Mesh sphereMesh = MC.Instance.Create(Configuration.MeshFactory, Sphere.Sample,
+                Configuration.BoundingBox, 2, 2, 2);
+            OptimizeMesh.ImproveVertexPositions(sphereMesh, Sphere.Sample, null);
 
             YamlSerializerTest.TestSerialize("ImproveVertexPositionsSphere.yaml", sphereMesh);
         }
@@ -125,8 +127,9 @@ namespace Matveev.Mtk.Tests
         public void ImproveVertexPositionsHP()
         {
             IImplicitSurface surface = QuadraticForm.ParabolicHyperboloid;
-            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, surface, -1, 1, -1, 1, -1, 1, 3, 3, 3);
-            OptimizeMesh.ImproveVertexPositions(mesh.Vertices.Where(v => v.Type == VertexType.Internal), surface);
+            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, surface, Configuration.BoundingBox, 3, 3, 3);
+            OptimizeMesh.ImproveVertexPositions(mesh.Vertices.Where(v => v.Type == VertexType.Internal), surface,
+                null);
             YamlSerializerTest.TestSerialize("ImproveVertexPositionsHP.yaml", mesh);
         }
     }

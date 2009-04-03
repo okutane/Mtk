@@ -13,6 +13,8 @@ namespace Matveev.Mtk.Library
 
         public static ICollection<EdgeTransform> EdgeTransforms = new List<EdgeTransform>();
 
+        public static BoundingBox BoundingBox = new BoundingBox(-1, 1, -1, 1, -1, 1);
+
         static Configuration()
         {
             EdgeTransforms.Add(new EdgeCollapse(0.5));

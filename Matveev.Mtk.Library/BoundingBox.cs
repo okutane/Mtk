@@ -9,21 +9,21 @@ namespace Matveev.Mtk.Library
 {
     public class BoundingBox : IVertexConstraintsProvider
     {
-        private readonly double _minX;
-        private readonly double _maxX;
-        private readonly double _minY;
-        private readonly double _maxY;
-        private readonly double _minZ;
-        private readonly double _maxZ;
+        public readonly double MinX;
+        public readonly double MaxX;
+        public readonly double MinY;
+        public readonly double MaxY;
+        public readonly double MinZ;
+        public readonly double MaxZ;
 
         public BoundingBox(double minX, double maxX, double minY, double maxY, double minZ, double maxZ)
         {
-            _minX = minX;
-            _maxX = maxX;
-            _minY = minY;
-            _maxY = maxY;
-            _minZ = minZ;
-            _maxZ = maxZ;
+            MinX = minX;
+            MaxX = maxX;
+            MinY = minY;
+            MaxY = maxY;
+            MinZ = minZ;
+            MaxZ = maxZ;
         }
 
         #region IVertexConstraintsProvider Members
@@ -34,15 +34,15 @@ namespace Matveev.Mtk.Library
             {
                 return true;
             }
-            if ((vertex.Point.X == _minX || vertex.Point.X == _maxX) && direction.x != 0)
+            if ((vertex.Point.X == MinX || vertex.Point.X == MaxX) && direction.x != 0)
             {
                 return false;
             }
-            if ((vertex.Point.Y == _minY || vertex.Point.Y == _maxY) && direction.y != 0)
+            if ((vertex.Point.Y == MinY || vertex.Point.Y == MaxY) && direction.y != 0)
             {
                 return false;
             }
-            if ((vertex.Point.Z == _minZ || vertex.Point.Z == _maxZ) && direction.z != 0)
+            if ((vertex.Point.Z == MinZ || vertex.Point.Z == MaxZ) && direction.z != 0)
             {
                 return false;
             }

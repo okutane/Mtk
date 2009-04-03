@@ -12,12 +12,13 @@ namespace Matveev.Mtk.Library
 {
     public static class OptimizeMesh
     {
-        public static void ImproveVertexPositions(IEnumerable<Vertex> vertices, IImplicitSurface surface)
+        public static void ImproveVertexPositions(IEnumerable<Vertex> vertices, IImplicitSurface surface,
+            IProgressMonitor monitor)
         {
             Func<Point[], double> faceEnergy;
             GradientDelegate<Point, Vector> localGradient;
             GetLocalFunctions(surface, out faceEnergy, out localGradient);
-            ImproveVertexPositions(vertices, faceEnergy, localGradient);
+            ImproveVertexPositions(vertices, faceEnergy, localGradient, monitor);
         }
 
         private static void GetLocalFunctions(IImplicitSurface surface, out Func<Point[], double> faceEnergy,
@@ -36,7 +37,7 @@ namespace Matveev.Mtk.Library
                 return surfaceToMesh(points) + triangleNormalDifference(points);
             };*/
             IFaceEnergyProvider energyProvider = TriangleImplicitApproximations.GetApproximation(surface, "square");
-            if (true)
+            if (false)
             {
                 IFaceEnergyProvider preciseEnergyProvider = surface as IFaceEnergyProvider;
                 if (preciseEnergyProvider != null)
@@ -49,7 +50,7 @@ namespace Matveev.Mtk.Library
         }
 
         public static void ImproveVertexPositions(IEnumerable<Vertex> vertices, Func<Point[], double> faceValue,
-            GradientDelegate<Point, Vector> faceGradient)
+            GradientDelegate<Point, Vector> faceGradient, IProgressMonitor monitor)
         {
             Vertex[] verticesArray = vertices.ToArray();
 
@@ -81,7 +82,7 @@ namespace Matveev.Mtk.Library
             IPointStrategy[][] faces =
                 facesCollection.Select(f => f.Vertices.Select(pointStrategyProvider).ToArray()).ToArray();
 
-            Point[] buffer = verticesArray.Select(v => v.Point).ToArray();
+            Point[] buffer = Array.ConvertAll(verticesArray, v => v.Point);
 
             Func<Point[], double> globalEnergy = delegate(Point[] points)
             {
@@ -113,7 +114,8 @@ namespace Matveev.Mtk.Library
                 }
             };
 
-            FunctionOptimization<Point, Vector>.GradientDescent(globalEnergy, globalGradient, buffer, 1e-8, 300);
+            FunctionOptimization<Point, Vector>.GradientDescent(globalEnergy, globalGradient, buffer, 1e-8, 100,
+                monitor);
 
             for (int i = 0; i < verticesArray.Length; i++)
             {
@@ -121,9 +123,9 @@ namespace Matveev.Mtk.Library
             }
         }
 
-        public static void ImproveVertexPositions(Mesh mesh, IImplicitSurface surface)
+        public static void ImproveVertexPositions(Mesh mesh, IImplicitSurface surface, IProgressMonitor monitor)
         {
-            ImproveVertexPositions(mesh.Vertices, surface);
+            ImproveVertexPositions(mesh.Vertices, surface, monitor);
         }
 
         public static void OptimizeImplicit(Mesh mesh, IImplicitSurface field, double epsilon, double alpha)
@@ -149,7 +151,7 @@ namespace Matveev.Mtk.Library
             ProjectAll(mesh, field, epsilon);
 
             //Этап 2. Улучшение позиций всех вершин сетки
-            ImproveVertexPositions(mesh, field);
+            ImproveVertexPositions(mesh, field, null);
 
             //Этап 3. Преобразования над структурой сетки
             Random rand = new Random(42);
@@ -200,7 +202,7 @@ namespace Matveev.Mtk.Library
                             continue;
                         }
 
-                        ImproveVertexPositions(smResult.GetVertices(0), field);
+                        ImproveVertexPositions(smResult.GetVertices(0), field, null);
 
                         E2 = energy.Eval(submesh2);
 
@@ -225,7 +227,7 @@ namespace Matveev.Mtk.Library
 
                         MeshPart result = transform.Execute(candidat);
 
-                        ImproveVertexPositions(result.GetVertices(0), field);
+                        ImproveVertexPositions(result.GetVertices(0), field, null);
                         candidats.AddRange(result.GetEdges(1));
                         changed = true;
                         break;

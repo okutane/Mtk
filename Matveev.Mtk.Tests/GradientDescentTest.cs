@@ -25,7 +25,7 @@ namespace Matveev.Mtk.Library.Tests
             for (int i = 0; i < 100; i++)
             {
                 points.Add((MyDouble[])x.Clone());
-                FunctionOptimization<MyDouble, MyDouble>.GradientDescent(f, grad, x, 1e-9, 1);
+                FunctionOptimization<MyDouble, MyDouble>.GradientDescent(f, grad, x, 1e-9, 1, null);
             }
             Assert.AreEqual(1, x[0], 1e-4);
         }
@@ -42,7 +42,7 @@ namespace Matveev.Mtk.Library.Tests
                 result[1] = 2 * a[1] * implicitCircle(a);
             };
 
-            FunctionOptimization<MyDouble, MyDouble>.GradientDescent(f, grad, x, 1e-4, 100);
+            FunctionOptimization<MyDouble, MyDouble>.GradientDescent(f, grad, x, 1e-4, 100, null);
             Assert.AreEqual(0, f(x), 1e-4);
         }
 
@@ -51,7 +51,8 @@ namespace Matveev.Mtk.Library.Tests
         {
             ITestFunction function = new Rosenbrock();
             MyDouble[] x = new MyDouble[] { 0, 0 };
-            FunctionOptimization<MyDouble, MyDouble>.GradientDescent(function.Function, function.Gradient, x, 0, 10000);
+            FunctionOptimization<MyDouble, MyDouble>.GradientDescent(function.Function, function.Gradient, x, 0,
+                10000, null);
             double[] expected = function.Minimum;
             Assert.AreEqual(0, function.Function(x), 1e-4, "f(x)");
             Assert.AreEqual(expected[0], x[0], 1e-2, "x[0]");
@@ -139,7 +140,7 @@ namespace Matveev.Mtk.Library.Tests
                 }
             };
             MyDouble[] arg = { 1, 0, 0, 1, -1, 0, 0, -1 };
-            FunctionOptimization<MyDouble, MyDouble>.GradientDescent(globalValue, globalGrad, arg, 0, 10000);
+            FunctionOptimization<MyDouble, MyDouble>.GradientDescent(globalValue, globalGrad, arg, 0, 10000, null);
             Assert.AreEqual(0.19, globalValue(arg), 1e-3);
         }
     }

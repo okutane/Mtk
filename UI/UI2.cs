@@ -55,7 +55,7 @@ namespace UI
             btnImprovePositions.Text = "Improve position";
             btnImprovePositions.Click += delegate(object sender, EventArgs e)
             {
-                OptimizeMesh.ImproveVertexPositions(_selection.GetVertices(0), _field);
+                OptimizeMesh.ImproveVertexPositions(_selection.GetVertices(0), _field, null);
                 Selection = _selection;
                 Invalidate(true);
             };
@@ -273,7 +273,7 @@ namespace UI
                     out polygonizer))
                     return;
 
-                _mesh = polygonizer.Create(Configuration.MeshFactory, surface, -1, 1, -1, 1, -1, 1, N, N, N);
+                _mesh = polygonizer.Create(Configuration.MeshFactory, surface, Configuration.BoundingBox, N, N, N);
                 visualizer.Mesh = _mesh;
                 _field = surface;
                 Colorers.MaxArea = _mesh.Faces.Max(f => f.Area());
@@ -303,9 +303,13 @@ namespace UI
             btnImproveVertexPositions.Text = "ImproveVertexPositions";
             btnImproveVertexPositions.Click += delegate(object sender, EventArgs e)
             {
-                OptimizeMesh.ImproveVertexPositions(_mesh, _field);
-                this.Invalidate();
-                MessageBox.Show("Done");
+                Action<IProgressMonitor> action = delegate(IProgressMonitor monitor)
+                {
+                    OptimizeMesh.ImproveVertexPositions(_mesh, _field, monitor);
+                    this.Invalidate();
+                    MessageBox.Show("Done");
+                };
+                algorithmExecutionWorker.RunWorkerAsync(action);
             };
             meshActions.Add(btnImproveVertexPositions);
             Button btnOptimizeAll = new Button();

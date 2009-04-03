@@ -17,7 +17,8 @@ namespace Matveev.Mtk.Tests
         [Test]
         public void Create()
         {
-            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, QuadraticForm.Plane, -1, 1, -1, 1, -1, 1, 2, 2, 2);
+            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, QuadraticForm.Plane,
+                Configuration.BoundingBox, 2, 2, 2);
             
             //Dictionary<
         }
