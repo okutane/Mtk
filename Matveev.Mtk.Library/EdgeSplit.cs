@@ -27,8 +27,6 @@ namespace Matveev.Mtk.Library
         public override MeshPart Execute(Edge edge)
         {
             Mesh mesh = edge.Mesh;
-            //if (affected != null)
-            //    affected.Clear();
 
             Vertex v, v0, v1, v2, v3;
             Face face;
@@ -44,19 +42,11 @@ namespace Matveev.Mtk.Library
                 v3 = edge.Pair.Next.End;
                 mesh.DeleteFace(edge.Pair.ParentFace);
                 face = mesh.CreateFace(v3, v, v0);
-                //if (affected != null)
-                //    affected.Add(face);
                 face = mesh.CreateFace(v1, v, v3);
-                //if (affected != null)
-                //    affected.Add(face);
             }
             mesh.DeleteFace(edge.ParentFace);
             face = mesh.CreateFace(v0, v, v2);
-            //if (affected != null)
-            //    affected.Add(face);
             face = mesh.CreateFace(v2, v, v1);
-            //if (affected != null)
-            //    affected.Add(face);
 
             return v;
         }
