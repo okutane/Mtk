@@ -121,7 +121,11 @@ namespace Matveev.Mtk.Library
             get
             {
                 // TODO: use State pattern here.
-                if (type == VertexType.Boundary)
+                if (type == VertexType.Isolated)
+                {
+                    throw new InvalidOperationException();
+                }
+                else if (type == VertexType.Boundary)
                 {
                     HEEdge edge = outEdge;
                     while (edge.pair != null)
