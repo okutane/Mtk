@@ -35,6 +35,8 @@ namespace UI
             this.btnFaces = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.algorithmExecutionProgress = new System.Windows.Forms.ToolStripProgressBar();
+            this.cancelButton = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,9 +48,7 @@ namespace UI
             this.drawFaceNormalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelActions = new System.Windows.Forms.FlowLayoutPanel();
             this.algorithmExecutionWorker = new System.ComponentModel.BackgroundWorker();
-            this.algorithmExecutionProgress = new System.Windows.Forms.ToolStripProgressBar();
             this.visualizer = new OglVisualizer.Visualizer();
-            this.cancelButton = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -116,6 +116,22 @@ namespace UI
             this.statusStrip1.Size = new System.Drawing.Size(640, 22);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
+            // 
+            // algorithmExecutionProgress
+            // 
+            this.algorithmExecutionProgress.Name = "algorithmExecutionProgress";
+            this.algorithmExecutionProgress.Size = new System.Drawing.Size(100, 16);
+            this.algorithmExecutionProgress.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
+                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
+                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(43, 17);
+            this.cancelButton.Text = "Cancel";
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
             // menuStrip1
             // 
@@ -211,11 +227,6 @@ namespace UI
             this.algorithmExecutionWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.algorithmExecutionWorker_RunWorkerCompleted);
             this.algorithmExecutionWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.algorithmExecutionWorker_ProgressChanged);
             // 
-            // algorithmExecutionProgress
-            // 
-            this.algorithmExecutionProgress.Name = "algorithmExecutionProgress";
-            this.algorithmExecutionProgress.Size = new System.Drawing.Size(100, 16);
-            // 
             // visualizer
             // 
             this.visualizer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -235,16 +246,6 @@ namespace UI
             this.visualizer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.visualizer_MouseMove);
             this.visualizer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.visualizer_MouseDown);
             this.visualizer.MouseUp += new System.Windows.Forms.MouseEventHandler(this.visualizer_MouseUp);
-            // 
-            // cancelButton
-            // 
-            this.cancelButton.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(43, 17);
-            this.cancelButton.Text = "Cancel";
-            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
             // UI2
             // 

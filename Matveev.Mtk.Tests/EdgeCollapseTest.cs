@@ -108,7 +108,8 @@ namespace Matveev.Mtk.Tests
         [Test]
         public void ExecuteEndPlane()
         {
-            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, Plane.Sample, -1, 1, -1, 1, -1, 1, 2, 2, 2);
+            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, CompactQuadraticForm.Plane,
+                Configuration.BoundingBox, 2, 2, 2);
             Edge edge = mesh.Edges.First(e => e.Begin.Point == new Point(-1, -1, 0) && e.End.Point == new Point(0, 0, 0));
             new EdgeCollapse(0).Execute(edge);
             mesh.Validate();
@@ -118,7 +119,8 @@ namespace Matveev.Mtk.Tests
         [Test]
         public void ExecuteEndPlaneBorder()
         {
-            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, Plane.Sample, -1, 1, -1, 1, -1, 1, 2, 2, 2);
+            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, CompactQuadraticForm.Plane,
+                Configuration.BoundingBox, 2, 2, 2);
             EdgeTransform target = new EdgeCollapse(1);
             Edge edge = FindEdge(mesh, UMeshTestHelper.FindVertex(mesh, 0, -1),
                 UMeshTestHelper.FindVertex(mesh, -1, -1));
@@ -130,7 +132,8 @@ namespace Matveev.Mtk.Tests
 
         private static void ExecuteWithWeight(double weight)
         {
-            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, Plane.Sample, -1, 1, -1, 1, -1, 1, 3, 3, 3);
+            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, CompactQuadraticForm.Plane,
+                Configuration.BoundingBox, 3, 3, 3);
             Edge edge = (from e in mesh.Edges
                          where (Math.Abs(e.Begin.Point.X + e.End.Point.X) < 1e-4)
                             && (Math.Abs(e.Begin.Point.Y + e.End.Point.Y) < 1e-4)

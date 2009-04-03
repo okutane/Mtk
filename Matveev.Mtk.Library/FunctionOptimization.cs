@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using Matveev.Common;
+using Matveev.Mtk.Core;
 
 namespace Matveev.Mtk.Library
 {
@@ -62,7 +63,7 @@ namespace Matveev.Mtk.Library
 
         public static void GradientDescent(Func<ArgType[], double> f,
             GradientDelegate<ArgType, DiffType> grad, ArgType[] x,
-            double eps, int maxIterations)
+            double eps, int maxIterations, IProgressMonitor monitor)
         {
             int n = x.Length;
             ArgType[] x0 = new ArgType[n];
@@ -73,6 +74,7 @@ namespace Matveev.Mtk.Library
             double change;
             do
             {
+                monitor.ReportProgress(k * 100 / maxIterations);
                 grad(x, grad0);
                 ILineSearch search = new LineSearch();
                 search.Perform(f, grad, x0, grad0, grad0, x, ref f0);
@@ -84,8 +86,8 @@ namespace Matveev.Mtk.Library
                 }
                 x.CopyTo(x0, 0);
             }
-            while (k++ < maxIterations /*&& change > eps*/);
-}
+            while (k++ < maxIterations /*&& change > eps*/ && !monitor.IsCancelled);
+        }
 
         public static void NewtonMethod(Func<ArgType[], double> f, GradientDelegate<ArgType, DiffType> grad,
             Func<ArgType[], DiffType[,]> hessian, ArgType[] x, double eps, int maxIterations)

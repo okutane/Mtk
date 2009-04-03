@@ -18,7 +18,7 @@ namespace Matveev.Mtk.Library.Tests
             IImplicitSurface field = new FieldFunction(p => p.X * p.X + p.Y * p.Y + p.Z * p.Z - 1,
                 p => new Vector(2 * p.X, 2 * p.Y, 2 * p.Z));
 
-            Mesh mesh = MT6.Instance.Create(HEMesh.Factory, field, -1, 1, -1, 1, -1, 1, 2, 2, 2);
+            Mesh mesh = MT6.Instance.Create(HEMesh.Factory, field, Configuration.BoundingBox, 2, 2, 2);
 
             Assert.IsTrue(mesh.Vertices.FirstOrDefault(v => v.Type != VertexType.Internal) == null,
                 "Non internal vertices");
