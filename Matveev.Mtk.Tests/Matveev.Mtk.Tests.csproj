@@ -79,6 +79,7 @@
     <Compile Include="ImproveVertexPositionsTests.cs" />
     <Compile Include="IntegrationTests.cs" />
     <Compile Include="MeshTest.cs" />
+    <Compile Include="NullProgressMonitor.cs" />
     <Compile Include="OneDimensionalOptimizationTest.cs" />
     <Compile Include="MT6Test.cs" />
     <None Include="NewtonMethodTest.cs" />
