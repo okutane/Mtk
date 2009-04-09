@@ -59,7 +59,7 @@ namespace Matveev.Mtk.Tests
             IImplicitSurface surface = Plane.Sample;
             Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, surface, Configuration.BoundingBox, 3, 3, 3);
 
-            OptimizeMesh.OptimizeImplicit(mesh, surface, 1e-2, 1e-1);
+            OptimizeMesh.OptimizeImplicit(mesh, surface, 1e-2, 1e-1, NullProgressMonitor.Instance);
 
             mesh.Validate();
             YamlSerializerTest.TestSerialize("OptimizeImplicit_Plane.yaml", mesh);
@@ -71,7 +71,7 @@ namespace Matveev.Mtk.Tests
             IImplicitSurface surface = Plane.Sample;
             Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, surface, Configuration.BoundingBox, 4, 4, 4);
 
-            OptimizeMesh.OptimizeImplicit(mesh, surface, 1e-2, 1e-1);
+            OptimizeMesh.OptimizeImplicit(mesh, surface, 1e-2, 1e-1, NullProgressMonitor.Instance);
 
             mesh.Validate();
         }
@@ -83,7 +83,7 @@ namespace Matveev.Mtk.Tests
             Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, surface, Configuration.BoundingBox,
                 12, 12, 12);
 
-            OptimizeMesh.OptimizeImplicit(mesh, surface, 1e-2, 1e-1);
+            OptimizeMesh.OptimizeImplicit(mesh, surface, 1e-2, 1e-1, NullProgressMonitor.Instance);
 
             mesh.Validate();
         }
@@ -100,7 +100,7 @@ namespace Matveev.Mtk.Tests
                 Configuration.EdgeTransforms.Clear();
                 Configuration.EdgeTransforms.Add(transform);
 
-                OptimizeMesh.OptimizeImplicit(mesh, Plane.Sample, 0, 0);
+                OptimizeMesh.OptimizeImplicit(mesh, Plane.Sample, 0, 0, NullProgressMonitor.Instance);
                 HashSet<Edge> actual = transform.PassedEdges;
                 HashSet<Edge> expected = new HashSet<Edge>(mesh.Edges, new EdgeComparer());
                 Assert.IsTrue(expected.IsSubsetOf(actual), "Actual edge set contains unexpected edges.");
@@ -118,7 +118,8 @@ namespace Matveev.Mtk.Tests
         {
             Mesh sphereMesh = MC.Instance.Create(Configuration.MeshFactory, Sphere.Sample,
                 Configuration.BoundingBox, 2, 2, 2);
-            OptimizeMesh.ImproveVertexPositions(sphereMesh, Sphere.Sample, null);
+            OptimizeMesh.ImproveVertexPositions(sphereMesh, Sphere.Sample,
+                NullProgressMonitor.Instance);
 
             YamlSerializerTest.TestSerialize("ImproveVertexPositionsSphere.yaml", sphereMesh);
         }
@@ -129,7 +130,7 @@ namespace Matveev.Mtk.Tests
             IImplicitSurface surface = QuadraticForm.ParabolicHyperboloid;
             Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, surface, Configuration.BoundingBox, 3, 3, 3);
             OptimizeMesh.ImproveVertexPositions(mesh.Vertices.Where(v => v.Type == VertexType.Internal), surface,
-                null);
+                NullProgressMonitor.Instance);
             YamlSerializerTest.TestSerialize("ImproveVertexPositionsHP.yaml", mesh);
         }
     }

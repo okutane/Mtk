@@ -20,12 +20,10 @@ namespace Matveev.Mtk.Library.Tests
             Func<MyDouble[], double> f = a => Math.Pow(a[0] - 1, 2);
             GradientDelegate<MyDouble, MyDouble> grad = (a, result) => result[0] = 2 * (a[0] - 1);
 
-            // WTF??!!
-            List<MyDouble[]> points = new List<MyDouble[]>();
             for (int i = 0; i < 100; i++)
             {
-                points.Add((MyDouble[])x.Clone());
-                FunctionOptimization<MyDouble, MyDouble>.GradientDescent(f, grad, x, 1e-9, 1, null);
+                FunctionOptimization<MyDouble, MyDouble>.GradientDescent(f, grad, x, 1e-9, 1,
+                    NullProgressMonitor.Instance);
             }
             Assert.AreEqual(1, x[0], 1e-4);
         }
@@ -42,7 +40,8 @@ namespace Matveev.Mtk.Library.Tests
                 result[1] = 2 * a[1] * implicitCircle(a);
             };
 
-            FunctionOptimization<MyDouble, MyDouble>.GradientDescent(f, grad, x, 1e-4, 100, null);
+            FunctionOptimization<MyDouble, MyDouble>.GradientDescent(f, grad, x, 1e-4, 100,
+                NullProgressMonitor.Instance);
             Assert.AreEqual(0, f(x), 1e-4);
         }
 
@@ -52,7 +51,7 @@ namespace Matveev.Mtk.Library.Tests
             ITestFunction function = new Rosenbrock();
             MyDouble[] x = new MyDouble[] { 0, 0 };
             FunctionOptimization<MyDouble, MyDouble>.GradientDescent(function.Function, function.Gradient, x, 0,
-                10000, null);
+                10000, NullProgressMonitor.Instance);
             double[] expected = function.Minimum;
             Assert.AreEqual(0, function.Function(x), 1e-4, "f(x)");
             Assert.AreEqual(expected[0], x[0], 1e-2, "x[0]");
@@ -140,7 +139,8 @@ namespace Matveev.Mtk.Library.Tests
                 }
             };
             MyDouble[] arg = { 1, 0, 0, 1, -1, 0, 0, -1 };
-            FunctionOptimization<MyDouble, MyDouble>.GradientDescent(globalValue, globalGrad, arg, 0, 10000, null);
+            FunctionOptimization<MyDouble, MyDouble>.GradientDescent(globalValue, globalGrad, arg, 0, 10000,
+                NullProgressMonitor.Instance);
             Assert.AreEqual(0.19, globalValue(arg), 1e-3);
         }
     }

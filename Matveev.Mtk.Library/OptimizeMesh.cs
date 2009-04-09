@@ -128,7 +128,8 @@ namespace Matveev.Mtk.Library
             ImproveVertexPositions(mesh.Vertices, surface, monitor);
         }
 
-        public static void OptimizeImplicit(Mesh mesh, IImplicitSurface field, double epsilon, double alpha)
+        public static void OptimizeImplicit(Mesh mesh, IImplicitSurface field, double epsilon, double alpha,
+            IProgressMonitor monitor)
         {
             ICollection<EdgeTransform> transforms = Configuration.EdgeTransforms;
 
@@ -151,7 +152,7 @@ namespace Matveev.Mtk.Library
             ProjectAll(mesh, field, epsilon);
 
             //Этап 2. Улучшение позиций всех вершин сетки
-            ImproveVertexPositions(mesh, field, null);
+            ImproveVertexPositions(mesh, field, monitor);
 
             //Этап 3. Преобразования над структурой сетки
             Random rand = new Random(42);
@@ -227,7 +228,7 @@ namespace Matveev.Mtk.Library
 
                         MeshPart result = transform.Execute(candidat);
 
-                        ImproveVertexPositions(result.GetVertices(0), field, null);
+                        ImproveVertexPositions(result.GetVertices(0), field, monitor);
                         candidats.AddRange(result.GetEdges(1));
                         changed = true;
                         break;
