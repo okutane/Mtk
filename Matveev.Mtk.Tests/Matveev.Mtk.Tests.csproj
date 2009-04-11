@@ -72,7 +72,6 @@
     <Compile Include="Fields\SphereTest.cs" />
     <Compile Include="Fields\TorusTest.cs" />
     <Compile Include="FunctionOptimization\Functions.cs" />
-    <Compile Include="GradientDescentTest.cs" />
     <Compile Include="HeaMeshTest.cs" />
     <Compile Include="HEMeshTest.cs" />
     <Compile Include="HEVertexTest.cs" />

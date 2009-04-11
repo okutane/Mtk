@@ -85,7 +85,6 @@
     <Compile Include="Fields\QuadraticForm.cs" />
     <Compile Include="Fields\Sphere.cs" />
     <Compile Include="Fields\Torus.cs" />
-    <Compile Include="FunctionOptimization.cs" />
     <Compile Include="HeaMesh.cs" />
     <Compile Include="HeaVertex.cs" />
     <Compile Include="HEEdge.cs" />
@@ -115,6 +114,7 @@
     <Compile Include="TetrahedronPolygonizer.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="TriangleImplicitApproximations.cs" />
+    <Compile Include="UGslMultimin.cs" />
     <Compile Include="Utilities\UFace.cs" />
     <Compile Include="Utilities\UMesh.cs" />
     <Compile Include="Utils.cs" />
@@ -127,6 +127,10 @@
     <Compile Include="VertexPointProjection.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\GslNet\GslNet\GslNet.vcproj">
+      <Project>{7D877E38-B495-47D0-8D84-15925C4697F6}</Project>
+      <Name>GslNet</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Core\Matveev.Mtk.Core.csproj">
       <Project>{3626C207-50B8-47C9-B6E2-195726D6B082}</Project>
       <Name>Matveev.Mtk.Core</Name>
