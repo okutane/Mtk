@@ -84,38 +84,10 @@ namespace Matveev.Mtk.Library
 
             Point[] buffer = Array.ConvertAll(verticesArray, v => v.Point);
 
-            Func<Point[], double> globalEnergy = delegate(Point[] points)
-            {
-                double result = 0;
-                foreach (IPointStrategy[] face in faces)
-                {
-                    Point[] localPoints = Array.ConvertAll(face, strategy => strategy.GetPoint(points));
-                    double weight = localPoints[0].AreaTo(localPoints[1], localPoints[2]);
-                    weight = 1;
-                    result += weight * faceValue(localPoints);
-                }
-                return result;
-            };
+            GlobalPointsFunctionWithGradient globalFunction = new GlobalPointsFunctionWithGradient(faceValue,
+                faceGradient, faces);
 
-            GradientDelegate<Point, Vector> globalGradient = delegate(Point[] points, Vector[] result)
-            {
-                Array.Clear(result, 0, result.Length);
-                foreach (IPointStrategy[] face in faces)
-                {
-                    Point[] localPoints = Array.ConvertAll(face, strategy => strategy.GetPoint(points));
-                    Vector[] localGradientValue = new Vector[3];
-                    faceGradient(localPoints, localGradientValue);
-                    double weight = localPoints[0].AreaTo(localPoints[1], localPoints[2]);
-                    weight = 1;
-                    for (int i = 0; i < 3; i++)
-                    {
-                        face[i].AddVector(result, localGradientValue[i]);
-                    }
-                }
-            };
-
-            FunctionOptimization<Point, Vector>.GradientDescent(globalEnergy, globalGradient, buffer, 1e-8, 100,
-                monitor);
+            UGslMultimin.Optimize(globalFunction, buffer, 1e-7, 100, monitor);
 
             for (int i = 0; i < verticesArray.Length; i++)
             {
@@ -351,6 +323,48 @@ namespace Matveev.Mtk.Library
             }
 
             #endregion
+        }
+
+        private class GlobalPointsFunctionWithGradient : AbstractPointsFunctionWithGradient
+        {
+            private readonly IPointStrategy[][] _faces;
+            private readonly Func<Point[], double> _faceValue;
+            private readonly GradientDelegate<Point, Vector> _faceGradient;
+
+            public GlobalPointsFunctionWithGradient(Func<Point[], double> faceValue,
+                GradientDelegate<Point, Vector> faceGradient,
+                IPointStrategy[][] faces)
+            {
+                _faces = faces;
+                _faceValue = faceValue;
+                _faceGradient = faceGradient;
+            }
+
+            public override double Evaluate(Point[] argument)
+            {
+                double result = 0;
+                foreach (IPointStrategy[] face in _faces)
+                {
+                    Point[] localPoints = Array.ConvertAll(face, strategy => strategy.GetPoint(argument));
+                    result += _faceValue(localPoints);
+                }
+                return result;
+            }
+
+            public override void EvaluateGradient(Point[] argument, Vector[] result)
+            {
+                Array.Clear(result, 0, result.Length);
+                foreach (IPointStrategy[] face in _faces)
+                {
+                    Point[] localPoints = Array.ConvertAll(face, strategy => strategy.GetPoint(argument));
+                    Vector[] localGradientValue = new Vector[3];
+                    _faceGradient(localPoints, localGradientValue);
+                    for (int i = 0; i < 3; i++)
+                    {
+                        face[i].AddVector(result, localGradientValue[i]);
+                    }
+                }
+            }
         }
     }
 }

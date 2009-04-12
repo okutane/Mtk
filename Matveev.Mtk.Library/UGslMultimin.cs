@@ -14,23 +14,14 @@ namespace Matveev.Mtk.Library
 
     public class UGslMultimin
     {
-        public static void Optimize(Func<Point[], double> f, GradientDelegate<Point, Vector> grad,
+        public static void Optimize(IPointsFunctionWithGradient function,
             Point[] x, double eps, int maxIterations, IProgressMonitor monitor)
         {
             GslVector origin = new GslVector(x.Length * 3);
             ToGslVector(x, origin);
             Point[] pointBuffer = new Point[x.Length];
             Vector[] resultBuffer = new Vector[x.Length];
-            Fdf fdf = new Fdf(delegate(GslVector point)
-            {
-                FromGslVector(pointBuffer, point);
-                return f(pointBuffer);
-            }, delegate(GslVector point, GslVector result)
-            {
-                FromGslVector(pointBuffer, point);
-                grad(pointBuffer, resultBuffer);
-                ToGslVector(resultBuffer, result);
-            }, x.Length * 3);
+            Fdf fdf = new Fdf(new FunctionAdapter(function, x.Length), x.Length * 3);
             FdfMinimizer minimizer = new FdfMinimizer(AlgorithmWithDerivatives.VectorBfgs2, x.Length * 3);
             minimizer.Initialize(fdf, origin, 1, 0.1);
             int k = 0;
@@ -49,7 +40,7 @@ namespace Matveev.Mtk.Library
             FromGslVector(x, minimum);
         }
 
-        public static void Optimize(Func<Point[], double> f, Point[] x, double eps, int maxIterations,                          IProgressMonitor monitor)
+        public static void Optimize(Func<Point[], double> f, Point[] x, double eps, int maxIterations, IProgressMonitor monitor)
         {
             GslVector origin = new GslVector(x.Length * 3);
             ToGslVector(x, origin);
@@ -106,6 +97,49 @@ namespace Matveev.Mtk.Library
                 to[3 * i + 1] = from[i].y;
                 to[3 * i + 2] = from[i].z;
             }
+        }
+
+        class FunctionAdapter : IFunctionWithGradient
+        {
+            private readonly IPointsFunctionWithGradient _function;
+            private readonly Point[] _argumentBuffer;
+            private readonly Vector[] _gradientBuffer;
+
+            public FunctionAdapter(IPointsFunctionWithGradient function, int size)
+            {
+                _function = function;
+                _argumentBuffer = new Point[size];
+                _gradientBuffer = new Vector[size];
+            }
+
+            #region IFunctionWithGradient Members
+
+            public void EvaluateGradient(GslVector argument, GslVector result)
+            {
+                FromGslVector(_argumentBuffer, argument);
+                _function.EvaluateGradient(_argumentBuffer, _gradientBuffer);
+                ToGslVector(_gradientBuffer, result);
+            }
+
+            public double EvaluateValueWithGradient(GslVector argument, GslVector result)
+            {
+                FromGslVector(_argumentBuffer, argument);
+                double resultValue = _function.EvaluateValueWithGradient(_argumentBuffer, _gradientBuffer);
+                ToGslVector(_gradientBuffer, result);
+                return resultValue;
+            }
+
+            #endregion
+
+            #region IFunction Members
+
+            public double Evaluate(GslVector argument)
+            {
+                FromGslVector(_argumentBuffer, argument);
+                return _function.Evaluate(_argumentBuffer);
+            }
+
+            #endregion
         }
     }
 }
