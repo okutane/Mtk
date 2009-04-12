@@ -276,7 +276,14 @@ namespace UI
                 _mesh = polygonizer.Create(Configuration.MeshFactory, surface, Configuration.BoundingBox, N, N, N);
                 visualizer.Mesh = _mesh;
                 _field = surface;
-                Colorers.MaxArea = _mesh.Faces.Max(f => f.Area());
+                if (_mesh.Faces.FirstOrDefault() != null)
+                {
+                    Colorers.MaxArea = _mesh.Faces.Max(f => f.Area());
+                }
+                else
+                {
+                    Colorers.MaxArea = 0;
+                }
             };
             meshActions.Add(btnImplicit);
 
@@ -306,7 +313,6 @@ namespace UI
                 Action<IProgressMonitor> action = delegate(IProgressMonitor monitor)
                 {
                     OptimizeMesh.ImproveVertexPositions(_mesh, _field, monitor);
-                    this.Invalidate();
                     MessageBox.Show("Done");
                 };
                 algorithmExecutionWorker.RunWorkerAsync(action);
@@ -316,9 +322,12 @@ namespace UI
             btnOptimizeAll.Text = "Optimize";
             btnOptimizeAll.Click += delegate(object sender, EventArgs e)
             {
-                OptimizeMesh.OptimizeImplicit(_mesh, _field, epsilon, alpha);
-                this.Invalidate();
-                MessageBox.Show("Done");
+                Action<IProgressMonitor> action = delegate(IProgressMonitor monitor)
+                {
+                    OptimizeMesh.OptimizeImplicit(_mesh, _field, epsilon, alpha, monitor);
+                    MessageBox.Show("Done");
+                };
+                algorithmExecutionWorker.RunWorkerAsync(action);
             };
             meshActions.Add(btnOptimizeAll);
 
@@ -354,6 +363,63 @@ namespace UI
                 };
                 meshActions.Add(btnDynamicOptimization);
             }
+
+            {
+                Button btnEdgeLengthSquareOptimization = new Button();
+                btnEdgeLengthSquareOptimization.Text = "Edge length square";
+                btnEdgeLengthSquareOptimization.Click += delegate(object sender, EventArgs e)
+                {
+                    Action<IProgressMonitor> action = delegate(IProgressMonitor pm)
+                    {
+                        OptimizeMesh.ImproveVertexPositions(_mesh.Vertices,
+                            delegate(Point[] points)
+                            {
+                                Vector[] edges = new Vector[3];
+                                for (int i = 0; i < 3; i++)
+                                {
+                                    edges[i] = points[(i + 1) % 3] - points[i];
+                                }
+                                return edges.Sum(edge => edge * edge);
+                            },
+                            delegate(Point[] points, Vector[] result)
+                            {
+                                result[0] = -2 * ((points[1] - points[0]) + (points[2] - points[0]));
+                                result[1] = -2 * ((points[0] - points[1]) + (points[2] - points[1]));
+                                result[2] = -2 * ((points[0] - points[2]) + (points[1] - points[2]));
+                            }, pm);
+                    };
+                    algorithmExecutionWorker.RunWorkerAsync(action);
+                };
+                meshActions.Add(btnEdgeLengthSquareOptimization);
+            }
+
+            {
+                Button btnAreaSquareOptimization = new Button();
+                btnAreaSquareOptimization.Text = "Area square";
+                btnAreaSquareOptimization.Click += delegate(object sender, EventArgs e)
+                {
+                    Action<IProgressMonitor> action = delegate(IProgressMonitor pm)
+                    {
+                        OptimizeMesh.ImproveVertexPositions(_mesh.Vertices,
+                            p => Math.Pow(p[0].AreaTo(p[1], p[2]), 2),
+                            delegate(Point[] points, Vector[] result)
+                            {
+                                Vector[] edges = new Vector[3];
+                                for (int i = 0; i < 3; i++)
+                                {
+                                    edges[i] = points[(i + 1) % 3] - points[i];
+                                }
+                                for (int i = 0; i < 3; i++)
+                                {
+                                    result[i] = (edges[1] ^ edges[2]) ^ edges[(i + 1) % 3];
+                                }
+                            }, pm);
+                    };
+                    algorithmExecutionWorker.RunWorkerAsync(action);
+                };
+                meshActions.Add(btnAreaSquareOptimization);
+            }
+
             Button btnMarkNonregular = new Button();
             btnMarkNonregular.Text = "Mark nonreg";
             btnMarkNonregular.Click += delegate(object sender, EventArgs e)
@@ -624,6 +690,10 @@ namespace UI
         private void algorithmExecutionWorker_RunWorkerCompleted(object sender,
             RunWorkerCompletedEventArgs e)
         {
+            if (e.Error != null)
+            {
+                MessageBox.Show(e.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             visualizer.Invalidate();
         }
 
