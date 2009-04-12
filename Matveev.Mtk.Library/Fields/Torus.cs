@@ -4,7 +4,7 @@ using Matveev.Mtk.Core;
 
 namespace Matveev.Mtk.Library.Fields
 {
-    public class Torus : IImplicitSurface, IParametrizedSurface, IFaceEnergyProvider
+    public class Torus : AbstractPointsFunctionWithGradient, IImplicitSurface, IParametrizedSurface
     {
         private readonly double _r0; // R 
         private readonly double _r1; // r
@@ -100,9 +100,9 @@ namespace Matveev.Mtk.Library.Fields
 
         #endregion
 
-        #region IFaceEnergyProvider Members
+        #region IPointsFunctionWithGradient Members
 
-        public double FaceEnergy(Point[] points)
+        public override double Evaluate(Point[] points)
         {
             Vector x0 = points[0];
             Vector e1 = points[1] - x0;
@@ -167,10 +167,10 @@ namespace Matveev.Mtk.Library.Fields
                 + a20 * a40 / 0.28e2 + a20 * a30 / 0.21e2 + a20 * a20 / 0.30e2 + a30 * a30 / 0.56e2
                 + a30 * a40 / 0.36e2 + a40 * a40 / 0.90e2 + a01 * a02 / 0.10e2 + a22 * a04 / 0.1260e4
                 + a12 * a04 / 0.252e3 + a02 * a04 / 0.28e2 + a00 * a04 / 0.15e2 + a13 * a13 / 0.2520e4;
-            return cg;
+            return cg * 2;
         }
 
-        public void FaceEnergyGradient(Point[] points, Vector[] result)
+        public override void EvaluateGradient(Point[] points, Vector[] result)
         {
             throw new NotImplementedException();
         }
@@ -179,6 +179,7 @@ namespace Matveev.Mtk.Library.Fields
 
         public static readonly Torus Sample = new Torus(0.5, 0.1);
         public static readonly Torus Unit = new Torus(0.6, 0.4);
+        public static readonly Torus Triple = new Torus(1.8, 1.2);
         public static readonly Torus WithoutHole = new Torus(0.3, 0.7);
     }
 }

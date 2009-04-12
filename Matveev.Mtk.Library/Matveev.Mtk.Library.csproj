@@ -94,7 +94,6 @@
     <Compile Include="HEVertex.cs" />
     <Compile Include="HEVertexBase.cs" />
     <Compile Include="HoppeOptimization.cs" />
-    <Compile Include="IFaceEnergyProvider.cs" />
     <Compile Include="IImplicitSurfacePolygonizer.cs" />
     <Compile Include="IPointsFunctionWithGradient.cs" />
     <Compile Include="OneDimensionalOptimization.cs" />

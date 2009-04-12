@@ -55,7 +55,7 @@ namespace Matveev.Mtk.Tests
                 EvalFunc = function
             };
             Func<Point[], double> approximation =
-                TriangleImplicitApproximations.GetApproximation(surface, name).FaceEnergy;
+                TriangleImplicitApproximations.GetApproximation(surface, name).Evaluate;
             Assert.AreEqual(expected, approximation(_TRIANGLE1), delta);
         }
 

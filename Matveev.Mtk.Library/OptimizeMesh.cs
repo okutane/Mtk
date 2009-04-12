@@ -15,42 +15,34 @@ namespace Matveev.Mtk.Library
         public static void ImproveVertexPositions(IEnumerable<Vertex> vertices, IImplicitSurface surface,
             IProgressMonitor monitor)
         {
-            Func<Point[], double> faceEnergy;
-            GradientDelegate<Point, Vector> localGradient;
-            GetLocalFunctions(surface, out faceEnergy, out localGradient);
-            ImproveVertexPositions(vertices, faceEnergy, localGradient, monitor);
+            IPointsFunctionWithGradient localFunction = GetLocalFunctions(surface);
+            ImproveVertexPositions(vertices, localFunction, monitor);
         }
 
-        private static void GetLocalFunctions(IImplicitSurface surface, out Func<Point[], double> faceEnergy,
-            out GradientDelegate<Point, Vector> localGradient)
+        private static IPointsFunctionWithGradient GetLocalFunctions(IImplicitSurface surface)
         {
-            /*Func<Point[], double> surfaceToMesh = TriangleImplicitApproximations.GetApproximation(surface.Eval,
-                "square");
-
-            Vector[] normal = new Vector[1];
-            Func<Point, double> normalDifference = p => (Vector.Normalize(surface.Grad(p)) - normal[0]).Norm;
-            Func<Point[], double> triangleNormalDifference =
-                TriangleImplicitApproximations.GetApproximation(normalDifference, "square");
-            faceEnergy = delegate(Point[] points)
-            {
-                normal[0] = Vector.Normalize(points[2] - points[0] ^ points[1] - points[0]);
-                return surfaceToMesh(points) + triangleNormalDifference(points);
-            };*/
-            IFaceEnergyProvider energyProvider = TriangleImplicitApproximations.GetApproximation(surface, "square");
+            IPointsFunctionWithGradient energyProvider =
+                TriangleImplicitApproximations.GetApproximation(surface, "square");
             if (false)
             {
-                IFaceEnergyProvider preciseEnergyProvider = surface as IFaceEnergyProvider;
+                IPointsFunctionWithGradient preciseEnergyProvider = surface as IPointsFunctionWithGradient;
                 if (preciseEnergyProvider != null)
                 {
                     energyProvider = preciseEnergyProvider;
                 }
             }
-            faceEnergy = energyProvider.FaceEnergy;
-            localGradient = energyProvider.FaceEnergyGradient;
+            return energyProvider;
         }
 
-        public static void ImproveVertexPositions(IEnumerable<Vertex> vertices, Func<Point[], double> faceValue,
-            GradientDelegate<Point, Vector> faceGradient, IProgressMonitor monitor)
+        public static void ImproveVertexPositions(IEnumerable<Vertex> vertices, Func<Point[], double> evaluate,
+            GradientDelegate<Point, Vector> evaluateGradient, IProgressMonitor monitor)
+        {
+            ImproveVertexPositions(vertices, new LocalPointsFunctionWithGradient(evaluate, evaluateGradient),
+                monitor);
+        }
+
+        public static void ImproveVertexPositions(IEnumerable<Vertex> vertices,
+            IPointsFunctionWithGradient localFunction, IProgressMonitor monitor)
         {
             Vertex[] verticesArray = vertices.ToArray();
 
@@ -84,8 +76,8 @@ namespace Matveev.Mtk.Library
 
             Point[] buffer = Array.ConvertAll(verticesArray, v => v.Point);
 
-            GlobalPointsFunctionWithGradient globalFunction = new GlobalPointsFunctionWithGradient(faceValue,
-                faceGradient, faces);
+            GlobalPointsFunctionWithGradient globalFunction = new GlobalPointsFunctionWithGradient(localFunction,
+                faces);
 
             UGslMultimin.Optimize(globalFunction, buffer, 1e-7, 100, monitor);
 
@@ -108,7 +100,7 @@ namespace Matveev.Mtk.Library
             Dictionary<EdgeTransform, int> numbersOfUses = new Dictionary<EdgeTransform, int>();
 
             Func<Point[], double> faceEnergy =
-                TriangleImplicitApproximations.GetApproximation(field, "square").FaceEnergy;
+                TriangleImplicitApproximations.GetApproximation(field, "square").Evaluate;
             if (field is QuadraticForm)
             {
                 faceEnergy = ((QuadraticForm)field).FaceDistance;
@@ -325,19 +317,39 @@ namespace Matveev.Mtk.Library
             #endregion
         }
 
+        private class LocalPointsFunctionWithGradient : AbstractPointsFunctionWithGradient
+        {
+            private readonly Func<Point[], double> _evaluate;
+            private readonly GradientDelegate<Point, Vector> _evaluateGradient;
+
+            public LocalPointsFunctionWithGradient(Func<Point[], double> evaluate,
+                GradientDelegate<Point, Vector> evaluateGradient)
+            {
+                _evaluate = evaluate;
+                _evaluateGradient = evaluateGradient;
+            }
+
+            public override double Evaluate(Point[] argument)
+            {
+                return _evaluate(argument);
+            }
+
+            public override void EvaluateGradient(Point[] argument, Vector[] result)
+            {
+                _evaluateGradient(argument, result);
+            }
+        }
+
         private class GlobalPointsFunctionWithGradient : AbstractPointsFunctionWithGradient
         {
             private readonly IPointStrategy[][] _faces;
-            private readonly Func<Point[], double> _faceValue;
-            private readonly GradientDelegate<Point, Vector> _faceGradient;
+            private readonly IPointsFunctionWithGradient _localFunction;
 
-            public GlobalPointsFunctionWithGradient(Func<Point[], double> faceValue,
-                GradientDelegate<Point, Vector> faceGradient,
+            public GlobalPointsFunctionWithGradient(IPointsFunctionWithGradient localFunction,
                 IPointStrategy[][] faces)
             {
                 _faces = faces;
-                _faceValue = faceValue;
-                _faceGradient = faceGradient;
+                _localFunction = localFunction;
             }
 
             public override double Evaluate(Point[] argument)
@@ -346,7 +358,7 @@ namespace Matveev.Mtk.Library
                 foreach (IPointStrategy[] face in _faces)
                 {
                     Point[] localPoints = Array.ConvertAll(face, strategy => strategy.GetPoint(argument));
-                    result += _faceValue(localPoints);
+                    result += _localFunction.Evaluate(localPoints);
                 }
                 return result;
             }
@@ -358,7 +370,7 @@ namespace Matveev.Mtk.Library
                 {
                     Point[] localPoints = Array.ConvertAll(face, strategy => strategy.GetPoint(argument));
                     Vector[] localGradientValue = new Vector[3];
-                    _faceGradient(localPoints, localGradientValue);
+                    _localFunction.EvaluateValueWithGradient(localPoints, localGradientValue);
                     for (int i = 0; i < 3; i++)
                     {
                         face[i].AddVector(result, localGradientValue[i]);
