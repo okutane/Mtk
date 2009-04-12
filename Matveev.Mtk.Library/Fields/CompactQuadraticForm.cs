@@ -81,27 +81,15 @@ namespace Matveev.Mtk.Library.Fields
 
         public void FaceEnergyGradient(Point[] points, Vector[] result)
         {
-            double[] grad = GradOfFaceDistance(points);
-            result[0] = new Vector(grad[0], grad[1], grad[2]);
-            result[1] = new Vector(grad[3], grad[4], grad[5]);
-            result[2] = new Vector(grad[6], grad[7], grad[8]);
-        }
-
-        #endregion
-
-        [Obsolete("Inline and optimize or use FaceEnergyGradient instead")]
-        public double[] GradOfFaceDistance(Point[] points)
-        {
+            Array.Clear(result, 0, 3);
             double[] axx = Array.ConvertAll(points, p => EvaluateA(p, p));
             double[] axy = new double[] { 2 * EvaluateA(points[1], points[2]), 2 * EvaluateA(points[0], points[2]),
                 2 * EvaluateA(points[0], points[1])};
-            double[][] Ax = Array.ConvertAll<Point, double[]>(points, EvaluateAx);
-            double[][] gradAx = Array.ConvertAll<Point, double[]>(points, GradAx);
+            Vector[] Ax = Array.ConvertAll<Point, Vector>(points, EvaluateAx);
+            Vector[] gradAx = Array.ConvertAll<Point, Vector>(points, GradAx);
 
             double[] b = Array.ConvertAll<Point, double>(points, EvaluateB);
             double c = _c;
-
-            double[] grad = new double[9];
 
             double coeff;
 
@@ -113,30 +101,23 @@ namespace Matveev.Mtk.Library.Fields
                 // aii
                 coeff = 2 * axx[i0] / 15 + c / 0.3e1 + axx[i1] / 0.45e2 + b[i1] / 0.15e2 + b[i0] / 0.5e1
                     + axy[i1] / 0.30e2 + axy[i2] / 0.30e2 + axy[i0] / 0.90e2 + b[i2] / 0.15e2 + axx[i2] / 0.45e2;
-                grad[3 * i0] += coeff * gradAx[i0][0];
-                grad[3 * i0 + 1] += coeff * gradAx[i0][1];
-                grad[3 * i0 + 2] += coeff * gradAx[i0][2];
+                result[i0] += coeff * gradAx[i0];
 
                 // axy ii
                 coeff = axy[i0] / 45 + b[i1] / 0.15e2 + axx[i0] / 0.90e2 + c / 0.6e1 + axx[i1] / 0.30e2
                     + axy[i2] / 0.90e2 + axx[i2] / 0.30e2 + b[i2] / 0.15e2 + axy[i1] / 0.90e2 + b[i0] / 0.30e2;
-                grad[3 * i1] += 2 * coeff * Ax[i2][0];
-                grad[3 * i1 + 1] += 2 * coeff * Ax[i2][1];
-                grad[3 * i1 + 2] += 2 * coeff * Ax[i2][2];
-                grad[3 * i2] += 2 * coeff * Ax[i1][0];
-                grad[3 * i2 + 1] += 2 * coeff * Ax[i1][1];
-                grad[3 * i2 + 2] += 2 * coeff * Ax[i1][2];
+                result[i1] += 2 * coeff * Ax[i2];
+                result[i2] += 2 * coeff * Ax[i1];
 
                 // b[i]
                 coeff = b[i0] / 3 + axx[i1] / 0.15e2 + b[i2] / 0.6e1 + b[i1] / 0.6e1 + axx[i0] / 0.5e1
-                    + axy[i2] / 0.15e2 + axy[i0] / 0.30e2 + axy[i1] / 0.15e2 + axx[i2] / 0.15e2 + 0.2e1 / 0.3e1 * c;
-                grad[3 * i0] += coeff * _b1;
-                grad[3 * i0 + 1] += coeff * _b2;
-                grad[3 * i0 + 2] += coeff * _b3;
+                    + axy[i2] / 0.15e2 + axy[i0] / 0.30e2 + axy[i1] / 0.15e2 + axx[i2] / 0.15e2
+                    + 0.2e1 / 0.3e1 * c;
+                result[i0] += coeff * new Vector(_b1, _b2, _b3);
             }
-
-            return grad;
         }
+
+        #endregion
 
         private double EvaluateA(Point x, Point y)
         {
@@ -145,22 +126,22 @@ namespace Matveev.Mtk.Library.Fields
                 + _a13 * x.Z * y.X + _a23 * x.Z * y.Y + _a33 * x.Z * y.Z;
         }
 
-        private double[] EvaluateAx(Point p)
+        private Vector EvaluateAx(Point p)
         {
-            return new double[] {
+            return new Vector (
                 _a11 * p.X + _a12 * p.Y + _a13 * p.Z,
                 _a12 * p.X + _a22 * p.Y + _a23 * p.Z,
-                _a13 * p.X + _a23 * p.Y + _a33 * p.Z,
-            };
+                _a13 * p.X + _a23 * p.Y + _a33 * p.Z
+            );
         }
 
-        private double[] GradAx(Point p)
+        private Vector GradAx(Point p)
         {
-            return new double[] {
+            return new Vector (
                 2 * _a11 * p.X + _a12 * p.Y + _a13 * p.Z,
                 _a12 * p.X + 2 * _a22 * p.Y + _a23 * p.Z,
-                _a13 * p.X + _a23 * p.Y + 2 * _a33 * p.Z,
-            };
+                _a13 * p.X + _a23 * p.Y + 2 * _a33 * p.Z
+            );
         }
 
         private double EvaluateB(Point p)

@@ -53,7 +53,9 @@ namespace Matveev.Mtk.Tests
             for (int i = 0; i < 3; i++)
             {
                 Assert.AreEqual(1, constant.FaceEnergy(triangle));
-                CollectionAssert.AreEqual(new double[9], constant.GradOfFaceDistance(triangle));
+                Vector[] actual = new Vector[3];
+                constant.FaceEnergyGradient(triangle, actual);
+                CollectionAssert.AreEqual(new Vector[3], actual);
                 Point tmp = triangle[0];
                 triangle[0] = triangle[1];
                 triangle[1] = triangle[2];
@@ -69,8 +71,10 @@ namespace Matveev.Mtk.Tests
             for (int i = 0; i < 3; i++)
             {
                 Assert.AreEqual(4, onlyLinear.FaceEnergy(triangle));
-                CollectionAssert.AreEqual(new double[] { 0, 0, 4.0 / 3, 0, 0, 4.0 / 3, 0, 0, 4.0 / 3 },
-                    onlyLinear.GradOfFaceDistance(triangle), new MyComparer());
+                Vector[] actual = new Vector[3];
+                onlyLinear.FaceEnergyGradient(triangle, actual);
+                CollectionAssert.AreEqual(new Vector[] { new Vector(0, 0, 4.0 / 3), new Vector(0, 0, 4.0 / 3),
+                    new Vector(0, 0, 4.0 / 3) }, actual, new MyComparer());
                 Point tmp = triangle[0];
                 triangle[0] = triangle[1];
                 triangle[1] = triangle[2];
@@ -85,8 +89,10 @@ namespace Matveev.Mtk.Tests
             for (int i = 0; i < 3; i++)
             {
                 Assert.AreEqual(9, linear.FaceEnergy(triangle));
-                CollectionAssert.AreEqual(new double[] { 0, 0, 2, 0, 0, 2, 0, 0, 2 },
-                    linear.GradOfFaceDistance(triangle));
+                Vector[] actual = new Vector[3];
+                linear.FaceEnergyGradient(triangle, actual);
+                CollectionAssert.AreEqual(new Vector[] { new Vector(0, 0, 2), new Vector(0, 0, 2),
+                    new Vector(0, 0, 2) }, actual);
                 Point tmp = triangle[0];
                 triangle[0] = triangle[1];
                 triangle[1] = triangle[2];
@@ -115,8 +121,10 @@ namespace Matveev.Mtk.Tests
             for (int i = 0; i < 3; i++)
             {
                 Assert.AreEqual(16, _SQUARE.FaceEnergy(triangle));
-                CollectionAssert.AreEqual(new double[] { 0, 0, 32.0 / 3, 0, 0, 32.0 / 3, 0, 0, 32.0 / 3 },
-                    _SQUARE.GradOfFaceDistance(triangle), new MyComparer());
+                Vector[] actual = new Vector[3];
+                _SQUARE.FaceEnergyGradient(triangle, actual);
+                CollectionAssert.AreEqual(new Vector[] { new Vector(0, 0, 32.0 / 3), new Vector(0, 0, 32.0 / 3),
+                    new Vector(0, 0, 32.0 / 3) }, actual, new MyComparer());
                 Point tmp = triangle[0];
                 triangle[0] = triangle[1];
                 triangle[1] = triangle[2];
@@ -144,14 +152,18 @@ namespace Matveev.Mtk.Tests
 
             public int Compare(object x, object y)
             {
-                double left = (double)x;
-                double right = (double)y;
+                Vector left = (Vector)x;
+                Vector right = (Vector)y;
 
-                if (Math.Abs(left - right) < 1e-4)
+                for (int i = 0; i < 3; i++)
                 {
-                    return 0;
+                    int value = left[i].CompareTo(right[i]);
+                    if (value != 0)
+                    {
+                        return value;
+                    }
                 }
-                return (int)(Math.Sign(left - right) * Math.Ceiling(Math.Abs(left - right)));
+                return 0;
             }
 
             #endregion
