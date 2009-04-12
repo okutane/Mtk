@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractPointsFunctionWithGradient.cs" />
     <Compile Include="Bloomenthal.cs" />
     <Compile Include="BoundingBox.cs" />
     <Compile Include="CompositeEnergy.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="HoppeOptimization.cs" />
     <Compile Include="IFaceEnergyProvider.cs" />
     <Compile Include="IImplicitSurfacePolygonizer.cs" />
+    <Compile Include="IPointsFunctionWithGradient.cs" />
     <Compile Include="OneDimensionalOptimization.cs" />
     <Compile Include="LocalGradientProvider.cs" />
     <Compile Include="MatrixBuilder.cs" />
