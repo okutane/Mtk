@@ -7,7 +7,7 @@ using Matveev.Mtk.Core;
 
 namespace Matveev.Mtk.Library
 {
-    abstract class AbstractPointsFunctionWithGradient : IPointsFunctionWithGradient
+    public abstract class AbstractPointsFunctionWithGradient : IPointsFunctionWithGradient
     {
         #region IPointsFunctionWithGradient Members
 

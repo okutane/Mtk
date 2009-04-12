@@ -7,7 +7,7 @@ using Matveev.Mtk.Core;
 
 namespace Matveev.Mtk.Library.Fields
 {
-    public class CompactQuadraticForm : IImplicitSurface, IFaceEnergyProvider
+    public class CompactQuadraticForm : AbstractPointsFunctionWithGradient, IImplicitSurface
     {
         private readonly double _a11;
         private readonly double _a12;
@@ -51,9 +51,9 @@ namespace Matveev.Mtk.Library.Fields
 
         #endregion
 
-        #region IFaceEnergyProvider Members
+        #region IPointsFunctionWithGradient Members
 
-        public double FaceEnergy(Point[] points)
+        public override double Evaluate(Point[] points)
         {
             Point x0 = points[0];
             Point e1 = points[1] - x0;
@@ -79,7 +79,7 @@ namespace Matveev.Mtk.Library.Fields
             return faceDistance;
         }
 
-        public void FaceEnergyGradient(Point[] points, Vector[] result)
+        public override void EvaluateGradient(Point[] points, Vector[] result)
         {
             Array.Clear(result, 0, 3);
             double[] axx = Array.ConvertAll(points, p => EvaluateA(p, p));

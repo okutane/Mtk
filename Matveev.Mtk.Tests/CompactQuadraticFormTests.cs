@@ -52,9 +52,9 @@ namespace Matveev.Mtk.Tests
             CompactQuadraticForm constant = new CompactQuadraticForm(new double[3, 3], new double[3], 1);
             for (int i = 0; i < 3; i++)
             {
-                Assert.AreEqual(1, constant.FaceEnergy(triangle));
+                Assert.AreEqual(1, constant.Evaluate(triangle));
                 Vector[] actual = new Vector[3];
-                constant.FaceEnergyGradient(triangle, actual);
+                constant.EvaluateGradient(triangle, actual);
                 CollectionAssert.AreEqual(new Vector[3], actual);
                 Point tmp = triangle[0];
                 triangle[0] = triangle[1];
@@ -70,9 +70,9 @@ namespace Matveev.Mtk.Tests
                 0);
             for (int i = 0; i < 3; i++)
             {
-                Assert.AreEqual(4, onlyLinear.FaceEnergy(triangle));
+                Assert.AreEqual(4, onlyLinear.Evaluate(triangle));
                 Vector[] actual = new Vector[3];
-                onlyLinear.FaceEnergyGradient(triangle, actual);
+                onlyLinear.EvaluateGradient(triangle, actual);
                 CollectionAssert.AreEqual(new Vector[] { new Vector(0, 0, 4.0 / 3), new Vector(0, 0, 4.0 / 3),
                     new Vector(0, 0, 4.0 / 3) }, actual, new MyComparer());
                 Point tmp = triangle[0];
@@ -88,9 +88,9 @@ namespace Matveev.Mtk.Tests
             CompactQuadraticForm linear = new CompactQuadraticForm(new double[3, 3], new double[] { 0, 0, 1 }, 1);
             for (int i = 0; i < 3; i++)
             {
-                Assert.AreEqual(9, linear.FaceEnergy(triangle));
+                Assert.AreEqual(9, linear.Evaluate(triangle));
                 Vector[] actual = new Vector[3];
-                linear.FaceEnergyGradient(triangle, actual);
+                linear.EvaluateGradient(triangle, actual);
                 CollectionAssert.AreEqual(new Vector[] { new Vector(0, 0, 2), new Vector(0, 0, 2),
                     new Vector(0, 0, 2) }, actual);
                 Point tmp = triangle[0];
@@ -107,7 +107,7 @@ namespace Matveev.Mtk.Tests
                 new double[,] { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 1 } }, new double[3], 1);
             for (int i = 0; i < 3; i++)
             {
-                Assert.AreEqual(25, field.FaceEnergy(triangle));
+                Assert.AreEqual(25, field.Evaluate(triangle));
                 Point tmp = triangle[0];
                 triangle[0] = triangle[1];
                 triangle[1] = triangle[2];
@@ -120,9 +120,9 @@ namespace Matveev.Mtk.Tests
         {
             for (int i = 0; i < 3; i++)
             {
-                Assert.AreEqual(16, _SQUARE.FaceEnergy(triangle));
+                Assert.AreEqual(16, _SQUARE.Evaluate(triangle));
                 Vector[] actual = new Vector[3];
-                _SQUARE.FaceEnergyGradient(triangle, actual);
+                _SQUARE.EvaluateGradient(triangle, actual);
                 CollectionAssert.AreEqual(new Vector[] { new Vector(0, 0, 32.0 / 3), new Vector(0, 0, 32.0 / 3),
                     new Vector(0, 0, 32.0 / 3) }, actual, new MyComparer());
                 Point tmp = triangle[0];
@@ -137,7 +137,7 @@ namespace Matveev.Mtk.Tests
         {
             for (int i = 0; i < 3; i++)
             {
-                Assert.AreEqual(25, _COMPLEX.FaceEnergy(triangle),
+                Assert.AreEqual(25, _COMPLEX.Evaluate(triangle),
                     string.Format("p0={0}, p1={1}, p2={2}", triangle[0], triangle[1], triangle[2]));
                 Point tmp = triangle[0];
                 triangle[0] = triangle[1];

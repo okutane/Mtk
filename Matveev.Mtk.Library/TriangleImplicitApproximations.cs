@@ -9,7 +9,7 @@ namespace Matveev.Mtk.Library
 {
     public static class TriangleImplicitApproximations
     {
-        private delegate IFaceEnergyProvider FactoryMethod(IImplicitSurface surface);
+        private delegate IPointsFunctionWithGradient FactoryMethod(IImplicitSurface surface);
 
         private static readonly IDictionary<string, FactoryMethod> _FACTORY
             = new Dictionary<string, FactoryMethod>();
@@ -29,27 +29,28 @@ namespace Matveev.Mtk.Library
             }
         }
 
-        public static IFaceEnergyProvider GetApproximation(IImplicitSurface surface, string approximationName)
+        public static IPointsFunctionWithGradient GetApproximation(IImplicitSurface surface,
+            string approximationName)
         {
             return _FACTORY[approximationName](surface);
         }
 
-        private static IFaceEnergyProvider GetLinearApproximation(IImplicitSurface surface)
+        private static IPointsFunctionWithGradient GetLinearApproximation(IImplicitSurface surface)
         {
             return new LinearApproximation(surface);
         }
 
-        private static IFaceEnergyProvider GetSquareApproximation(IImplicitSurface surface)
+        private static IPointsFunctionWithGradient GetSquareApproximation(IImplicitSurface surface)
         {
             return new SquareApproximation(surface);
         }
 
-        private static IFaceEnergyProvider GetCubicApproximation(IImplicitSurface surface)
+        private static IPointsFunctionWithGradient GetCubicApproximation(IImplicitSurface surface)
         {
             return new CubicApproximation(surface);
         }
 
-        private abstract class ApproximationBase : IFaceEnergyProvider
+        private abstract class ApproximationBase : AbstractPointsFunctionWithGradient
         {
             protected readonly IImplicitSurface _surface;
             private readonly GradientDelegate<Point, Vector> _localGradient;
@@ -57,16 +58,14 @@ namespace Matveev.Mtk.Library
             protected ApproximationBase(IImplicitSurface surface)
             {
                 _surface = surface;
-                _localGradient = LocalGradientProvider.GetNumericalGradient2(FaceEnergy, 1e-6);
+                _localGradient = LocalGradientProvider.GetNumericalGradient2(Evaluate, 1e-6);
             }
 
-            #region IFaceEnergyProvider Members
+            #region IPointsFunctionWithGradient Members
 
-            public abstract double FaceEnergy(Point[] points);
-
-            public virtual void FaceEnergyGradient(Point[] points, Vector[] result)
+            public override void EvaluateGradient(Point[] argument, Vector[] result)
             {
-                _localGradient(points, result);
+                _localGradient(argument, result);
             }
 
             #endregion
@@ -74,11 +73,12 @@ namespace Matveev.Mtk.Library
 
         private class LinearApproximation : ApproximationBase
         {
-            public LinearApproximation(IImplicitSurface surface) : base(surface)
+            public LinearApproximation(IImplicitSurface surface)
+                : base(surface)
             {
             }
 
-            public override double FaceEnergy(Point[] points)
+            public override double Evaluate(Point[] points)
             {
                 double f0 = _surface.Eval(points[0]);
                 double f1 = _surface.Eval(points[1]);
@@ -96,7 +96,7 @@ namespace Matveev.Mtk.Library
             {
             }
 
-            public override double FaceEnergy(Point[] points)
+            public override double Evaluate(Point[] points)
             {
                 double f0 = _surface.Eval(points[0]);
                 double f1 = _surface.Eval(points[1]);
@@ -111,6 +111,32 @@ namespace Matveev.Mtk.Library
                 sum /= 90;
                 return sum;
             }
+
+            /*public override void FaceEnergyGradient(Point[] points, Vector[] result)
+            {
+                Point p3 = points[0].Interpolate(points[1], 0.5);
+                Point p4 = points[0].Interpolate(points[2], 0.5);
+                Point p5 = points[1].Interpolate(points[2], 0.5);
+                double f0 = _surface.Eval(points[0]);
+                double f1 = _surface.Eval(points[1]);
+                double f2 = _surface.Eval(points[2]);
+                double f3 = _surface.Eval(p3);
+                double f4 = _surface.Eval(p4);
+                double f5 = _surface.Eval(p5);
+                Vector grad0 = _surface.Grad(points[0]);
+                Vector grad1 = _surface.Grad(points[1]);
+                Vector grad2 = _surface.Grad(points[2]);
+                Vector grad3 = _surface.Grad(p3);
+                Vector grad4 = _surface.Grad(p4);
+                Vector grad5 = _surface.Grad(p5);
+
+                result[0] = (2 * f0 / 60 - (f1 + f2) / 180 - f5 / 45) * grad0
+                    + (4.0 / 45 * (f3 + (f4 + f5) / 2) * grad3 + (f4 + (f3 + f5) / 2) * grad4);
+                result[1] = (2 * f1 / 60 - (f0 + f2) / 180 - f4 / 45) * grad1
+                    + (4.0 / 45 * (f3 + (f4 + f5) / 2) * grad3 + (f5 + (f4 + f5) / 2) * grad5);
+                result[2] = (2 * f2 / 60 - (f0 + f1) / 180 - f3 / 45) * grad2
+                    + (4.0 / 45 * (f4 + (f3 + f5) / 2) * grad4 + (f5 + (f3 + f4) / 2) * grad5);
+            }*/
         }
 
         private class CubicApproximation : ApproximationBase
@@ -120,7 +146,7 @@ namespace Matveev.Mtk.Library
             {
             }
 
-            public override double FaceEnergy(Point[] points)
+            public override double Evaluate(Point[] points)
             {
                 double f0 = _surface.Eval(points[0]);
                 double f1 = _surface.Eval(points[0].Interpolate(points[1], 1.0 / 3.0));
