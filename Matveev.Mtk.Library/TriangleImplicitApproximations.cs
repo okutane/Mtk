@@ -58,7 +58,7 @@ namespace Matveev.Mtk.Library
             protected ApproximationBase(IImplicitSurface surface)
             {
                 _surface = surface;
-                _localGradient = LocalGradientProvider.GetNumericalGradient2(Evaluate, 1e-6);
+                _localGradient = LocalGradientProvider.GetNumericalGradient2(Evaluate, 1e-3);
             }
 
             #region IPointsFunctionWithGradient Members
@@ -87,6 +87,16 @@ namespace Matveev.Mtk.Library
                 sum /= 6;
                 return sum;
             }
+
+            public override void EvaluateGradient(Point[] argument, Vector[] result)
+            {
+                double f0 = _surface.Eval(argument[0]);
+                double f1 = _surface.Eval(argument[1]);
+                double f2 = _surface.Eval(argument[2]);
+                result[0] = (f0 / 3 + f1 / 6 + f2 / 6) * _surface.Grad(argument[0]);
+                result[1] = (f0 / 6 + f1 / 3 + f2 / 6) * _surface.Grad(argument[1]);
+                result[2] = (f0 / 6 + f1 / 6 + f2 / 3) * _surface.Grad(argument[2]);
+            }
         }
 
         private class SquareApproximation : ApproximationBase
@@ -112,7 +122,7 @@ namespace Matveev.Mtk.Library
                 return sum;
             }
 
-            /*public override void FaceEnergyGradient(Point[] points, Vector[] result)
+            public override void EvaluateGradient(Point[] points, Vector[] result)
             {
                 Point p3 = points[0].Interpolate(points[1], 0.5);
                 Point p4 = points[0].Interpolate(points[2], 0.5);
@@ -130,13 +140,16 @@ namespace Matveev.Mtk.Library
                 Vector grad4 = _surface.Grad(p4);
                 Vector grad5 = _surface.Grad(p5);
 
-                result[0] = (2 * f0 / 60 - (f1 + f2) / 180 - f5 / 45) * grad0
-                    + (4.0 / 45 * (f3 + (f4 + f5) / 2) * grad3 + (f4 + (f3 + f5) / 2) * grad4);
-                result[1] = (2 * f1 / 60 - (f0 + f2) / 180 - f4 / 45) * grad1
-                    + (4.0 / 45 * (f3 + (f4 + f5) / 2) * grad3 + (f5 + (f4 + f5) / 2) * grad5);
-                result[2] = (2 * f2 / 60 - (f0 + f1) / 180 - f3 / 45) * grad2
-                    + (4.0 / 45 * (f4 + (f3 + f5) / 2) * grad4 + (f5 + (f3 + f4) / 2) * grad5);
-            }*/
+                result[0] = (f0 / 15 - (f1 + f2) / 90 - 2 * f5 / 45) * grad0
+                    + ((4.0 / 45 * (2 * f3 + (f4 + f5)) - f2 / 45) * grad3)
+                    + ((4.0 / 45 * (2 * f4 + (f3 + f5)) - f1 / 45) * grad4);
+                result[1] = (f1 / 15 - (f0 + f2) / 90 - 2 * f4 / 45) * grad1
+                    + ((4.0 / 45 * (2 * f3 + (f4 + f5)) - f2 / 45) * grad3)
+                    + ((4.0 / 45 * (2 * f5 + (f3 + f4)) - f0 / 45) * grad5);
+                result[2] = (f2 / 15 - (f0 + f1) / 90 - 2 * f3 / 45) * grad2
+                    + ((4.0 / 45 * (2 * f4 + (f3 + f5)) - f1 / 45) * grad4)
+                    + ((4.0 / 45 * (2 * f5 + (f3 + f4)) - f0 / 45) * grad5);
+            }
         }
 
         private class CubicApproximation : ApproximationBase
