@@ -73,6 +73,8 @@
     <Compile Include="EdgeFunctions\Length.cs" />
     <Compile Include="EdgeSplit.cs" />
     <Compile Include="EdgeSwap.cs" />
+    <Compile Include="FaceAreaDecorator.cs" />
+    <Compile Include="FaceFunctions\AreaSquare.cs" />
     <Compile Include="FaceFunctions\DihedralAngles.cs" />
     <Compile Include="FaceFunctions\ImplicitApproximations.cs" />
     <Compile Include="FaceFunctions\MultiplicationFaceFunction.cs" />
@@ -102,6 +104,7 @@
     <Compile Include="MC.cs" />
     <Compile Include="MT6.cs" />
     <Compile Include="OptimizeMesh.cs" />
+    <Compile Include="Parameters.cs" />
     <Compile Include="ParametrizedSurfacePolygonizer.cs" />
     <Compile Include="Plane.cs" />
     <Compile Include="PointProjection.cs" />
