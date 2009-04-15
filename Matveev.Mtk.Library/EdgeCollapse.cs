@@ -47,6 +47,42 @@ namespace Matveev.Mtk.Library
             {
                 return false;
             }
+
+            Point possibleResult = edge.Begin.Point.Interpolate(edge.End.Point, _weight);
+            Vector normal = Vector.Normalize(_weight * edge.Begin.Normal + (1 - _weight) * edge.End.Normal);
+            Plane plane = new Plane(possibleResult, normal);
+            Vertex[] vertices;
+            if (edge.Begin.Type == VertexType.Boundary)
+            {
+                return true;
+                vertices = edge.End.GetVertices(1);
+            }
+            else if (edge.End.Type == VertexType.Boundary)
+            {
+                return true;
+                vertices = edge.Begin.GetVertices(1);
+            }
+            else
+            {
+                return true;
+                vertices = edge.GetVertices(1);
+            }
+            List<double[]> uv =
+                new List<double[]>(vertices.Select(v => plane.Trace(new Ray(v.Point, normal))));
+            for (int i = 0; i < uv.Count; i++)
+            {
+                double[] p0 = uv[i];
+                double[] p1 = uv[(i + 1) % uv.Count];
+                /* Here we need to check that possibleResult is visible from any point of {uv} polygon,
+                 * to check this we're checking that possibleResult is located on the left side of all
+                 * {uv} polygon sides. possibleResult coordinates on the plane is always (0, 0) so they
+                 * aren't present in code anythere. To perform side check we only evaluating z coordinate
+                 * of normal for (0, p0, p1) triangle and comparing it to the zero. */
+                if (p0[0] * p1[1] - p0[1] * p1[0] < 0)
+                {
+                    return false;
+                }
+            }
             return true;
         }
 
