@@ -22,25 +22,50 @@ namespace Matveev.Mtk.Library
             Point[] pointBuffer = new Point[x.Length];
             Vector[] resultBuffer = new Vector[x.Length];
             Fdf fdf = new Fdf(new FunctionAdapter(function, x.Length), x.Length * 3);
-            FdfMinimizer minimizer = new FdfMinimizer(AlgorithmWithDerivatives.VectorBfgs2, x.Length * 3);
-            minimizer.Initialize(fdf, origin, 1, 0.1);
+            FdfMinimizer minimizer =
+                new FdfMinimizer(AlgorithmWithDerivatives.VectorBfgs2, x.Length * 3);
+            minimizer.Initialize(fdf, origin, Parameters.Instance.StepSize,
+                Parameters.Instance.Tolerance);
             int k = 0;
-            do
+            try
             {
-                minimizer.Iterate();
-                if (minimizer.TestGradient(eps))
+                do
                 {
-                    break;
+                    if (minimizer.TestGradient(eps))
+                    {
+                        break;
+                    }
+                    minimizer.Iterate();
+                    monitor.ReportProgress(k++);
                 }
-                monitor.ReportProgress(k);
+                while (k < maxIterations && !monitor.IsCancelled);
             }
-            while (++k < maxIterations /*&& change > eps*/ && !monitor.IsCancelled);
+            catch
+            {
+                FromGslVector(x, minimizer.X);
+                Vector[] gradient = new Vector[x.Length];
+                double value = function.EvaluateValueWithGradient(x, gradient);
+                Console.WriteLine("Value:");
+                Console.WriteLine(value);
+                Console.WriteLine("X:");
+                foreach (Point point in x)
+                {
+                    Console.WriteLine(point);
+                }
+                Console.WriteLine("Gradient:");
+                foreach (Vector vector in gradient)
+                {
+                    Console.WriteLine(vector);
+                }
+                //throw;
+            }
             monitor.ReportProgress(100);
             GslVector minimum = minimizer.X;
             FromGslVector(x, minimum);
         }
 
-        public static void Optimize(Func<Point[], double> f, Point[] x, double eps, int maxIterations, IProgressMonitor monitor)
+        public static void Optimize(Func<Point[], double> f, Point[] x, double eps, int maxIterations, 
+            IProgressMonitor monitor)
         {
             GslVector origin = new GslVector(x.Length * 3);
             ToGslVector(x, origin);
@@ -52,7 +77,7 @@ namespace Matveev.Mtk.Library
                 return f(pointBuffer);
             }, x.Length * 3);
             FMinimizer minimizer = new FMinimizer(AlgorithmWithoutDerivatives.NMSimplex, x.Length * 3);
-            minimizer.Initialize(f2, origin, 0.01);
+            minimizer.Initialize(f2, origin, 0.0001);
             int k = 0;
             do
             {
@@ -61,7 +86,7 @@ namespace Matveev.Mtk.Library
                 {
                     break;
                 }
-                monitor.ReportProgress(k);
+                monitor.ReportProgress(100 * k / maxIterations);
             }
             while (++k < maxIterations && !monitor.IsCancelled);
             monitor.ReportProgress(100);
