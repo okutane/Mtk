@@ -31,6 +31,7 @@ namespace Matveev.Mtk.Library
                     energyProvider = preciseEnergyProvider;
                 }
             }
+            return new FaceAreaDecorator(energyProvider);
             return energyProvider;
         }
 
@@ -76,14 +77,26 @@ namespace Matveev.Mtk.Library
 
             Point[] buffer = Array.ConvertAll(verticesArray, v => v.Point);
 
-            GlobalPointsFunctionWithGradient globalFunction = new GlobalPointsFunctionWithGradient(localFunction,
-                faces);
-
-            UGslMultimin.Optimize(globalFunction, buffer, 1e-7, 100, monitor);
-
-            for (int i = 0; i < verticesArray.Length; i++)
+            IDictionary<IPointStrategy[], double> areas = new Dictionary<IPointStrategy[], double>();
+            foreach (IPointStrategy[] face in faces)
             {
-                verticesArray[i].Point = buffer[i];
+                areas.Add(face, face[0].GetPoint(buffer).AreaTo(face[1].GetPoint(buffer),
+                    face[2].GetPoint(buffer)));
+            }
+
+            GlobalPointsFunctionWithGradient globalFunction = new GlobalPointsFunctionWithGradient(localFunction,
+                faces, areas);
+
+            try
+            {
+                UGslMultimin.Optimize(globalFunction, buffer, 1e-7, 100, monitor);
+            }
+            finally
+            {
+                for (int i = 0; i < verticesArray.Length; i++)
+                {
+                    verticesArray[i].Point = buffer[i];
+                }
             }
         }
 
@@ -95,16 +108,13 @@ namespace Matveev.Mtk.Library
         public static void OptimizeImplicit(Mesh mesh, IImplicitSurface field, double epsilon, double alpha,
             IProgressMonitor monitor)
         {
+            NullProgressMonitor nullMonitor = new NullProgressMonitor();
+
             ICollection<EdgeTransform> transforms = Configuration.EdgeTransforms;
 
             Dictionary<EdgeTransform, int> numbersOfUses = new Dictionary<EdgeTransform, int>();
 
-            Func<Point[], double> faceEnergy =
-                TriangleImplicitApproximations.GetApproximation(field, "square").Evaluate;
-            if (field is QuadraticForm)
-            {
-                faceEnergy = ((QuadraticForm)field).FaceDistance;
-            }
+            Func<Point[], double> faceEnergy = GetLocalFunctions(field).Evaluate;
             Energy energy = new CompositeEnergy(new VertexEnergy(alpha), new FaceEnergy(faceEnergy));
             BoundingBox constraintsProvider = new BoundingBox(-1, 1, -1, 1, -1, 1);
 
@@ -113,7 +123,7 @@ namespace Matveev.Mtk.Library
             validators.Add(new FaceNormalsValidator());
 
             //Этап 1. Проецирование всех вершин сетки на поверхность
-            ProjectAll(mesh, field, epsilon);
+            //ProjectAll(mesh, field, epsilon);
 
             //Этап 2. Улучшение позиций всех вершин сетки
             ImproveVertexPositions(mesh, field, monitor);
@@ -129,8 +139,9 @@ namespace Matveev.Mtk.Library
                 Mesh submesh;
                 Dictionary<Edge, Edge> edgeMap = new Dictionary<Edge, Edge>();
                 double E1, E2;
-                while (candidats.Count != 0)
+                while (candidats.Count != 0 && !monitor.IsCancelled)
                 {
+                    monitor.ReportProgress(100 - 100 * candidats.Count / mesh.EdgesCount);
                     candidat = candidats[rand.Next(candidats.Count - 1)];
                     candidats.RemoveAll(edge => edge == candidat || edge == candidat.Pair);
 
@@ -167,7 +178,7 @@ namespace Matveev.Mtk.Library
                             continue;
                         }
 
-                        ImproveVertexPositions(smResult.GetVertices(0), field, null);
+                        ImproveVertexPositions(smResult.GetVertices(0), field, nullMonitor);
 
                         E2 = energy.Eval(submesh2);
 
@@ -192,14 +203,14 @@ namespace Matveev.Mtk.Library
 
                         MeshPart result = transform.Execute(candidat);
 
-                        ImproveVertexPositions(result.GetVertices(0), field, monitor);
+                        ImproveVertexPositions(result.GetVertices(0), field, nullMonitor);
                         candidats.AddRange(result.GetEdges(1));
                         changed = true;
                         break;
                     }
                 }
             }
-            while (changed);
+            while (changed && !monitor.IsCancelled);
         }
 
         public static void ProjectAll(Mesh mesh, IImplicitSurface field, double epsilon)
@@ -213,6 +224,43 @@ namespace Matveev.Mtk.Library
                 VertexOps.ProjectPointOnSurface(ref p, field, epsilon);
                 vert.Point = p;
                 vert.Normal = Vector.Normalize(field.Grad(p));
+            }
+        }
+
+        public class MeshEnergy
+        {
+            readonly IList<EnergyPart> FaceEnergies = new List<EnergyPart>();
+            readonly IList<EnergyPart> EdgeEnergies = new List<EnergyPart>();
+            readonly IList<EnergyPart> VertexEnergies = new List<EnergyPart>();
+
+            public void AddFaceEnergy(double weight, IPointsFunctionWithGradient function)
+            {
+                EnergyPart faceEnergy;
+                faceEnergy.Weight = weight;
+                faceEnergy.Function = function;
+                FaceEnergies.Add(faceEnergy);
+            }
+
+            public void AddEdgeEnergy(double weight, IPointsFunctionWithGradient function)
+            {
+                EnergyPart edgeEnergy;
+                edgeEnergy.Weight = weight;
+                edgeEnergy.Function = function;
+                EdgeEnergies.Add(edgeEnergy);
+            }
+
+            public void AddVertexEnergy(double weight, IPointsFunctionWithGradient function)
+            {
+                EnergyPart vertexEnergy;
+                vertexEnergy.Weight = weight;
+                vertexEnergy.Function = function;
+                VertexEnergies.Add(vertexEnergy);
+            }
+
+            private struct EnergyPart
+            {
+                public double Weight;
+                public IPointsFunctionWithGradient Function;
             }
         }
 
@@ -344,12 +392,14 @@ namespace Matveev.Mtk.Library
         {
             private readonly IPointStrategy[][] _faces;
             private readonly IPointsFunctionWithGradient _localFunction;
+            private readonly IDictionary<IPointStrategy[], double> _areas;
 
             public GlobalPointsFunctionWithGradient(IPointsFunctionWithGradient localFunction,
-                IPointStrategy[][] faces)
+                IPointStrategy[][] faces, IDictionary<IPointStrategy[], double> areas)
             {
                 _faces = faces;
                 _localFunction = localFunction;
+                _areas = areas;
             }
 
             public override double Evaluate(Point[] argument)
@@ -358,7 +408,7 @@ namespace Matveev.Mtk.Library
                 foreach (IPointStrategy[] face in _faces)
                 {
                     Point[] localPoints = Array.ConvertAll(face, strategy => strategy.GetPoint(argument));
-                    result += _localFunction.Evaluate(localPoints);
+                    result += /*_areas[face] * */ _localFunction.Evaluate(localPoints);
                 }
                 return result;
             }
@@ -373,7 +423,7 @@ namespace Matveev.Mtk.Library
                     _localFunction.EvaluateValueWithGradient(localPoints, localGradientValue);
                     for (int i = 0; i < 3; i++)
                     {
-                        face[i].AddVector(result, localGradientValue[i]);
+                        face[i].AddVector(result, /*_areas[face] * */ localGradientValue[i]);
                     }
                 }
             }
