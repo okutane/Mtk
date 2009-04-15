@@ -65,6 +65,14 @@ namespace Matveev.Mtk.Library
             }
         }
 
+        public override int EdgesCount
+        {
+            get
+            {
+                return edges.Count;
+            }
+        }
+
         public sealed override Vertex AddVertex(Point p, Vector n)
         {
             HEVertexBase vertex;

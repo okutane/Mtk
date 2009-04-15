@@ -20,6 +20,11 @@ namespace Matveev.Mtk.Core
             get;
         }
 
+        public abstract int EdgesCount
+        {
+            get;
+        }
+
         public abstract Vertex AddVertex(Point p, Vector n);
 
         public abstract void RemoveVertex(Vertex vert);
