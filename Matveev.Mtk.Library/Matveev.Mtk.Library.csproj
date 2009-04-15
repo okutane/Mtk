@@ -81,6 +81,7 @@
     <Compile Include="FaceFunctions\NormalDeviation.cs" />
     <Compile Include="FacePointProjection.cs" />
     <Compile Include="FieldFunction.cs" />
+    <Compile Include="Fields\Blob.cs" />
     <Compile Include="Fields\CompactQuadraticForm.cs" />
     <Compile Include="Fields\MonkeySaddle.cs" />
     <Compile Include="Fields\PiriformTeardrop.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="HoppeOptimization.cs" />
     <Compile Include="IImplicitSurfacePolygonizer.cs" />
     <Compile Include="IPointsFunctionWithGradient.cs" />
+    <Compile Include="NullProgressMonitor.cs" />
     <Compile Include="OneDimensionalOptimization.cs" />
     <Compile Include="LocalGradientProvider.cs" />
     <Compile Include="MatrixBuilder.cs" />

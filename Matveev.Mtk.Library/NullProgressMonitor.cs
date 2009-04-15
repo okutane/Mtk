@@ -1,8 +1,8 @@
 ﻿using Matveev.Mtk.Core;
 
-namespace Matveev.Mtk.Tests
+namespace Matveev.Mtk.Library
 {
-    class NullProgressMonitor : IProgressMonitor
+    public class NullProgressMonitor : IProgressMonitor
     {
         #region IProgressMonitor Members
 
