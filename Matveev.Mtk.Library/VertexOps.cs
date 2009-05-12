@@ -7,6 +7,8 @@ namespace Matveev.Mtk.Library
 {
     public static class VertexOps
     {
+        private const double INTERSECTION_THRESHOLD = 0;
+        
         public static double Curvature(Vertex vert)
         {
             if (vert.Type != VertexType.Internal)
@@ -94,7 +96,7 @@ namespace Matveev.Mtk.Library
             if(t > 0 && t < 1)
             {
                 t = (a11 * f2 - a21 * f1) / det;
-                if (t >= 1e-8 && (1 - t) >= 1e-8)
+                if (t >= INTERSECTION_THRESHOLD && (1 - t) >= INTERSECTION_THRESHOLD)
                 {
                     return true;
                 }

@@ -7,7 +7,7 @@ using Matveev.Mtk.Core;
 
 namespace Matveev.Mtk.Library
 {
-    static class LocalGradientProvider
+    public static class LocalGradientProvider
     {
         public static GradientDelegate<Point, Vector> GetNumericalGradient(Func<Point[], double> localEnergy)
         {
