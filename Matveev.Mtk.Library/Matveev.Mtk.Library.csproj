@@ -83,6 +83,7 @@
     <Compile Include="FieldFunction.cs" />
     <Compile Include="Fields\Blob.cs" />
     <Compile Include="Fields\CompactQuadraticForm.cs" />
+    <Compile Include="Fields\Cosine.cs" />
     <Compile Include="Fields\MonkeySaddle.cs" />
     <Compile Include="Fields\PiriformTeardrop.cs" />
     <Compile Include="Fields\Plane.cs" />
