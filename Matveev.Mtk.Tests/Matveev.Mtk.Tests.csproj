@@ -85,6 +85,7 @@
     <Compile Include="ParametrizedSurfacePolygonizerTest.cs" />
     <Compile Include="PlanePolygonizationTests.cs" />
     <Compile Include="PlaneVertexPositionOptimizerTest.cs" />
+    <Compile Include="PointsFunctionsWithGradientTests.cs" />
     <Compile Include="PointTest.cs" />
     <Compile Include="PolygonizationSuite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
