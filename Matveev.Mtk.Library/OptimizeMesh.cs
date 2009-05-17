@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 
 using Matveev.Mtk.Core;
 using Matveev.Mtk.Library.FaceFunctions;
@@ -215,8 +216,8 @@ namespace Matveev.Mtk.Library
 
         public static void ProjectAll(Mesh mesh, IImplicitSurface field, double epsilon)
         {
-            if (field == null)
-                throw new ArgumentNullException("field");
+            Contract.Requires(mesh != null);
+            Contract.Requires(field != null);
 
             foreach (Vertex vert in mesh.Vertices)
             {
