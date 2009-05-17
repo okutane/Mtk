@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.Contracts;
 
 namespace Matveev.Common
 {
@@ -16,7 +17,6 @@ namespace Matveev.Common
         /// Arrays of elements
         /// </summary>
         private double[][] _a;
-        private bool _isTransponed;
 
         public enum Access
         {
@@ -30,18 +30,15 @@ namespace Matveev.Common
         /// <param name="m">Number of columns</param>
         public Matrix(int n, int m)
         {
-            if (n < 0 || m < 0)
-            {
-                throw new System.ArgumentOutOfRangeException();
-            }
+            Contract.Requires(n >= 0);
+            Contract.Requires(m >= 0);
+            
             _n = n;
             _m = m;
 
             _a = new double[_n][];
             for(int i = 0 ; i < _n ; i++)
                 _a[i] = new double[_m];
-
-            _isTransponed = false;
         }
 
         public int N
@@ -70,12 +67,6 @@ namespace Matveev.Common
         {
             get
             {
-                if(_isTransponed)
-                {
-                    int k = i;
-                    i = j;
-                    j = k;
-                }
                 if (i < 0 || j < 0 || i >= _n || j >= _m)
                 {
                     throw new ArgumentOutOfRangeException();
@@ -85,12 +76,6 @@ namespace Matveev.Common
             }
             set
             {
-                if(_isTransponed)
-                {
-                    int k = i;
-                    i = j;
-                    j = k;
-                }
                 if (i < 0 || j < 0 || i >= _n || j >= _m)
                 {
                     throw new ArgumentOutOfRangeException();
@@ -157,26 +142,10 @@ namespace Matveev.Common
         public static Matrix operator +(Matrix left, Matrix right)
         {
             int n1, n2, m1, m2;
-            if(left._isTransponed)
-            {
-                n1 = left._m;
-                m1 = left._n;
-            }
-            else
-            {
                 n1 = left._n;
                 m1 = left._m;
-            }
-            if(right._isTransponed)
-            {
-                n2 = right._m;
-                m2 = right._n;
-            }
-            else
-            {
                 n2 = right._n;
                 m2 = right._m;
-            }
             if (n1 != n2 || m1 != m2)
             {
                 throw new ArgumentException("Bad array dimensions");
@@ -193,32 +162,16 @@ namespace Matveev.Common
         public static Matrix operator -(Matrix left, Matrix right)
         {
             int n1, n2, m1, m2;
-            if(left._isTransponed)
-            {
-                n1 = left._m;
-                m1 = left._n;
-            }
-            else
-            {
-                n1 = left._n;
-                m1 = left._m;
-            }
-            if(right._isTransponed)
-            {
-                n2 = right._m;
-                m2 = right._n;
-            }
-            else
-            {
-                n2 = right._n;
-                m2 = right._m;
-            }
-            if(n1 != n2 || m1 != m2)
+            n1 = left._n;
+            m1 = left._m;
+            n2 = right._n;
+            m2 = right._m;
+            if (n1 != n2 || m1 != m2)
                 throw new ArgumentException("Bad array dimensions");
 
             Matrix result = new Matrix(n1, m1);
-            for(int i = 0 ; i < n1 ; i++)
-                for(int j = 0 ; j < m1 ; j++)
+            for (int i = 0; i < n1; i++)
+                for (int j = 0; j < m1; j++)
                     result[i, j] = left[i, j] - right[i, j];
 
             return result;
@@ -227,51 +180,23 @@ namespace Matveev.Common
         public static Matrix operator *(Matrix left, Matrix right)
         {
             int n1, n2, m1, m2;
-            if(left._isTransponed)
-            {
-                n1 = left._m;
-                m1 = left._n;
-            }
-            else
-            {
-                n1 = left._n;
-                m1 = left._m;
-            }
-            if(right._isTransponed)
-            {
-                n2 = right._m;
-                m2 = right._n;
-            }
-            else
-            {
-                n2 = right._n;
-                m2 = right._m;
-            }
-            if(m1 != n2)
+            n1 = left._n;
+            m1 = left._m;
+            n2 = right._n;
+            m2 = right._m;
+            if (m1 != n2)
                 throw new System.ArgumentException("Bad array dimensions");
 
             Matrix result = new Matrix(n1, m2);
-            for(int i = 0 ; i < n1 ; i++)
-                for(int j = 0 ; j < m2 ; j++)
+            for (int i = 0; i < n1; i++)
+                for (int j = 0; j < m2; j++)
                 {
                     result[i, j] = 0;
-                    for(int k = 0 ; k < m1 ; k++)
+                    for (int k = 0; k < m1; k++)
                         result[i, j] += left[i, k] * right[k, j];
                 }
 
             return result;
-        }
-
-        public Matrix Transponed
-        {
-            get
-            {
-                Matrix result = new Matrix(_n, _m);
-                result._isTransponed = !_isTransponed;
-                result._a = (double[][])_a.Clone();
-
-                return result;
-            }
         }
 
         public Matrix Inversed
