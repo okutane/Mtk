@@ -52,6 +52,11 @@ namespace Matveev.Mtk.Core
             }
         }
 
+        public static Vector operator -(Vector argument)
+        {
+            return new Vector(-argument.x, -argument.y, -argument.z);
+        }
+
         public static Vector operator +(Vector left, Vector right)
         {
             return new Vector(left.x + right.x, left.y + right.y, left.z + right.z);
