@@ -18,7 +18,7 @@ namespace Matveev.Mtk.Library
 
         public override double Eval(Mesh mesh)
         {
-            EdgeFunction function = new EdgeFunctions.Length();
+            IEdgeFunction function = new EdgeFunctions.Length();
 
             return mesh.Edges.Sum(edge => function.Evaluate(edge));
         }

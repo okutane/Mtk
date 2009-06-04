@@ -47,7 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract Mesh\MeshPart.cs" />
-    <Compile Include="EdgeFunction.cs" />
+    <Compile Include="IEdgeFunction.cs" />
     <Compile Include="EdgeTransform.cs" />
     <Compile Include="Energy.cs" />
     <Compile Include="FaceFunction.cs" />
@@ -63,7 +63,6 @@
     <Compile Include="Point.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ray.cs" />
-    <Compile Include="SphereFunctions.cs" />
     <Compile Include="Vector.cs" />
     <Compile Include="Abstract Mesh\Vertex.cs" />
     <Compile Include="VertexAction.cs" />

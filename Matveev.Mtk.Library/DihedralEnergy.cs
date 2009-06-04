@@ -10,7 +10,7 @@ namespace Matveev.Mtk.Library
 {
     public class DihedralEnergy : Energy
     {
-        private EdgeFunction _length = new Length();
+        private IEdgeFunction _length = new Length();
 
         public override double Eval(Mesh mesh)
         {

@@ -33,17 +33,6 @@ namespace Matveev.Common
             return count;
         }
 
-        public static T Find<T>(IEnumerable<T> enumerable, Predicate<T> predicate)
-        {
-            foreach (T item in enumerable)
-            {
-                if (predicate(item))
-                    return item;
-            }
-
-            return default(T);
-        }
-
         public static T2 Aggregate<T1, T2>(IEnumerable<T1> enumerable, Function<T1, T2> function,
             IAggregator<T2> aggregator)
         {

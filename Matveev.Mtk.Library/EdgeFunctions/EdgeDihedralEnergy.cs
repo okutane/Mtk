@@ -6,10 +6,10 @@ using Matveev.Mtk.Core;
 
 namespace Matveev.Mtk.Library.EdgeFunctions
 {
-    public class EdgeDihedralEnergy : EdgeFunction
+    public class EdgeDihedralEnergy : IEdgeFunction
     {
-        private EdgeFunction _dihedralAngle;
-        private EdgeFunction _length;
+        private IEdgeFunction _dihedralAngle;
+        private IEdgeFunction _length;
 
         public EdgeDihedralEnergy()
         {
@@ -17,7 +17,7 @@ namespace Matveev.Mtk.Library.EdgeFunctions
             this._length = new Length();
         }
 
-        public override double Evaluate(Edge edge)
+        public double Evaluate(Edge edge)
         {
             return this._dihedralAngle.Evaluate(edge) * this._length.Evaluate(edge);
         }
