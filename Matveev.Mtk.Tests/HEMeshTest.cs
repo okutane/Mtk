@@ -13,11 +13,14 @@ namespace Matveev.Mtk.Tests
     [TestFixture]
     public class HEMeshTest : MeshTest
     {
-        protected override ISimpleFactory<Mesh> Factory
+        protected override Configuration Configuration
         {
             get
             {
-                return HEMesh.Factory;
+                return new Configuration
+                {
+                    MeshFactory = HEMesh.Factory
+                };
             }
         }
     }

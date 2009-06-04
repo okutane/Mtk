@@ -22,7 +22,7 @@ namespace Matveev.Mtk.Library.Tests
         public void SetUp()
         {
             this._mesh = HEMesh.Factory.Create();
-            this._target = new EdgeSwap();
+            this._target = EdgeSwap.Instance;
         }
 
         [Test]
@@ -64,8 +64,7 @@ namespace Matveev.Mtk.Library.Tests
         [Test]
         public void Execute()
         {
-            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, Plane.Sample, Configuration.BoundingBox,
-                3, 3, 3);
+            Mesh mesh = MC.Instance.Create(Configuration.Default, Plane.Sample, 3, 3, 3);
             Edge edge = (from e in mesh.Edges
                        where (Math.Abs(e.Begin.Point.X + e.End.Point.X) < 1e-4)
                           && (Math.Abs(e.Begin.Point.Y + e.End.Point.Y) < 1e-4)

@@ -13,7 +13,7 @@ namespace Matveev.Mtk.Tests
 {
     public abstract class MeshTest
     {
-        protected abstract ISimpleFactory<Mesh> Factory
+        protected abstract Configuration Configuration
         {
             get;
         }
@@ -21,7 +21,7 @@ namespace Matveev.Mtk.Tests
         [Test]
         public void VertexGetRadius1()
         {
-            Mesh mesh = MC.Instance.Create(Factory, Plane.Sample, Configuration.BoundingBox, 2, 2, 2);
+            Mesh mesh = MC.Instance.Create(Configuration, Plane.Sample, 2, 2, 2);
             Vertex target = UMeshTestHelper.FindVertex(mesh, 0, 0);
             Vertex[] expected = new Vertex[] {
                 UMeshTestHelper.FindVertex(mesh, 1, 0),
@@ -37,7 +37,7 @@ namespace Matveev.Mtk.Tests
         [Test]
         public void BoundaryVertexGetRadius1()
         {
-            Mesh mesh = MC.Instance.Create(Factory, Plane.Sample, Configuration.BoundingBox, 2, 2, 2);
+            Mesh mesh = MC.Instance.Create(Configuration, Plane.Sample, 2, 2, 2);
             Vertex target = UMeshTestHelper.FindVertex(mesh, 1, 0);
             Vertex[] expected = new Vertex[] {
                 UMeshTestHelper.FindVertex(mesh, 1, -1),
@@ -51,7 +51,9 @@ namespace Matveev.Mtk.Tests
         [Test]
         public void EdgeGetRadius1()
         {
-            Mesh mesh = MC.Instance.Create(Factory, Plane.Sample, new BoundingBox(-3, 3, -3, 3, -3, 3), 3, 3, 3);
+            Configuration configuration = Configuration;
+            configuration.BoundingBox = new BoundingBox(-3, 3, -3, 3, -3, 3);
+            Mesh mesh = MC.Instance.Create(configuration, Plane.Sample, 3, 3, 3);
             Edge target = mesh.Edges.Single(
                 edge => edge.Begin.Point == new Point(1, 1, 0) && edge.End.Point == new Point(-1, -1, 0));
             Vertex[] expected = new Vertex[] {

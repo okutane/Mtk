@@ -79,7 +79,6 @@
     <Compile Include="IntegrationTests.cs" />
     <Compile Include="MeshTest.cs" />
     <Compile Include="OneDimensionalOptimizationTest.cs" />
-    <Compile Include="MT6Test.cs" />
     <None Include="NewtonMethodTest.cs" />
     <Compile Include="OptimizeMeshTest.cs" />
     <Compile Include="ParametrizedSurfacePolygonizerTest.cs" />

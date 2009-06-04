@@ -7,7 +7,7 @@ using Matveev.Mtk.Core;
 
 namespace UI
 {
-    public class EdgeFunctionsCollector : CtorCollectorBase<EdgeFunction>
+    public class EdgeFunctionsCollector : CtorCollectorBase<IEdgeFunction>
     {
         public string GetInfo(Edge edge)
         {

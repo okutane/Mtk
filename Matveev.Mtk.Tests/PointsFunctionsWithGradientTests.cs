@@ -22,8 +22,7 @@ namespace Matveev.Mtk.Tests
             GradientDelegate<Point, Vector> testedGradient = testedFunction.EvaluateGradient;
             GradientDelegate<Point, Vector> numericGradient =
                 LocalGradientProvider.GetNumericalGradient2(testedFunction.Evaluate, 1e-5);
-            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, CompactQuadraticForm.Sphere,
-                Configuration.BoundingBox, 4, 4, 4);
+            Mesh mesh = MC.Instance.Create(Configuration.Default, CompactQuadraticForm.Sphere, 4, 4, 4);
             foreach (Face face in mesh.Faces)
             {
                 Point[] points = face.Vertices.Select(v => v.Point).ToArray();

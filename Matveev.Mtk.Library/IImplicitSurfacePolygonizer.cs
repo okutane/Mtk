@@ -6,7 +6,6 @@ namespace Matveev.Mtk.Library
 {
     public interface IImplicitSurfacePolygonizer
     {
-        Mesh Create(ISimpleFactory<Mesh> factory, IImplicitSurface surface, 
-            BoundingBox polygonizationRegion, int n, int m, int l);
+        Mesh Create(Configuration configuration, IImplicitSurface surface, int n, int m, int l);
     }
 }
