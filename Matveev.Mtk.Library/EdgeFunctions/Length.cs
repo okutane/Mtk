@@ -6,9 +6,9 @@ using Matveev.Mtk.Core;
 
 namespace Matveev.Mtk.Library.EdgeFunctions
 {
-    public class Length : EdgeFunction
+    public class Length : IEdgeFunction
     {
-        public override double Evaluate(Edge edge)
+        public double Evaluate(Edge edge)
         {
             return (edge.End.Point - edge.Begin.Point).Norm;
         }

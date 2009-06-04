@@ -7,7 +7,7 @@ using Matveev.Mtk.Core;
 
 namespace Matveev.Mtk.Library
 {
-    public partial class HEMesh : Mesh
+    public class HEMesh : Mesh
     {
         private class HEMeshFactory : ISimpleFactory<Mesh>
         {

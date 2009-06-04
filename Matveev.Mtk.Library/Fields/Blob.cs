@@ -29,12 +29,12 @@ namespace Matveev.Mtk.Library.Fields
 
         #endregion
 
-        private double F(double x)
+        private static double F(double x)
         {
             return 4 * x * x + Math.Sin(8 * x);
         }
 
-        private double DF(double x)
+        private static double DF(double x)
         {
             return 8 * x + 8 * Math.Cos(8 * x);
         }

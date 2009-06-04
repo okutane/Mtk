@@ -16,7 +16,7 @@ namespace Matveev.Mtk.Library.Tests
         [Test]
         public void Test()
         {
-            Mesh mesh = Configuration.MeshFactory.Create();
+            Mesh mesh = Configuration.Default.MeshFactory.Create();
             Vertex v1 = mesh.AddVertex(new Point(0, 0, 1), new Vector());
             Vertex v2 = mesh.AddVertex(new Point(0, -0.5, 0.5), new Vector());
             Vertex v3 = mesh.AddVertex(new Point(-1, 0, 0), new Vector());

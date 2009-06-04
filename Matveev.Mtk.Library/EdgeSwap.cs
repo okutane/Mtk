@@ -10,6 +10,10 @@ namespace Matveev.Mtk.Library
 {
     public class EdgeSwap : EdgeTransform
     {
+        private EdgeSwap()
+        {
+        }
+
         public override bool IsPossible(Edge edge, IVertexConstraintsProvider constraintsProvider)
         {
             if (edge.Pair == null)
@@ -55,5 +59,7 @@ namespace Matveev.Mtk.Library
             v2 = edge.Next.End;
             v4 = edge.Pair.Next.End;
         }
+
+        public static readonly EdgeSwap Instance = new EdgeSwap();
     }
 }

@@ -6,27 +6,31 @@ using Matveev.Mtk.Core;
 
 namespace Matveev.Mtk.Library.EdgeFunctions
 {
-    public class DihedralAngle : EdgeFunction
+    public sealed class DihedralAngle : IEdgeFunction
     {
-        public static readonly EdgeFunction Instance = new DihedralAngle();
+        public static readonly DihedralAngle Instance = new DihedralAngle();
 
         private DihedralAngle()
         {
         }
 
-        public override double Evaluate(Edge edge)
+        public double Evaluate(Edge edge)
         {
             if (edge.Pair == null)
+            {
                 return 0;
+            }
 
             double cos = edge.ParentFace.Normal * edge.Pair.ParentFace.Normal;
             if (cos > 1)
-                cos = 1;
+            {
+                return 0;
+            }
             if (cos < -1)
-                cos = -1;
-
-            double result = Math.Acos(cos);
-            return result;
+            {
+                return Math.PI;
+            }
+            return Math.Acos(cos);
         }
     }
 }

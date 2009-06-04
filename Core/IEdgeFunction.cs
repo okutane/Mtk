@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Matveev.Mtk.Core
 {
-    public abstract class EdgeFunction
+    public interface IEdgeFunction
     {
-        public abstract double Evaluate(Edge edge);
+        double Evaluate(Edge edge);
     }
 }
