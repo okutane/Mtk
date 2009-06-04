@@ -14,9 +14,9 @@ namespace Matveev.Mtk.Library
 
         #region IImplicitSurfacePolygonizer Members
 
-        public Mesh Create(ISimpleFactory<Mesh> factory, IImplicitSurface surface,
-            BoundingBox polygonizationRegion, int n, int m, int l)
+        public Mesh Create(Configuration configuration, IImplicitSurface surface, int n, int m, int l)
         {
+            BoundingBox polygonizationRegion = configuration.BoundingBox;
             double x1 = polygonizationRegion.MaxX;
             double x0 = polygonizationRegion.MinX;
             double y1 = polygonizationRegion.MaxY;
@@ -25,7 +25,7 @@ namespace Matveev.Mtk.Library
             double z0 = polygonizationRegion.MinZ;
 
             _surface = surface;
-            _mesh = factory.Create();
+            _mesh = configuration.MeshFactory.Create();
             _nonInternal = new List<Vertex>();
 
             double hx, hy, hz;
@@ -151,7 +151,7 @@ namespace Matveev.Mtk.Library
 
         private Vertex AddVertex(Point p, Vector n)
         {
-            Vertex result = _nonInternal.Find(vertex => vertex.Point == p);
+            Vertex result = _nonInternal.Find(vertex => (vertex.Point - p).Norm < 1e-5);
             if (result == null)
             {
                 result = _mesh.AddVertex(p, n);

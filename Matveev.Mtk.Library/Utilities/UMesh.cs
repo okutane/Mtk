@@ -26,7 +26,7 @@ namespace Matveev.Mtk.Library.Utilities
         public static Mesh CloneSub(this Mesh mesh, IEnumerable<Face> faces, IDictionary<Vertex, Vertex> vertMap,
             IDictionary<Edge, Edge> edgeMap, IDictionary<Face, Face> faceMap)
         {
-            Mesh result = Configuration.MeshFactory.Create();
+            Mesh result = Configuration.Default.MeshFactory.Create();
 
             vertMap = GetCleanOrNew(vertMap);
             edgeMap = GetCleanOrNew(edgeMap);
@@ -61,7 +61,7 @@ namespace Matveev.Mtk.Library.Utilities
 
         public static Mesh Clone(this Mesh mesh, IDictionary<Edge, Edge> edgeMap)
         {
-            Mesh result = Configuration.MeshFactory.Create();
+            Mesh result = Configuration.Default.MeshFactory.Create();
 
             IDictionary<Vertex, Vertex> vertMap = new Dictionary<Vertex, Vertex>();
             foreach (Vertex vertex in mesh.Vertices)

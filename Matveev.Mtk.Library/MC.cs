@@ -2,31 +2,35 @@
 using System.Linq;
 
 using Matveev.Mtk.Core;
+using System.Diagnostics;
+using System;
 
 namespace Matveev.Mtk.Library
 {
     public class MC : IImplicitSurfacePolygonizer
     {
+        private static Vertex[] _vertices = new Vertex[3];
+
         private static List<Vertex> _nonInternal = new List<Vertex>();
         private static Mesh _mesh;
         private static IImplicitSurface _surface;
 
         public static readonly MC Instance = new MC();
 
-        private static Vertex AddVertex(Point p, Vector n)
+        private static Vertex GetVertex(Point p)
         {
-            Vertex result = MC._nonInternal.Find(vertex => vertex.Point == p);
+            Vertex result = MC._nonInternal.Find(vertex => (vertex.Point - p).Norm < 1e-5);
             if (result == null)
             {
-                result = MC._mesh.AddVertex(p, n);
+                result = MC._mesh.AddVertex(p, Vector.Normalize(_surface.Grad(p)));
                 MC._nonInternal.Add(result);
             }
             return result;
         }
 
-        public Mesh Create(ISimpleFactory<Mesh> factory, IImplicitSurface surface,
-            BoundingBox polygonizationRegion, int n, int m, int l)
+        public Mesh Create(Configuration configuration, IImplicitSurface surface, int n, int m, int l)
         {
+            BoundingBox polygonizationRegion = configuration.BoundingBox;
             double x1 = polygonizationRegion.MaxX;
             double x0 = polygonizationRegion.MinX;
             double y1 = polygonizationRegion.MaxY;
@@ -34,7 +38,7 @@ namespace Matveev.Mtk.Library
             double z1 = polygonizationRegion.MaxZ;
             double z0 = polygonizationRegion.MinZ;
 
-            MC._mesh = factory.Create();
+            MC._mesh = configuration.MeshFactory.Create();
             MC._surface = surface;
 
             double hx, hy, hz;
@@ -64,12 +68,11 @@ namespace Matveev.Mtk.Library
 
         private static void CellSubroutine(double x0, double x1, double y0, double y1, double z0, double z1)
         {
-            Point[] p = new Point[8];
-            double[] v = new double[8];
-            int cubeindex = 0;
-            int some = 1;
+            Point[] points = new Point[8];
+            double[] values = new double[8];
+            int cubeCase = 0;
 
-            p = new Point[]{
+            points = new Point[]{
                 new Point(x0,y0,z0),
                 new Point(x1,y0,z0),
                 new Point(x1,y1,z0),
@@ -78,67 +81,55 @@ namespace Matveev.Mtk.Library
                 new Point(x1,y0,z1),
                 new Point(x1,y1,z1),
                 new Point(x0,y1,z1),
-        };
+            };
 
+            int flag = 1;
             for (int i = 0; i < 8; i++)
             {
-                v[i] = MC._surface.Eval(p[i]);
-                if (v[i] < 0)
+                values[i] = _surface.Eval(points[i]);
+                if (values[i] < 0)
                 {
-                    cubeindex |= some;
+                    cubeCase |= flag;
                 }
-                some <<= 1;
+                flag <<= 1;
             }
 
             int k = 0;
-            while (casesTable[cubeindex, k] != -1)
+            while (casesTable[cubeCase, k] != -1)
             {
-                Point p1, p2, p3;
-                Vertex v1, v2, v3;
-                int i1, i2;
-                i1 = edgesTable[casesTable[cubeindex, k + 0], 0];
-                i2 = edgesTable[casesTable[cubeindex, k + 0], 1];
-                p1 = Point.Interpolate(p[i1], v[i1], p[i2], v[i2]);
-                v1 = AddVertex(p1, Vector.Normalize(MC._surface.Grad(p1)));
-
-                i1 = edgesTable[casesTable[cubeindex, k + 1], 0];
-                i2 = edgesTable[casesTable[cubeindex, k + 1], 1];
-                p2 = Point.Interpolate(p[i1], v[i1], p[i2], v[i2]);
-                v2 = AddVertex(p2, Vector.Normalize(MC._surface.Grad(p2)));
-
-                i1 = edgesTable[casesTable[cubeindex, k + 2], 0];
-                i2 = edgesTable[casesTable[cubeindex, k + 2], 1];
-                p3 = Point.Interpolate(p[i1], v[i1], p[i2], v[i2]);
-                v3 = AddVertex(p3, Vector.Normalize(MC._surface.Grad(p3)));
+                for (int i = 0; i < 3; i++)
+                {
+                    byte[] edge = edgesTable[casesTable[cubeCase, k + i]];
+                    int edgeBegin = edge[0];
+                    int edgeEnd = edge[1];
+                    Point point = Point.Interpolate(points[edgeBegin], values[edgeBegin],
+                        points[edgeEnd], values[edgeEnd]);
+                    _vertices[i] = GetVertex(point);
+                }
                 k += 3;
 
-                CreateFace(v1, v2, v3);
+                _mesh.CreateFace(_vertices[0], _vertices[1], _vertices[2]);
 
-                MC._nonInternal.RemoveAll(vert => vert.Type == VertexType.Internal);
+                _nonInternal.RemoveAll(vert => vert.Type == VertexType.Internal);
             }
-        }
-
-        private static Face CreateFace(Vertex i1, Vertex i2, Vertex i3)
-        {
-            return MC._mesh.CreateFace(i1, i2, i3);
         }
 
         #region Edges Table
 
-        private static readonly byte[,] edgesTable = new byte[,]
+        private static readonly byte[][] edgesTable = new byte[][]
             {
-                {0,1},
-                {1,2},
-                {2,3},
-                {3,0},
-                {4,5},
-                {5,6},
-                {6,7},
-                {7,4},
-                {4,0},
-                {5,1},
-                {6,2},
-                {7,3},
+                new byte[] {0, 1},
+                new byte[] {1, 2},
+                new byte[] {2, 3},
+                new byte[] {3, 0},
+                new byte[] {4, 5},
+                new byte[] {5, 6},
+                new byte[] {6, 7},
+                new byte[] {7, 4},
+                new byte[] {4, 0},
+                new byte[] {5, 1},
+                new byte[] {6, 2},
+                new byte[] {7, 3},
             };
 
         #endregion

@@ -54,6 +54,11 @@ namespace Matveev.Mtk.Library
             return 0;
         }
 
+        public static bool IsInternal(this Vertex vertex)
+        {
+            return vertex.Type == VertexType.Internal;
+        }
+
         private static Vector[] GetOrthogonalPair(Vector mean)
         {
             Vector e1;

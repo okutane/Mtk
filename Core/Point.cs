@@ -27,8 +27,7 @@ namespace Matveev.Mtk.Core
 
         public static bool operator ==(Point left, Point right)
         {
-            Vector v = right - left;
-            return v.Norm < 0.000001;
+            return left.X == right.X && left.Y == right.Y && left.Z == right.Z;
         }
         public static bool operator !=(Point left, Point right)
         {
@@ -76,20 +75,15 @@ namespace Matveev.Mtk.Core
 
         public override bool Equals(object obj)
         {
-            try
-            {
-                Point p2 = (Point)obj;
-                return this == p2;
-            }
-            catch(Exception)
-            {
-                return false;
-            }
+            return this == (Point)obj;
         }
 
         public override int GetHashCode()
         {
-            return 0;
+            int result = X.GetHashCode();
+            result ^= Y.GetHashCode();
+            result ^= Z.GetHashCode();
+            return result;
         }
 
         public override string ToString()
