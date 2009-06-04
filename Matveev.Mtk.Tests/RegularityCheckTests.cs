@@ -17,8 +17,7 @@ namespace Matveev.Mtk.Tests
         [Test]
         public void Sphere3()
         {
-            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, CompactQuadraticForm.Sphere,
-                Configuration.BoundingBox, 3, 3, 3);
+            Mesh mesh = MC.Instance.Create(Configuration.Default, CompactQuadraticForm.Sphere, 3, 3, 3);
             foreach (Vertex v in mesh.Vertices)
             {
                 Assert.IsTrue(VertexOps.ExternalCurvature(v) == 0, v.Point.ToString());

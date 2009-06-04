@@ -4,7 +4,7 @@ using System.Text;
 
 namespace UI
 {
-    class Application
+    class Program
     {
         [STAThread]
         static void Main()

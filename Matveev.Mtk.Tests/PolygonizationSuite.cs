@@ -25,7 +25,7 @@ namespace Matveev.Mtk.Tests
             IImplicitSurfacePolygonizer polygonizer =
                 InstanceCollector<IImplicitSurfacePolygonizer>.Instances[polygonizerKey];
             IImplicitSurface surface = InstanceCollector<IImplicitSurface>.Instances[surfaceKey];
-            Mesh mesh = polygonizer.Create(Configuration.MeshFactory, surface, Configuration.BoundingBox, 4, 4, 4);
+            Mesh mesh = polygonizer.Create(Configuration.Default, surface, 4, 4, 4);
             YamlSerializerTest.TestSerialize(string.Format(filename, surface, polygonizer), mesh);
             YamlSerializerTest.TestSerialize(string.Format(filename, surface, polygonizer), mesh.Clone(null));
         }
