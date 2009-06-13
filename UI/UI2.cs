@@ -15,6 +15,10 @@ using Matveev.Mtk.Library;
 using Matveev.Mtk.Library.FaceFunctions;
 using Matveev.Mtk.Library.Fields;
 using Matveev.Mtk.Library.Utilities;
+using System.Globalization;
+using OglVisualizer;
+using Matveev.Mtk.Library.EdgeFunctions;
+using Matveev.Mtk.Library.VertexFunctions;
 
 namespace UI
 {
@@ -25,8 +29,6 @@ namespace UI
         private Mesh _mesh;
         private IEnumerable<Point> _points;
 
-        private IImplicitSurface _field;
-
         private MeshPart _selection;
 
         private Button btnImprovePositions;
@@ -35,27 +37,33 @@ namespace UI
         double epsilon = 1e-2;//max point-to-surface range
         double alpha = 1e-3; //vertex value
 
-        List<Control> meshActions, vertActions, edgeActions, faceActions;
+        private readonly Control[] _meshActions, _vertActions, _edgeActions, _faceActions;
 
         public UI2()
         {
             InitializeComponent();
 
-            meshActions = new List<Control>();
-            vertActions = new List<Control>();
-            edgeActions = new List<Control>();
-            faceActions = new List<Control>();
-
-            ListMeshActions();
-            ListVertexActions();
-            ListEdgeActions();
-            ListFaceActions();
+            ControlListBuilder builder = new ControlListBuilder(this);
+            ListMeshActions(builder);
+            _meshActions = builder.Result;
+            builder = new ControlListBuilder(this);
+            ListVertexActions(builder);
+            _vertActions = builder.Result;
+            builder = new ControlListBuilder(this);
+            ListEdgeActions(builder);
+            _edgeActions = builder.Result;
+            builder = new ControlListBuilder(this);
+            ListFaceActions(builder);
+            _faceActions = builder.Result;
 
             btnImprovePositions = new Button();
             btnImprovePositions.Text = "Improve position";
             btnImprovePositions.Click += delegate(object sender, EventArgs e)
             {
-                OptimizeMesh.ImproveVertexPositions(_selection.GetVertices(0), _field, null);
+                var functions = new FunctionList();
+                functions.Add(Configuration.Default.Surface);
+                OptimizeMesh.ImproveVertexPositions(Configuration.Default, _selection.GetVertices(0),
+                    NullProgressMonitor.Instance, functions);
                 Selection = _selection;
                 Invalidate(true);
             };
@@ -88,9 +96,11 @@ namespace UI
                 }));
             }
             colorers[0].Checked = true;
+
+            propertyGrid1.SelectedObject = Parameters.Instance;
         }
 
-        private void ListFaceActions()
+        private void ListFaceActions(IControlBuilder builder)
         {
             TextBox txtFaceInfo = new TextBox();
             txtFaceInfo.Multiline = true;
@@ -105,10 +115,10 @@ namespace UI
                     txtFaceInfo.Text = new FaceFunctionsCollector().GetInfo((Face)Selection);
                 }
             };
-            faceActions.Add(txtFaceInfo);
+            builder.AddControl(txtFaceInfo);
         }
 
-        private void ListEdgeActions()
+        private void ListEdgeActions(IControlBuilder builder)
         {
             TextBox txtEdgeInfo = new TextBox();
             txtEdgeInfo.Multiline = true;
@@ -122,19 +132,17 @@ namespace UI
                     txtEdgeInfo.Text = new EdgeFunctionsCollector().GetInfo((Edge)Selection);
                 }
             };
-            edgeActions.Add(txtEdgeInfo);
+            builder.AddControl(txtEdgeInfo);
 
             Dictionary<string, EdgeTransform> transforms = InstanceCollector<EdgeTransform>.Instances;
             foreach (string key in transforms.Keys)
             {
-                Button btnEdgeTransform = new Button();
-                btnEdgeTransform.Text = key;
-                btnEdgeTransform.Click += delegate(object sender, EventArgs e)
+                builder.AddButton(key, delegate()
                 {
                     Edge selected = Selection as Edge;
                     if (selected != null)
                     {
-                        EdgeTransform transform = transforms[((Button)sender).Text];
+                        EdgeTransform transform = transforms[key];
                         if (!transform.IsPossible(selected, null))
                         {
                             MessageBox.Show("Transform is not possible");
@@ -148,20 +156,15 @@ namespace UI
                         else if (Selection is Face)
                             this.visualizer.SelectedFace = (Face)Selection;
                     }
-                };
-                edgeActions.Add(btnEdgeTransform);
+                });
             }
-            Button btnSelectNext = new Button();
-            btnSelectNext.Text = "Select next";
-            btnSelectNext.Click += (sender, e) => Selection = visualizer.SelectedEdge = ((Edge)Selection).Next;
-            edgeActions.Add(btnSelectNext);
-            Button btnSelectPair = new Button();
-            btnSelectPair.Text = "Select pair";
-            btnSelectPair.Click += (sender, e) => Selection = visualizer.SelectedEdge = ((Edge)Selection).Pair;
-            edgeActions.Add(btnSelectPair);
+            builder.AddButton("Select next",
+                () => Selection = visualizer.SelectedEdge = ((Edge)Selection).Next);
+            builder.AddButton("Select pair",
+                () => Selection = visualizer.SelectedEdge = ((Edge)Selection).Pair);
         }
 
-        private void ListVertexActions()
+        private void ListVertexActions(IControlBuilder builder)
         {
             TextBox txtVertInfo = new TextBox();
             txtVertInfo.Multiline = true;
@@ -180,7 +183,7 @@ namespace UI
                     txtVertInfo.Text += "Normal:" + LB;
                     txtVertInfo.Text += selection.Normal + LB;
                     txtVertInfo.Text += "Field value:" + LB;
-                    txtVertInfo.Text += _field.Eval(selection.Point) + LB;
+                    txtVertInfo.Text += Configuration.Default.Surface.Eval(selection.Point) + LB;
                     try
                     {
                         double curvature = VertexOps.Curvature(selection);
@@ -195,18 +198,16 @@ namespace UI
                     }
                 }
             };
-            vertActions.Add(txtVertInfo);
-            Button btnOptimisePos = new Button();
-            btnOptimisePos.Text = "Project";
-            btnOptimisePos.Click += delegate(object sender, EventArgs e)
+            builder.AddControl(txtVertInfo);
+            builder.AddButton("Project", delegate()
             {
-                VertexOps.OptimizePosition(_selection as Vertex, _field, 0.01);
+                VertexOps.OptimizePosition((Vertex)_selection,
+                    Configuration.Default.Surface, 0.01);
                 Selection = _selection;
-            };
-            vertActions.Add(btnOptimisePos);
+            });
         }
 
-        private void ListMeshActions()
+        private void ListMeshActions(IControlBuilder builder)
         {
             Dictionary<string, IParametrizedSurface> parametrizedSurfaces =
                 InstanceCollector<IParametrizedSurface>.Instances;
@@ -215,18 +216,14 @@ namespace UI
             Dictionary<string, IImplicitSurfacePolygonizer> implicitPolygonizers =
                 InstanceCollector<IImplicitSurfacePolygonizer>.Instances;
 
-            Label lblSurface = new Label();
-            lblSurface.Text = "Поверхность";
-            meshActions.Add(lblSurface);
+            builder.AddLabel("Поверхность");
 
             ComboBox cbxSurface = new ComboBox();
             cbxSurface.DataSource = new List<string>(parametrizedSurfaces.Keys.Union(implicitSurfaces.Keys));
             cbxSurface.DropDownStyle = ComboBoxStyle.DropDownList;
-            meshActions.Add(cbxSurface);
+            builder.AddControl(cbxSurface);
 
-            Button btnCreateParametrized = new Button();
-            btnCreateParametrized.Text = "Parametrized";
-            btnCreateParametrized.Click += delegate(object sender, EventArgs e)
+            builder.AddButton("Parametrized", delegate()
             {
                 IParametrizedSurface surface;
                 if (parametrizedSurfaces.TryGetValue(cbxSurface.SelectedItem.ToString(), out surface))
@@ -234,14 +231,13 @@ namespace UI
                     _mesh = ParametrizedSurfacePolygonizer.Instance.Create(surface, 32, 32);
                     visualizer.Mesh = _mesh;
                 }
-                _field = surface as IImplicitSurface;
-            };
-            meshActions.Add(btnCreateParametrized);
+                Configuration.Default.Surface = surface as IImplicitSurface;
+            });
 
             ComboBox cbxImplicitPolygonizer = new ComboBox();
             cbxImplicitPolygonizer.DataSource = new List<string>(implicitPolygonizers.Keys);
             cbxImplicitPolygonizer.DropDownStyle = ComboBoxStyle.DropDownList;
-            meshActions.Add(cbxImplicitPolygonizer);
+            builder.AddControl(cbxImplicitPolygonizer);
 
             TextBox txtN = new TextBox();
             txtN.Text = N.ToString();
@@ -252,191 +248,114 @@ namespace UI
                     N = int.Parse(txtN.Text);
                     if (N < 2)
                         throw new Exception();
-                    txtN.ForeColor = System.Drawing.Color.Black;
+                    txtN.ForeColor = Color.Black;
                 }
                 catch
                 {
-                    txtN.ForeColor = System.Drawing.Color.Red;
+                    txtN.ForeColor = Color.Red;
                 }
             };
-            meshActions.Add(txtN);
+            builder.AddControl(txtN);
 
-            Button btnImplicit = new Button();
-            btnImplicit.Text = "Implicit";
-            btnImplicit.Click += delegate(object sender, EventArgs e)
+            builder.AddButton("Implicit", delegate()
             {
-                IImplicitSurface surface;
-                IImplicitSurfacePolygonizer polygonizer;
-                if (!implicitSurfaces.TryGetValue(cbxSurface.SelectedValue.ToString(), out surface))
-                    return;
-                if (!implicitPolygonizers.TryGetValue(cbxImplicitPolygonizer.SelectedValue.ToString(),
-                    out polygonizer))
-                    return;
-
-                _mesh = polygonizer.Create(Configuration.MeshFactory, surface, Configuration.BoundingBox, N, N, N);
+                Configuration.Default.Surface = implicitSurfaces[cbxSurface.SelectedValue.ToString()];
+                IImplicitSurfacePolygonizer polygonizer =
+                    implicitPolygonizers[cbxImplicitPolygonizer.SelectedValue.ToString()];
+                _mesh = polygonizer.Create(Configuration.Default, N, N, N);
                 visualizer.Mesh = _mesh;
-                _field = surface;
-                if (_mesh.Faces.FirstOrDefault() != null)
-                {
-                    Colorers.MaxArea = _mesh.Faces.Max(f => f.Area());
-                }
-                else
+                if (_mesh.Faces.IsEmpty())
                 {
                     Colorers.MaxArea = 0;
                 }
-            };
-            meshActions.Add(btnImplicit);
+                else
+                {
+                    Colorers.MaxArea = _mesh.Faces.Max(f => f.Area());
+                }
+                Selection = null;
+            });
 
             DoubleValueTextBox txtEps = new DoubleValueTextBox();
             txtEps.ValueChanged += (sender, e) => epsilon = e.NewValue;
             txtEps.Text = epsilon.ToString();
-            meshActions.Add(txtEps);
+            builder.AddControl(txtEps);
 
             DoubleValueTextBox txtAlpha = new DoubleValueTextBox();
             txtAlpha.ValueChanged += (sender, e) => alpha = e.NewValue;
             txtAlpha.Text = alpha.ToString();
-            meshActions.Add(txtAlpha);
+            builder.AddControl(txtAlpha);
 
-            Button btnProjectAll = new Button();
-            btnProjectAll.Text = "ProjectAll";
-            btnProjectAll.Click += delegate(object sender, EventArgs e)
+            builder.AddButton("ImproveVertexPositions", delegate(IProgressMonitor pm)
             {
-                OptimizeMesh.ProjectAll(_mesh, _field, epsilon);
-                this.Invalidate();
-                MessageBox.Show("Done");
-            };
-            meshActions.Add(btnProjectAll);
-            Button btnImproveVertexPositions = new Button();
-            btnImproveVertexPositions.Text = "ImproveVertexPositions";
-            btnImproveVertexPositions.Click += delegate(object sender, EventArgs e)
+                var functions = new FunctionList();
+                functions.Add(Configuration.Default.Surface);
+                OptimizeMesh.ImproveVertexPositions(Configuration.Default, _mesh.Vertices, pm, functions);
+            });
+            builder.AddButton("ImproveVertexPositionsGsl", delegate(IProgressMonitor pm)
             {
-                Action<IProgressMonitor> action = delegate(IProgressMonitor monitor)
-                {
-                    OptimizeMesh.ImproveVertexPositions(_mesh, _field, monitor);
-                    MessageBox.Show("Done");
-                };
-                algorithmExecutionWorker.RunWorkerAsync(action);
-            };
-            meshActions.Add(btnImproveVertexPositions);
-            Button btnOptimizeAll = new Button();
-            btnOptimizeAll.Text = "Optimize";
-            btnOptimizeAll.Click += delegate(object sender, EventArgs e)
+                var functions = new FunctionList();
+                functions.Add(Configuration.Default.Surface);
+                OptimizeMesh.ImproveVertexPositionsGsl(Configuration.Default, _mesh.Vertices, pm, functions);
+            });
+            builder.AddButton("Optimize", delegate(IProgressMonitor pm)
             {
-                Action<IProgressMonitor> action = delegate(IProgressMonitor monitor)
-                {
-                    OptimizeMesh.OptimizeImplicit(_mesh, _field, epsilon, alpha, monitor);
-                    MessageBox.Show("Done");
-                };
-                algorithmExecutionWorker.RunWorkerAsync(action);
-            };
-            meshActions.Add(btnOptimizeAll);
+                var functions = new FunctionList();
+                functions.Add(Configuration.Default.Surface);
+                //functions.Add(EdgeLengthSquare.Instance);
+                functions.Add(AreaSquare.Instance);
+                OptimizeMesh.OptimizeImplicit(_mesh, epsilon, alpha, pm, Configuration.Default, functions);
+            });
 
-            Button btnMeshToPoints = new Button();
-            btnMeshToPoints.Text = "Mesh to points";
-            btnMeshToPoints.Click += delegate(object sender, EventArgs e)
-            {
-                this._points = from vertex in this._mesh.Vertices
-                               select vertex.Point;
-            };
-            meshActions.Add(btnMeshToPoints);
+            builder.AddButton("Mesh to points",
+                () => _points = _mesh.Vertices.Select(v => v.Point));
 
-            {
-                Button btnHoppeOptimization = new Button();
-                btnHoppeOptimization.Text = "Hoppe";
-                btnHoppeOptimization.Click += delegate(object sender, EventArgs e)
-                {
-                    HoppeOptimization.OptimizeMesh(_mesh, this._points);
-                };
-                meshActions.Add(btnHoppeOptimization);
-            }
+            builder.AddButton("Hoppe",
+                () => HoppeOptimization.OptimizeMesh(_mesh, _points));
 
+            builder.AddButton("Dynamic", delegate(IProgressMonitor pm)
             {
-                Button btnDynamicOptimization = new Button();
-                btnDynamicOptimization.Text = "Dynamic";
-                btnDynamicOptimization.Click += delegate(object sender, EventArgs e)
-                {
-                    Action<IProgressMonitor> action = delegate(IProgressMonitor pm)
-                    {
-                        DynamicMeshOptimization.Optimize(_mesh, _field, pm);
-                    };
-                    algorithmExecutionWorker.RunWorkerAsync(action);
-                };
-                meshActions.Add(btnDynamicOptimization);
-            }
+                DynamicMeshOptimization.Optimize(_mesh,
+                    Configuration.Default.Surface, pm);
+            });
 
+            builder.AddButton("Edge length square", delegate(IProgressMonitor pm)
             {
-                Button btnEdgeLengthSquareOptimization = new Button();
-                btnEdgeLengthSquareOptimization.Text = "Edge length square";
-                btnEdgeLengthSquareOptimization.Click += delegate(object sender, EventArgs e)
-                {
-                    Action<IProgressMonitor> action = delegate(IProgressMonitor pm)
-                    {
-                        OptimizeMesh.ImproveVertexPositions(_mesh.Vertices,
-                            delegate(Point[] points)
-                            {
-                                Vector[] edges = new Vector[3];
-                                for (int i = 0; i < 3; i++)
-                                {
-                                    edges[i] = points[(i + 1) % 3] - points[i];
-                                }
-                                return edges.Sum(edge => edge * edge);
-                            },
-                            delegate(Point[] points, Vector[] result)
-                            {
-                                result[0] = -2 * ((points[1] - points[0]) + (points[2] - points[0]));
-                                result[1] = -2 * ((points[0] - points[1]) + (points[2] - points[1]));
-                                result[2] = -2 * ((points[0] - points[2]) + (points[1] - points[2]));
-                            }, pm);
-                    };
-                    algorithmExecutionWorker.RunWorkerAsync(action);
-                };
-                meshActions.Add(btnEdgeLengthSquareOptimization);
-            }
+                var functions = new FunctionList();
+                functions.Add(1E+5, new SquareDecorator(Configuration.Default.Surface));
+                functions.Add(EdgeLengthSquare.Instance);
+                OptimizeMesh.ImproveVertexPositionsGsl(Configuration.Default, _mesh.Vertices, pm, functions);
+            });
 
+            builder.AddButton("Area square", delegate(IProgressMonitor pm)
             {
-                Button btnAreaSquareOptimization = new Button();
-                btnAreaSquareOptimization.Text = "Area square";
-                btnAreaSquareOptimization.Click += delegate(object sender, EventArgs e)
-                {
-                    Action<IProgressMonitor> action = delegate(IProgressMonitor pm)
-                    {
-                        OptimizeMesh.ImproveVertexPositions(_mesh.Vertices,
-                            p => Math.Pow(p[0].AreaTo(p[1], p[2]), 2),
-                            delegate(Point[] points, Vector[] result)
-                            {
-                                Vector[] edges = new Vector[3];
-                                for (int i = 0; i < 3; i++)
-                                {
-                                    edges[i] = points[(i + 1) % 3] - points[i];
-                                }
-                                for (int i = 0; i < 3; i++)
-                                {
-                                    result[i] = (edges[1] ^ edges[2]) ^ edges[(i + 1) % 3];
-                                }
-                            }, pm);
-                    };
-                    algorithmExecutionWorker.RunWorkerAsync(action);
-                };
-                meshActions.Add(btnAreaSquareOptimization);
-            }
+                var functions = new FunctionList();
+                functions.Add(new SquareDecorator(Configuration.Default.Surface));
+                functions.Add(1E-5, AreaSquare.Instance);
+                OptimizeMesh.ImproveVertexPositions(Configuration.Default, _mesh.Vertices, pm, functions);
+            });
 
-            Button btnMarkNonregular = new Button();
-            btnMarkNonregular.Text = "Mark nonreg";
-            btnMarkNonregular.Click += delegate(object sender, EventArgs e)
+            builder.AddButton("Regularity", delegate(IProgressMonitor pm)
+            {
+                var functions = new FunctionList();
+                functions.Add(new SquareDecorator(Configuration.Default.Surface));
+                functions.Add(Regularity.Instance);
+                OptimizeMesh.ImproveVertexPositions(Configuration.Default, _mesh.Vertices, pm, functions);
+            });
+
+            builder.AddButton("Mark nonreg", delegate()
             {
                 visualizer.MarkedVerts = from v in _mesh.Vertices
                                          where v.Type == VertexType.Internal
                                          && VertexOps.ExternalCurvature(v) > 0.1
                                          select v;
                 Selection = null;
-            };
-            meshActions.Add(btnMarkNonregular);
+            });
 
             TextBox txtMeshInfo = new TextBox();
             txtMeshInfo.Multiline = true;
             txtMeshInfo.ReadOnly = true;
             txtMeshInfo.Width = panelActions.Width - 10;
-            txtMeshInfo.Height = 150;
+            txtMeshInfo.Height = 75;
             txtMeshInfo.ParentChanged += delegate(object sender, EventArgs e)
             {
                 if (_mesh == null)
@@ -444,32 +363,17 @@ namespace UI
                     return;
                 }
 
-                double index = 0;
-                int verts = 0, faces = 0;
-                double E = 0;
-                foreach (Vertex vert in _mesh.Vertices)
-                {
-                    if (vert.Type == VertexType.Internal)
-                    {
-                        index += VertexOps.ExternalCurvature(vert);
-                    }
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("Verts: " + _mesh.Vertices.Count());
+                sb.AppendLine("Faces: " + _mesh.Faces.Count());
+                sb.AppendLine("Index: "
+                    + _mesh.Vertices.Where(VertexOps.IsInternal).Sum(v => VertexOps.ExternalCurvature(v)));
+                sb.AppendLine("Energy: "
+                    + _mesh.Faces.Sum(face => new ImplicitApproximations.NumericalIntegration().Evaluate(face)));
 
-                    E += Math.Pow(_field.Eval(vert.Point), 2);
-
-                    verts++;
-                }
-                E = _mesh.Faces.Sum(face => new ImplicitApproximations.NumericalIntegration().Evaluate(face));
-                faces = _mesh.Faces.Count();
-
-                StringWriter writer = new StringWriter();
-                writer.WriteLine("Verts: " + verts);
-                writer.WriteLine("Faces: " + faces);
-                writer.WriteLine("Index: " + index);
-                writer.WriteLine("Energy: " + E);
-
-                txtMeshInfo.Text = writer.ToString();
+                txtMeshInfo.Text = sb.ToString();
             };
-            meshActions.Add(txtMeshInfo);
+            builder.AddControl(txtMeshInfo);
         }
 
         private MeshPart Selection
@@ -484,39 +388,88 @@ namespace UI
                 _selection = value;
                 if (_selection == null)
                 {
-                    panelActions.Controls.AddRange(meshActions.ToArray());
+                    panelActions.Controls.AddRange(_meshActions);
+                    textBox1.Text = _mesh != null ? BuildDescription(_mesh) : string.Empty;
                     return;
                 }
                 if (_selection is Vertex)
-                    panelActions.Controls.AddRange(vertActions.ToArray());
+                {
+                    panelActions.Controls.AddRange(_vertActions);
+                    textBox1.Text = BuildDescription((Vertex)_selection, Globals.VertexFunctions);
+                }
                 else if (_selection is Edge)
-                    panelActions.Controls.AddRange(edgeActions.ToArray());
+                {
+                    panelActions.Controls.AddRange(_edgeActions);
+                    textBox1.Text = BuildDescription((Edge)_selection, Globals.EdgeFunctions);
+                }
                 else if (_selection is Face)
-                    panelActions.Controls.AddRange(faceActions.ToArray());
+                {
+                    panelActions.Controls.AddRange(_faceActions);
+                    textBox1.Text = BuildDescription((Face)_selection, Globals.FaceFunctions);
+                }
                 panelActions.Controls.Add(btnImprovePositions);
             }
         }
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        private string BuildDescription(Mesh arg)
         {
-            System.Windows.Forms.Application.Exit();
+            StringBuilder sb = new StringBuilder();
+            AppendStatistics(sb, "Vertices", arg.Vertices, Globals.VertexFunctions);
+            AppendStatistics(sb, "Edges", arg.Edges, Globals.EdgeFunctions);
+            AppendStatistics(sb, "Faces", arg.Faces, Globals.FaceFunctions);
+
+            return sb.ToString();
         }
 
-        private int _x0, _y0;
-        private double _theta0, _phi0;
-        private bool rotating;
+        private void AppendStatistics<T>(StringBuilder sb, string name, IEnumerable<T> enumerable,
+            IDictionary<string, Func<T, double>> functions)
+        {
+            sb.AppendLine(name + ":");
+            sb.AppendLine();
+
+            AppendValue(sb, "Count", enumerable.Count());
+            foreach (var item in functions)
+            {
+                sb.AppendLine(item.Key + ":");
+                sb.AppendLine();
+                AppendValue(sb, "Sum", enumerable.SafeSum(item.Value));
+                AppendValue(sb, "Mean", enumerable.SafeMean(item.Value));
+                AppendValue(sb, "Variance", enumerable.SafeVariance(item.Value));
+            }
+        }
+
+        private string BuildDescription<T>(T arg,
+            IDictionary<string, Func<T, double>> functions)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var item in functions)
+            {
+                try
+                {
+                    AppendValue(sb, item.Key, item.Value(arg));
+                }
+                catch
+                {
+                }
+            }
+            return sb.ToString();
+        }
+
+        private void AppendValue(StringBuilder sb, string name, IConvertible value)
+        {
+            sb.AppendLine(name + ":");
+            sb.AppendLine(value.ToString(NumberFormatInfo.InvariantInfo));
+            sb.AppendLine();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
 
         private void visualizer_MouseDown(object sender, MouseEventArgs e)
         {
-            if (rotating == false && e.Button == System.Windows.Forms.MouseButtons.Right)
-            {
-                _x0 = e.X;
-                _y0 = e.Y;
-                _phi0 = visualizer.Phi;
-                _theta0 = visualizer.Theta;
-                rotating = true;
-            }
-            if (rotating == false && e.Button == System.Windows.Forms.MouseButtons.Left)
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
                 Ray ray = visualizer.RayThroughScreen(e.X, e.Y);
                 if (btnPoints.Checked)
@@ -598,27 +551,9 @@ namespace UI
             }
         }
 
-        private void visualizer_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                rotating = false;
-            }
-        }
-
-        private void visualizer_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (rotating)
-            {
-                visualizer.Phi = _phi0 + (_x0 - e.X) * 0.01;
-                visualizer.Theta = _theta0 + (_y0 - e.Y) * 0.01;
-                visualizer.Invalidate();
-            }
-        }
-
         private void btnRestartCam_Click(object sender, System.EventArgs e)
         {
-            visualizer.Translate = new Matveev.Mtk.Core.Point(0, 0, 0);
+            visualizer.Translate = new Point(0, 0, 0);
             visualizer.Phi = visualizer.Theta = 0;
             visualizer.Invalidate();
         }
@@ -651,21 +586,21 @@ namespace UI
         {
             doNotDrawToolStripMenuItem.Checked = drawToolStripMenuItem.Checked = false;
             drawWithNormalsToolStripMenuItem.Checked = true;
-            visualizer.DrawPoints = OglVisualizer.DrawPoints.DrawWithNormals;
+            visualizer.DrawPoints = DrawPoints.DrawWithNormals;
         }
 
         private void drawToolStripMenuItem_Click(object sender, EventArgs e)
         {
             doNotDrawToolStripMenuItem.Checked = drawWithNormalsToolStripMenuItem.Checked = false;
             drawToolStripMenuItem.Checked = true;
-            visualizer.DrawPoints = OglVisualizer.DrawPoints.Draw;
+            visualizer.DrawPoints = DrawPoints.Draw;
         }
 
         private void doNotDrawToolStripMenuItem_Click(object sender, EventArgs e)
         {
             drawToolStripMenuItem.Checked = drawWithNormalsToolStripMenuItem.Checked = false;
             doNotDrawToolStripMenuItem.Checked = true;
-            visualizer.DrawPoints = OglVisualizer.DrawPoints.DoNotDraw;
+            visualizer.DrawPoints = DrawPoints.DoNotDraw;
         }
 
         #endregion
@@ -700,6 +635,98 @@ namespace UI
         private void cancelButton_Click(object sender, EventArgs e)
         {
             algorithmExecutionWorker.CancelAsync();
+        }
+
+        private void tikZToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(@"\begin{tikzpicture}");
+            foreach (Edge edge in _mesh.Edges)
+            {
+                sb.AppendLine(string.Format(NumberFormatInfo.InvariantInfo,
+                    @"\draw {4} ({0:F5},{1:F5}) -- ({2:F5},{3:F5});",
+                    edge.Begin.Point.X, edge.Begin.Point.Y, edge.End.Point.X, edge.End.Point.Y,
+                    (Selection != null && (edge == Selection || edge.Pair == Selection)) ? "[red]" : ""));
+            }
+            sb.AppendLine(@"\end{tikzpicture}");
+            Clipboard.SetDataObject(sb.ToString());
+            MessageBox.Show("Copied generated code to clipboard", "Tikz code");
+        }
+
+        private class ControlListBuilder : IControlBuilder
+        {
+            private readonly ICollection<Control> _result = new List<Control>();
+            private readonly UI2 _mainWindow;
+
+            public ControlListBuilder(UI2 mainWindow)
+            {
+                _mainWindow = mainWindow;
+            }
+
+            public Control[] Result
+            {
+                get
+                {
+                    return _result.ToArray();
+                }
+            }
+
+            #region IControlBuilder Members
+
+            public void AddButton(string text, Action action)
+            {
+                Button button = new Button();
+                button.Text = text;
+                button.Click += (s, e) => action();
+                _result.Add(button);
+            }
+
+            public void AddButton(string text, Action<IProgressMonitor> action)
+            {
+                Button button = new Button();
+                button.Text = text;
+                button.Click += delegate(object sender, EventArgs e)
+                {
+                    if (_mainWindow.algorithmExecutionWorker.IsBusy)
+                    {
+                        MessageBox.Show("Worker is busy!");
+                        return;
+                    }
+                    Action<IProgressMonitor> runnedAction = delegate(IProgressMonitor pm)
+                    {
+                        action(pm);
+                        MessageBox.Show("Done");
+                    };
+                    _mainWindow.algorithmExecutionWorker.RunWorkerAsync(runnedAction);
+                };
+                _result.Add(button);
+            }
+
+            public void AddLabel(string text)
+            {
+                Label label = new Label();
+                label.Text = text;
+                _result.Add(label);
+            }
+
+            public void AddControl(object control)
+            {
+                _result.Add((Control)control);
+            }
+
+            #endregion
+        }
+
+        private void ConsoleButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((ToolStripButton)sender).Checked)
+            {
+                Win32.AllocConsole();
+            }
+            else
+            {
+                Win32.FreeConsole();
+            }
         }
     }
 }

@@ -51,16 +51,22 @@ namespace Matveev.Mtk.Tests
 
         public static void TestSerialize(string name, object obj)
         {
-            string expectedDirectory = Environment.GetEnvironmentVariable("TESTS_FOLDER");
+            string expectedDirectory = @"V:\Incoming\Matveev.Mtk\Matveev.Mtk.Tests\YamlExpected";
             string actualDirectory = Path.Combine(expectedDirectory, "../YamlActual");
             string expected = Path.Combine(expectedDirectory, name);
             string actual = Path.Combine(actualDirectory, name);
-            using (Stream stream = new FileStream(actual, FileMode.Create))
+            using(Stream stream = new FileStream(actual, FileMode.Create))
+            {
                 formatter.Serialize(stream, obj);
-            if (File.Exists(expected))
+            }
+            if(File.Exists(expected))
+            {
                 FileAssert.AreEqual(expected, actual);
+            }
             else
+            {
                 File.Copy(actual, expected);
+            }
         }
 
         [Test, Ignore]

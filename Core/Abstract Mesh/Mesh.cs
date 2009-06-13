@@ -31,6 +31,8 @@ namespace Matveev.Mtk.Core
 
         public abstract Face CreateFace(Vertex v1, Vertex v2, Vertex v3);
 
-        public abstract void DeleteFace(Face face);     
+        public abstract void DeleteFace(Face face);
+
+        public abstract void Attach(Mesh submesh, Dictionary<Edge, Edge> edgeMap);
     }
 }

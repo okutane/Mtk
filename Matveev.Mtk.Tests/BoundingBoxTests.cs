@@ -41,7 +41,8 @@ namespace Matveev.Mtk.Tests
 
         private void TestConstraints(IImplicitSurface surface, string name)
         {
-            Mesh mesh = MC.Instance.Create(Configuration.Default, surface, 4, 4, 4);
+            Configuration.Default.Surface = surface;
+            Mesh mesh = MC.Instance.Create(Configuration.Default, 4, 4, 4);
             var forbiddenMoves = from v in mesh.Vertices
                                  from e in _basis
                                  where !Configuration.Default.BoundingBox.IsMovable(v, e)

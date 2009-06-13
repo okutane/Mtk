@@ -2,9 +2,7 @@
 
 namespace Matveev.Mtk.Core
 {
-    public interface IImplicitSurface
+    public interface IImplicitSurface : IPointFunctionWithGradient
     {
-        double Eval(Point p);
-        Vector Grad(Point p);
     }
 }

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 
 using NUnit.Framework;
+using Rhino.Mocks;
+using Is = Rhino.Mocks.Constraints.Is;
 
 using Matveev.Common;
 using Matveev.Mtk.Core;
@@ -15,51 +17,14 @@ namespace Matveev.Mtk.Tests
     [TestFixture]
     public class OptimizeMeshTest
     {
-        private class EdgeComparer : IEqualityComparer<Edge>
-        {
-            #region IEqualityComparer<Edge> Members
-
-            public bool Equals(Edge x, Edge y)
-            {
-                return (x == y) || (x.Pair == y);
-            }
-
-            public int GetHashCode(Edge obj)
-            {
-                int result = obj.GetHashCode();
-                if (obj.Pair != null)
-                {
-                    result ^= obj.Pair.GetHashCode();
-                }
-                return result;
-            }
-
-            #endregion
-        }
-
-        private class TransformMock : EdgeTransform
-        {
-            public readonly HashSet<Edge> PassedEdges = new HashSet<Edge>(new EdgeComparer());
-
-            public override bool IsPossible(Edge edge, IVertexConstraintsProvider constraintsProvider)
-            {
-                Assert.IsTrue(PassedEdges.Add(edge), "Edge already visited");
-                return false;
-            }
-
-            public override MeshPart Execute(Edge edge)
-            {
-                throw new NotSupportedException();
-            }
-        }
-
         [Test]
         public void OptimizeImplicit()
         {
-            IImplicitSurface surface = Plane.Sample;
-            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, surface, Configuration.BoundingBox, 3, 3, 3);
+            Configuration.Default.Surface = Plane.Sample;
+            Mesh mesh = MC.Instance.Create(Configuration.Default, 3, 3, 3);
 
-            OptimizeMesh.OptimizeImplicit(mesh, surface, 1e-2, 1e-1, NullProgressMonitor.Instance);
+            OptimizeMesh.OptimizeImplicit(mesh, Configuration.Default.Surface, 1e-2, 1e-1,
+                NullProgressMonitor.Instance, Configuration.Default);
 
             mesh.Validate();
             YamlSerializerTest.TestSerialize("OptimizeImplicit_Plane.yaml", mesh);
@@ -68,10 +33,11 @@ namespace Matveev.Mtk.Tests
         [Test]
         public void OptimizeImplicitFlippedTriangles()
         {
-            IImplicitSurface surface = Plane.Sample;
-            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, surface, Configuration.BoundingBox, 4, 4, 4);
+            IImplicitSurface surface = Configuration.Default.Surface = Plane.Sample;
+            Mesh mesh = MC.Instance.Create(Configuration.Default, 4, 4, 4);
 
-            OptimizeMesh.OptimizeImplicit(mesh, surface, 1e-2, 1e-1, NullProgressMonitor.Instance);
+            OptimizeMesh.OptimizeImplicit(mesh, surface, 1e-2, 1e-1, NullProgressMonitor.Instance,
+                Configuration.Default);
 
             mesh.Validate();
         }
@@ -79,59 +45,72 @@ namespace Matveev.Mtk.Tests
         [Test]
         public void OptimizeImplicitExceptionTriangles()
         {
-            IImplicitSurface surface = Plane.Sample;
-            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, surface, Configuration.BoundingBox,
-                12, 12, 12);
+            IImplicitSurface surface = Configuration.Default.Surface = Plane.Sample;
+            Mesh mesh = MC.Instance.Create(Configuration.Default, 12, 12, 12);
 
-            OptimizeMesh.OptimizeImplicit(mesh, surface, 1e-2, 1e-1, NullProgressMonitor.Instance);
+            OptimizeMesh.OptimizeImplicit(mesh, surface, 1e-2, 1e-1, NullProgressMonitor.Instance,
+                Configuration.Default);
 
             mesh.Validate();
+        }
+
+        private Predicate<T> IsOneOf<T>(params T[] candidates)
+        {
+            return target => candidates.Contains(target);
         }
 
         [Test]
         public void EdgeSelection()
         {
-            List<EdgeTransform> transforms = new List<EdgeTransform>(Configuration.EdgeTransforms);
-            try
+            Configuration.Default.Surface = Plane.Sample;
+            Mesh mesh = MC.Instance.Create(Configuration.Default, 2, 2, 2);
+            MockRepository repository = new MockRepository();
+            EdgeTransform transform = repository.StrictMock<EdgeTransform>();
+            using (repository.Unordered())
             {
-                Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, Plane.Sample, Configuration.BoundingBox,
-                    2, 2, 2);
-                TransformMock transform = new TransformMock();
-                Configuration.EdgeTransforms.Clear();
-                Configuration.EdgeTransforms.Add(transform);
+                HashSet<Edge> set = new HashSet<Edge>(new NotOrientedEdgeComparer());
+                foreach (Edge edge in mesh.Edges)
+                {
+                    if (!set.Add(edge))
+                    {
+                        continue;
+                    }
+                    Expect.Call(transform.IsPossible(null, null))
+                        .Constraints(Is.Matching<Edge>(IsOneOf(edge, edge.Pair)), Is.Anything())
+                        .Return(false);
+                }
+            }
+            Configuration testConfiguration = new Configuration();
+            testConfiguration.EdgeTransforms.Clear();
+            testConfiguration.EdgeTransforms.Add(transform);
 
-                OptimizeMesh.OptimizeImplicit(mesh, Plane.Sample, 0, 0, NullProgressMonitor.Instance);
-                HashSet<Edge> actual = transform.PassedEdges;
-                HashSet<Edge> expected = new HashSet<Edge>(mesh.Edges, new EdgeComparer());
-                Assert.IsTrue(expected.IsSubsetOf(actual), "Actual edge set contains unexpected edges.");
-                Assert.IsTrue(actual.IsSubsetOf(expected), "Some expected edges weren't visited.");
-            }
-            finally
-            {
-                Configuration.EdgeTransforms.Clear();
-                transforms.ForEach(Configuration.EdgeTransforms.Add);
-            }
+            repository.ReplayAll();
+            OptimizeMesh.OptimizeImplicit(mesh, Plane.Sample, 0, 0, NullProgressMonitor.Instance,
+                testConfiguration);
+            repository.VerifyAll();
         }
 
         [Test]
         public void ImproveVertexPositionsSphere()
         {
-            Mesh sphereMesh = MC.Instance.Create(Configuration.MeshFactory, Sphere.Sample,
-                Configuration.BoundingBox, 2, 2, 2);
-            OptimizeMesh.ImproveVertexPositions(sphereMesh, Sphere.Sample,
-                NullProgressMonitor.Instance);
+            Configuration.Default.Surface = Sphere.Sample;
+            Mesh sphereMesh = MC.Instance.Create(Configuration.Default, 2, 2, 2);
+            var functions = new FunctionList();
+            functions.Add(Sphere.Sample);
+            OptimizeMesh.ImproveVertexPositions(Configuration.Default, sphereMesh.Vertices,
+                NullProgressMonitor.Instance, functions);
 
             YamlSerializerTest.TestSerialize("ImproveVertexPositionsSphere.yaml", sphereMesh);
         }
 
-        [Test]
+        /*[Test]
         public void ImproveVertexPositionsHP()
         {
-            IImplicitSurface surface = QuadraticForm.ParabolicHyperboloid;
-            Mesh mesh = MC.Instance.Create(Configuration.MeshFactory, surface, Configuration.BoundingBox, 3, 3, 3);
-            OptimizeMesh.ImproveVertexPositions(mesh.Vertices.Where(v => v.Type == VertexType.Internal), surface,
-                NullProgressMonitor.Instance);
+            Configuration.Default.Surface = QuadraticForm.ParabolicHyperboloid;
+            Mesh mesh = MC.Instance.Create(Configuration.Default, 3, 3, 3);
+            OptimizeMesh.ImproveVertexPositions(mesh.Vertices.Where(VertexOps.IsInternal),
+                Configuration.Default.Surface, NullProgressMonitor.Instance, Configuration.Default);
             YamlSerializerTest.TestSerialize("ImproveVertexPositionsHP.yaml", mesh);
-        }
+        }*/
     }
 }

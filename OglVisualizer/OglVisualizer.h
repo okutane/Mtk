@@ -51,6 +51,11 @@ namespace OglVisualizer
         Edge ^_edgeSelected;
         Face ^_faceSelected;
 
+		bool _rotating;
+		int _x0;
+		int _y0;
+		double _phi0;
+		double _theta0;
 	public:        
         property Mesh ^Mesh
         {
@@ -224,9 +229,14 @@ namespace OglVisualizer
             return result;
         }
     private:
+		static float GetDiameter()
+		{
+			return System::Math::Sqrt(3);
+		}
+
 		static void Reshape(int w, int h)
 		{
-			float diameter = System::Math::Sqrt(3);
+			float diameter = GetDiameter();
 			glViewport(0, 0, (GLsizei)w, (GLsizei)h);
 			glMatrixMode(GL_PROJECTION);
 			glLoadIdentity();
@@ -254,7 +264,7 @@ namespace OglVisualizer
 
 		static void PolarView(GLdouble twist, GLdouble elevation)
 		{
-			float diameter = System::Math::Sqrt(3);
+			float diameter = GetDiameter();
 			double distance = diameter * 2;
 			double centerx, centery, centerz;
 			double eyex, eyey, eyez;
@@ -493,5 +503,38 @@ namespace OglVisualizer
             Reshape(this->Width, this->Height);
 			Invalidate();
 		}
+
+		virtual void OnMouseDown(MouseEventArgs ^e) override
+		{
+			Control::OnMouseDown(e);
+			if (e->Button == System::Windows::Forms::MouseButtons::Right)
+            {
+                _x0 = e->X;
+                _y0 = e->Y;
+                _phi0 = Phi;
+                _theta0 = Theta;
+                _rotating = true;
+            }
+		}
+
+		virtual void OnMouseUp(MouseEventArgs ^e) override
+		{
+			Control::OnMouseUp(e);
+			if (e->Button == System::Windows::Forms::MouseButtons::Right)
+			{
+				_rotating = false;
+			}
+		}
+
+		virtual void OnMouseMove(MouseEventArgs ^e) override
+        {
+			Control::OnMouseMove(e);
+            if (_rotating)
+            {
+                Phi = _phi0 + (_x0 - e->X) * 0.01;
+                Theta = _theta0 + (_y0 - e->Y) * 0.01;
+                Invalidate();
+            }
+        }
 	};
 }

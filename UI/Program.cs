@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Forms;
 
 namespace UI
 {
@@ -9,7 +10,8 @@ namespace UI
         [STAThread]
         static void Main()
         {
-            System.Windows.Forms.Application.Run(new UI2());
+            Win32.AllocConsole();
+            Application.Run(new UI2());
         }
     }
 }
