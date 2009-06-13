@@ -50,6 +50,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GslNet, Version=0.1.3451.19433, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>U:\Documents\Visual Studio 2008\Projects\GslNet\Debug\GslNet.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=736440c9b414ea16, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -71,6 +75,7 @@
     <Compile Include="EdgeCollapse.cs" />
     <Compile Include="EdgeFunctions\DihedralAngle.cs" />
     <Compile Include="EdgeFunctions\EdgeDihedralEnergy.cs" />
+    <Compile Include="EdgeFunctions\EdgeLength.cs" />
     <Compile Include="EdgeFunctions\Length.cs" />
     <Compile Include="EdgeSplit.cs" />
     <Compile Include="EdgeSwap.cs" />
@@ -91,6 +96,7 @@
     <Compile Include="Fields\QuadraticForm.cs" />
     <Compile Include="Fields\Sphere.cs" />
     <Compile Include="Fields\Torus.cs" />
+    <Compile Include="GslPointStrategies.cs" />
     <Compile Include="HeaMesh.cs" />
     <Compile Include="HeaVertex.cs" />
     <Compile Include="HEEdge.cs" />
@@ -101,6 +107,7 @@
     <Compile Include="HoppeOptimization.cs" />
     <Compile Include="IImplicitSurfacePolygonizer.cs" />
     <Compile Include="IPointsFunctionWithGradient.cs" />
+    <Compile Include="NotOrientedEdgeComparer.cs" />
     <Compile Include="NullProgressMonitor.cs" />
     <Compile Include="OneDimensionalOptimization.cs" />
     <Compile Include="LocalGradientProvider.cs" />
@@ -130,15 +137,13 @@
     <Compile Include="Validators\DuplicatedEdgesValidator.cs" />
     <Compile Include="Validators\FaceNormalsValidator.cs" />
     <Compile Include="Validators\IsolatedVerticesValidator.cs" />
-    <Compile Include="VertexEnergy.cs" />
+    <Compile Include="VertexFunctions\VertexEnergy.cs" />
+    <Compile Include="VertexFunctions\Regularity.cs" />
+    <Compile Include="VertexFunctions\SquareDecorator.cs" />
     <Compile Include="VertexOps.cs" />
     <Compile Include="VertexPointProjection.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\GslNet\GslNet\GslNet.vcproj">
-      <Project>{7D877E38-B495-47D0-8D84-15925C4697F6}</Project>
-      <Name>GslNet</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Core\Matveev.Mtk.Core.csproj">
       <Project>{3626C207-50B8-47C9-B6E2-195726D6B082}</Project>
       <Name>Matveev.Mtk.Core</Name>

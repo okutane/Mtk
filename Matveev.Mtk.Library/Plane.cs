@@ -8,13 +8,28 @@ using Matveev.Mtk.Core;
 
 namespace Matveev.Mtk.Library
 {
-    class Plane
+    class Point2d
+    {
+        public double X
+        {
+            get;
+            set;
+        }
+
+        public double Y
+        {
+            get;
+            set;
+        }
+    }
+
+    class Plane3d
     {
         readonly Point _center;
         readonly Vector _e1;
         readonly Vector _e2;
 
-        public Plane(Point center, Vector normal)
+        public Plane3d(Point center, Vector normal)
         {
             _center = center;
             int imin = 0;
@@ -38,7 +53,7 @@ namespace Matveev.Mtk.Library
             _e2 = normal ^ _e1;
         }
 
-        public double[] Trace(Ray ray)
+        public Point2d Trace(Ray ray)
         {
             Matrix a = new Matrix(3, 3);
             Matrix f = new Matrix(3, 1);
@@ -50,7 +65,11 @@ namespace Matveev.Mtk.Library
                 f[i, 0] = ray.origin[i] - _center[i];
             }
             LinSolve.Gauss(a, f);
-            return new double[] { f[0, 0], f[1, 0] };
+            return new Point2d
+            {
+                X = f[0, 0],
+                Y = f[1, 0]
+            };
         }
     }
 }

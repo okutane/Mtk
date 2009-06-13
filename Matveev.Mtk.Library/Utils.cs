@@ -69,12 +69,17 @@ namespace Matveev.Mtk.Library
 
         public static double Square(Face face)
         {
-            Point[] p = face.Vertices.Select(v => v.Point).ToArray();
+            Point[] p = face.ToPoints();
             p[1] = p[1] - p[0];
             p[2] = p[2] - p[0];
 
             return p[1].Y * p[2].Z + p[1].X * p[2].Y + p[1].Z * p[2].X
                 - p[1].Y * p[2].Z - p[1].X * p[2].Z - p[1].X * p[2].Y;
+        }
+
+        public static Point[] ToPoints(this Face face)
+        {
+            return face.Vertices.Select(v => v.Point).ToArray();
         }
     }
 }

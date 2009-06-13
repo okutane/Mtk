@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using Matveev.Mtk.Core;
+using System.Diagnostics.Contracts;
 
 namespace Matveev.Mtk.Library
 {
@@ -213,6 +214,35 @@ namespace Matveev.Mtk.Library
                     vert.type = VertexType.Boundary;
                 }
             }
+        }
+
+        public override void Attach(Mesh submesh, Dictionary<Edge, Edge> edgeMap)
+        {
+            Contract.Assert(submesh is HEMesh);
+            var heSubmesh = (HEMesh)submesh;
+            var facesToRemove = edgeMap.Keys.Select(e => e.ParentFace).Distinct();
+            var verticesMap = new Dictionary<HEVertexBase, HEVertexBase>();
+            foreach(var entry in edgeMap.Where(entry => entry.Value.Pair == null && entry.Key.Pair != null))
+            {
+                HEEdge oldEdge = (HEEdge)entry.Key;
+                HEEdge newEdge = (HEEdge)entry.Value;
+                verticesMap.Add(newEdge.end, oldEdge.end);
+                newEdge.pair = oldEdge.pair;
+                newEdge.pair.pair = newEdge;
+            }
+            foreach(HEEdge edge in heSubmesh.edges.Where(e => verticesMap.ContainsKey(e.end)))
+            {
+                edge.end = verticesMap[edge.end];
+            }
+            foreach(var face in facesToRemove)
+            {
+                DeleteFace(face);
+            }
+            foreach(var isolatedVertex in facesToRemove.SelectMany(f => f.Vertices).Distinct())
+            {
+                RemoveVertex(isolatedVertex);
+            }
+            edges.AddRange(heSubmesh.edges);
         }
 
         #endregion

@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
+using Matveev.Common;
 using Matveev.Mtk.Core;
+using Matveev.Mtk.Library.VertexFunctions;
 
 namespace Matveev.Mtk.Library
 {
     public static class VertexOps
     {
-        private const double INTERSECTION_THRESHOLD = 0;
+        public const double INTERSECTION_THRESHOLD = 0;
         
         public static double Curvature(Vertex vert)
         {
@@ -29,29 +32,13 @@ namespace Matveev.Mtk.Library
 
         public static double ExternalCurvature(Vertex vert)
         {
-            if (vert.Type != VertexType.Internal)
+            if (!IsInternal(vert))
             {
-                throw new Exception("Can't calculate curvature of non internal vertex.");
+                throw new ArgumentException("Vertex must be internal.", "vert");
             }
 
-            Plane plane = new Plane((Point)vert.Normal, vert.Normal);
-
-            List<double[]> uv =
-                new List<double[]>(vert.AdjacentFaces.Select(f => plane.Trace(new Ray(Point.ORIGIN, f.Normal))));
-
-            for (int i = 0; i < uv.Count - 1; i++)
-            {
-                for (int j = i + 2; j < uv.Count; j++)
-                {
-                    if (LineIntersectionTest2d(uv[i][0], uv[i][1], uv[i + 1][0], uv[i + 1][1],
-                        uv[j][0], uv[j][1], uv[(j + 1) % uv.Count][0], uv[(j + 1) % uv.Count][1]))
-                    {
-                        return 1;
-                    }
-                }
-            }
-                       
-            return 0;
+            Point[] points = vert.Adjacent.Prepend(vert).Select(v => v.Point).ToArray();
+            return Regularity.Instance.Evaluate(points);
         }
 
         public static bool IsInternal(this Vertex vertex)
@@ -84,29 +71,6 @@ namespace Matveev.Mtk.Library
             e1 = mean ^ e2;
             e2 = mean ^ e1;
             return new Vector[] { e1, e2 };
-        }
-
-        public static bool LineIntersectionTest2d(double x1, double y1, double x2, double y2,
-            double x3, double y3, double x4, double y4)
-        {            
-            double a11, a12, a21, a22, f1, f2, t;
-            a11 = x2 - x1;
-            a12 = x3 - x4;
-            f1 = x3 - x1;
-            a21 = y2 - y1;
-            a22 = y3 - y4;
-            f2 = y3 - y1;
-            double det = a11 * a22 - a12 * a21;
-            t = (f1 * a22 - f2 * a12) / det;
-            if(t > 0 && t < 1)
-            {
-                t = (a11 * f2 - a21 * f1) / det;
-                if (t >= INTERSECTION_THRESHOLD && (1 - t) >= INTERSECTION_THRESHOLD)
-                {
-                    return true;
-                }
-            }
-            return false;
         }
 
         #region ProjectPointOnSurface
