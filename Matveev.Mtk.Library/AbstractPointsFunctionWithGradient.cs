@@ -21,6 +21,14 @@ namespace Matveev.Mtk.Library
             return Evaluate(argument);
         }
 
+        public virtual IPointSelectionStrategy PointSelectionStrategy
+        {
+            get
+            {
+                return FacesSelectionStrategy.Instance;
+            }
+        }
+
         #endregion
     }
 }

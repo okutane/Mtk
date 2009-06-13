@@ -14,9 +14,85 @@ namespace Matveev.Mtk.Library
 
     public class UGslMultimin
     {
+        public static GslVector Optimize(IFunction function, GslVector x, int size, double eps, int maxIterations, IProgressMonitor monitor)
+        {
+            F f = new F(function.Evaluate, size);
+            FMinimizer minimizer = new FMinimizer(AlgorithmWithoutDerivatives.NMSimplex, size);
+            GslVector stepSizes = new GslVector(size);
+            stepSizes.SetAll(1e-3);
+            minimizer.Initialize(f, x, stepSizes);
+            double oldValue = function.Evaluate(x);
+            int k = 0;
+            try
+            {
+                do
+                {
+                    if(minimizer.TestSize(eps))
+                    {
+                        Console.WriteLine("Size test.");
+                        break;
+                    }
+                    minimizer.Iterate();
+                    monitor.ReportProgress(k++ * 100 / maxIterations);
+                }
+                while(k < maxIterations && !monitor.IsCancelled);
+                if(k == maxIterations)
+                {
+                    Console.WriteLine("Max iterations!");
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Minimization error after {0} iterations: " + ex.Message, k);
+            }
+            monitor.ReportProgress(100);
+            double newValue = minimizer.Minimum;
+            Console.WriteLine("Optimized from {0} to {1}. Boost: {2}", oldValue, newValue, oldValue - newValue);
+            return minimizer.X;
+        }
+
+        public static GslVector Optimize(IFunctionWithGradient function, GslVector x, int size, double eps, int maxIterations, IProgressMonitor monitor)
+        {
+            Fdf fdf = new Fdf(function, size);
+            FdfMinimizer minimizer =
+                new FdfMinimizer(AlgorithmWithDerivatives.VectorBfgs2, size);
+            minimizer.Initialize(fdf, x, Parameters.Instance.StepSize,
+                Parameters.Instance.Tolerance);
+            double oldValue = function.Evaluate(x);
+            int k = 0;
+            try
+            {
+                do
+                {
+                    if(minimizer.TestGradient(eps))
+                    {
+                        Console.WriteLine("Gradient test.");
+                        break;
+                    }
+                    minimizer.Iterate();
+                    monitor.ReportProgress(k++ * 100 / maxIterations);
+                }
+                while(k < maxIterations && !monitor.IsCancelled);
+                if(k == maxIterations)
+                {
+                    Console.WriteLine("Max iterations!");
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Minimization error after {0} iterations: " + ex.Message, k);
+                Console.WriteLine("Gradient norm: {0}", minimizer.Gradient.Norm2());
+            }
+            monitor.ReportProgress(100);
+            double newValue = minimizer.Minimum;
+            Console.WriteLine("Optimized from {0} to {1}. Boost: {2}", oldValue, newValue, oldValue - newValue);
+            return minimizer.X;
+        }
+
         public static void Optimize(IPointsFunctionWithGradient function,
             Point[] x, double eps, int maxIterations, IProgressMonitor monitor)
         {
+            Console.WriteLine("Problem dimension: {0}", x.Length * 3);
             GslVector origin = new GslVector(x.Length * 3);
             ToGslVector(x, origin);
             Point[] pointBuffer = new Point[x.Length];
@@ -26,6 +102,7 @@ namespace Matveev.Mtk.Library
                 new FdfMinimizer(AlgorithmWithDerivatives.VectorBfgs2, x.Length * 3);
             minimizer.Initialize(fdf, origin, Parameters.Instance.StepSize,
                 Parameters.Instance.Tolerance);
+            double oldValue = minimizer.Minimum;
             int k = 0;
             try
             {
@@ -33,16 +110,23 @@ namespace Matveev.Mtk.Library
                 {
                     if (minimizer.TestGradient(eps))
                     {
+                        Console.WriteLine("Gradient test.");
                         break;
                     }
                     minimizer.Iterate();
-                    monitor.ReportProgress(k++);
+                    monitor.ReportProgress(k++ * 100 / maxIterations);
                 }
                 while (k < maxIterations && !monitor.IsCancelled);
+                if (k == maxIterations)
+                {
+                    Console.WriteLine("Max iterations!");
+                }
             }
-            catch
+            catch(Exception ex)
             {
-                FromGslVector(x, minimizer.X);
+                Console.WriteLine("Minimization error after {0} iterations: " + ex.Message, k);
+                Console.WriteLine("Gradient norm: {0}", minimizer.Gradient.Norm2());
+                /*FromGslVector(x, minimizer.X);
                 Vector[] gradient = new Vector[x.Length];
                 double value = function.EvaluateValueWithGradient(x, gradient);
                 Console.WriteLine("Value:");
@@ -56,12 +140,14 @@ namespace Matveev.Mtk.Library
                 foreach (Vector vector in gradient)
                 {
                     Console.WriteLine(vector);
-                }
+                }*/
                 //throw;
             }
             monitor.ReportProgress(100);
             GslVector minimum = minimizer.X;
+            double newValue = minimizer.Minimum;
             FromGslVector(x, minimum);
+            Console.WriteLine("Optimized from {0} to {1}. Boost: {2}", oldValue, newValue, oldValue - newValue);
         }
 
         public static void Optimize(Func<Point[], double> f, Point[] x, double eps, int maxIterations, 
@@ -77,7 +163,10 @@ namespace Matveev.Mtk.Library
                 return f(pointBuffer);
             }, x.Length * 3);
             FMinimizer minimizer = new FMinimizer(AlgorithmWithoutDerivatives.NMSimplex, x.Length * 3);
-            minimizer.Initialize(f2, origin, 0.0001);
+            GslVector stepSizes = new GslVector(x.Length * 3);
+            stepSizes.SetAll(1e-4);
+            minimizer.Initialize(f2, origin, stepSizes);
+            double oldValue = f(x);
             int k = 0;
             do
             {
@@ -90,8 +179,10 @@ namespace Matveev.Mtk.Library
             }
             while (++k < maxIterations && !monitor.IsCancelled);
             monitor.ReportProgress(100);
-            GslVector minimum = minimizer.X;
-            FromGslVector(x, minimum);
+            GslVector newX = minimizer.X;
+            FromGslVector(x, newX);
+            double newValue = minimizer.Minimum;
+            Console.WriteLine("Optimized from {0} to {1}. Boost: {2}", oldValue, newValue, oldValue - newValue);
         }
 
         private static void FromGslVector(Point[] to, GslVector from)

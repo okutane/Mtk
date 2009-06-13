@@ -22,12 +22,14 @@ namespace Matveev.Mtk.Library
             get;
             set;
         }
+
         [Category("MultiMin")]
         public double Tolerance
         {
             get;
             set;
         }
+
         [Category("MultiMin")]
         public AlgorithmWithDerivatives Algorithm
         {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using Matveev.Mtk.Core;
+using Matveev.Mtk.Library.Fields;
 
 namespace Matveev.Mtk.Library
 {
@@ -14,6 +15,8 @@ namespace Matveev.Mtk.Library
         public ICollection<EdgeTransform> EdgeTransforms = new List<EdgeTransform>();
 
         public BoundingBox BoundingBox = new BoundingBox(-1, 1, -1, 1, -1, 1);
+
+        public IImplicitSurface Surface = Plane.Sample;
 
         public Configuration()
         {

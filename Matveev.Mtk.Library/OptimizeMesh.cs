@@ -3,23 +3,21 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
+using Matveev.Common;
+using Matveev.Common.Utilities;
+
 using Matveev.Mtk.Core;
 using Matveev.Mtk.Library.FaceFunctions;
 using Matveev.Mtk.Library.Fields;
 using Matveev.Mtk.Library.Validators;
 using Matveev.Mtk.Library.Utilities;
+using Matveev.Mtk.Library.VertexFunctions;
+using GslNet;
 
 namespace Matveev.Mtk.Library
 {
     public static class OptimizeMesh
     {
-        public static void ImproveVertexPositions(IEnumerable<Vertex> vertices, IImplicitSurface surface,
-            IProgressMonitor monitor)
-        {
-            IPointsFunctionWithGradient localFunction = GetLocalFunctions(surface);
-            ImproveVertexPositions(vertices, localFunction, monitor);
-        }
-
         private static IPointsFunctionWithGradient GetLocalFunctions(IImplicitSurface surface)
         {
             IPointsFunctionWithGradient energyProvider =
@@ -36,19 +34,13 @@ namespace Matveev.Mtk.Library
             return energyProvider;
         }
 
-        public static void ImproveVertexPositions(IEnumerable<Vertex> vertices, Func<Point[], double> evaluate,
-            GradientDelegate<Point, Vector> evaluateGradient, IProgressMonitor monitor)
+        public static void ImproveVertexPositions(Configuration configuration,
+            IEnumerable<Vertex> verticesCollection, IProgressMonitor monitor,
+            FunctionList functions)
         {
-            ImproveVertexPositions(vertices, new LocalPointsFunctionWithGradient(evaluate, evaluateGradient),
-                monitor);
-        }
+            Vertex[] verticesArray = verticesCollection.ToArray();
 
-        public static void ImproveVertexPositions(IEnumerable<Vertex> vertices,
-            IPointsFunctionWithGradient localFunction, IProgressMonitor monitor)
-        {
-            Vertex[] verticesArray = vertices.ToArray();
-
-            Func<Vertex, IPointStrategy> pointStrategyProvider = delegate(Vertex vertex)
+            Func<Vertex, IPointStrategy<Point[], Vector[]>> vertexToStrategy = delegate(Vertex vertex)
             {
                 int index = Array.IndexOf(verticesArray, vertex);
                 if (index >= 0)
@@ -56,14 +48,20 @@ namespace Matveev.Mtk.Library
                     if (vertex.Type == VertexType.Boundary)
                     {
                         bool[] locks = new bool[3];
+                        bool anyLock = false;
                         for (int i = 0; i < 3; i++)
                         {
                             Vector direction = new Vector(0, 0, 0);
                             direction[i] = 1;
-                            if (!Configuration.BoundingBox.IsMovable(vertex, direction))
+                            if (!configuration.BoundingBox.IsMovable(vertex, direction))
                             {
                                 locks[i] = true;
+                                anyLock = true;
                             }
+                        }
+                        if(!anyLock)
+                        {
+                            return new FixedPointStrategy(vertex.Point);
                         }
                         return new ConstrainedPointStrategy(index, locks);
                     }
@@ -72,52 +70,158 @@ namespace Matveev.Mtk.Library
                 return new FixedPointStrategy(vertex.Point);
             };
 
-            IEnumerable<Face> facesCollection = verticesArray.SelectMany(v => v.AdjacentFaces).Distinct();
-            IPointStrategy[][] faces =
-                facesCollection.Select(f => f.Vertices.Select(pointStrategyProvider).ToArray()).ToArray();
-
+            var functionsToStrategies
+                = new Dictionary<Pair<double, IPointsFunctionWithGradient>, IPointStrategy<Point[], Vector[]>[][]>();
+            Func<IEnumerable<Vertex>, IPointStrategy<Point[], Vector[]>[]> verticesToStrategies =
+                verts => verts.Select(vertexToStrategy).ToArray();
+            foreach (var function in functions)
+            {
+                var linkedSets = function.Second.PointSelectionStrategy.GetAllLinkedSets(verticesArray);
+                functionsToStrategies.Add(function, linkedSets.Select(verticesToStrategies).ToArray());
+            }
+ 
             Point[] buffer = Array.ConvertAll(verticesArray, v => v.Point);
 
-            IDictionary<IPointStrategy[], double> areas = new Dictionary<IPointStrategy[], double>();
-            foreach (IPointStrategy[] face in faces)
+            //IDictionary<IPointStrategy[], double> areas = new Dictionary<IPointStrategy[], double>();
+            /*foreach (IPointStrategy[] face in faces)
             {
                 areas.Add(face, face[0].GetPoint(buffer).AreaTo(face[1].GetPoint(buffer),
                     face[2].GetPoint(buffer)));
-            }
+            }*/
 
-            GlobalPointsFunctionWithGradient globalFunction = new GlobalPointsFunctionWithGradient(localFunction,
-                faces, areas);
+            GlobalPointsFunctionWithGradient globalFunction =
+                new GlobalPointsFunctionWithGradient(functionsToStrategies);
 
             try
             {
-                UGslMultimin.Optimize(globalFunction, buffer, 1e-7, 100, monitor);
+                UGslMultimin.Optimize(globalFunction, buffer, 1e-5, 1000, monitor);
             }
             finally
             {
                 for (int i = 0; i < verticesArray.Length; i++)
                 {
-                    verticesArray[i].Point = buffer[i];
+                    verticesArray[i].Point = vertexToStrategy(verticesArray[i])[buffer];
                 }
             }
         }
 
-        public static void ImproveVertexPositions(Mesh mesh, IImplicitSurface surface, IProgressMonitor monitor)
+        public static void ImproveVertexPositionsGsl(Configuration configuration, 
+            IEnumerable<Vertex> verticesCollection, IProgressMonitor monitor,
+            FunctionList functions)
         {
-            ImproveVertexPositions(mesh.Vertices, surface, monitor);
+            Vertex[] verticesArray = verticesCollection.ToArray();
+
+            int size = 0;
+            var vertexToStrategyMap = new Dictionary<Vertex, IPointStrategy<GslVector, GslVector>>();
+            Func<Vertex, IPointStrategy<GslVector, GslVector>> vertexToStrategyUncached = delegate(Vertex vertex)
+            {
+                int index = Array.IndexOf(verticesArray, vertex);
+                if(index >= 0)
+                {
+                    if(vertex.Type == VertexType.Boundary)
+                    {
+                        var dof = new List<Vector>();
+                        for(int i = 0 ; i < 3 ; i++)
+                        {
+                            Vector direction = new Vector(0, 0, 0);
+                            direction[i] = 1;
+                            if(configuration.BoundingBox.IsMovable(vertex, direction))
+                            {
+                                dof.Add(direction);
+                            }
+                        }
+                        if(dof.Count == 1)
+                        {
+                            return new GslFixedOnVector(ref size, vertex.Point, dof[0]);
+                        }
+                        if(dof.Count == 2)
+                        {
+                            return new GslFixedOnPlane(ref size, vertex.Point, dof[0], dof[1]);
+                        }
+                        return new FixedPointStrategy(vertex.Point);
+                    }
+                    return new GslPointStrategy(ref size);
+                }
+                return new FixedPointStrategy(vertex.Point);
+            };
+            Func<Vertex, IPointStrategy<GslVector, GslVector>> vertexToStrategy = delegate(Vertex vertex)
+            {
+                IPointStrategy<GslVector, GslVector> result;
+                if(!vertexToStrategyMap.TryGetValue(vertex, out result))
+                {
+                    result = vertexToStrategyUncached(vertex);
+                    vertexToStrategyMap.Add(vertex, result);
+                }
+                return result;
+            };
+
+            var functionsToStrategies
+                = new Dictionary<Pair<double, IPointsFunctionWithGradient>, IPointStrategy<GslVector, GslVector>[][]>();
+            Func<IEnumerable<Vertex>, IPointStrategy<GslVector, GslVector>[]> verticesToStrategies =
+                verts => verts.Select(vertexToStrategy).ToArray();
+            foreach(var function in functions)
+            {
+                var linkedSets = function.Second.PointSelectionStrategy.GetAllLinkedSets(verticesArray);
+                functionsToStrategies.Add(function, linkedSets.Select(verticesToStrategies).ToArray());
+            }
+
+            GslVector buffer = new GslVector(size);
+            foreach(var vertex in verticesArray)
+            {
+                vertexToStrategyMap[vertex][buffer] = vertex.Point;
+            }
+
+            GslGlobalPointsFunctionWithGradient globalFunction =
+                new GslGlobalPointsFunctionWithGradient(functionsToStrategies);
+
+            try
+            {
+                buffer = UGslMultimin.Optimize(globalFunction, buffer, size, 1e-5, 1000, monitor);
+            }
+            finally
+            {
+                for(int i = 0 ; i < verticesArray.Length ; i++)
+                {
+                    verticesArray[i].Point = vertexToStrategy(verticesArray[i])[buffer];
+                }
+            }
         }
 
-        public static void OptimizeImplicit(Mesh mesh, IImplicitSurface field, double epsilon, double alpha,
-            IProgressMonitor monitor)
+
+        public static double Eval(this IEnumerable<Pair<double, IPointsFunctionWithGradient>> energy, Mesh mesh)
         {
+            double result = 0;
+            foreach (var item in energy)
+            {
+                double partialResult = 0;
+                foreach (var set in item.Second.PointSelectionStrategy.GetAllLinkedSets(mesh.Vertices.ToArray()))
+                {
+                    partialResult += item.Second.Evaluate(set.Select(v => v.Point).ToArray());
+                }
+                result += item.First * partialResult;
+            }
+            return result;
+        }
+
+        public static void OptimizeImplicit(Mesh mesh, IImplicitSurface surface, double epsilon, double alpha,
+            IProgressMonitor monitor, Configuration configuration)
+        {
+            FunctionList functions = new FunctionList();
+            functions.Add(surface);
+            OptimizeImplicit(mesh, epsilon, alpha, monitor, configuration, functions);
+        }
+
+        public static void OptimizeImplicit(Mesh mesh, double epsilon, double alpha, IProgressMonitor monitor,
+            Configuration configuration, FunctionList energy)
+        {
+            Func<Vertex, IEnumerable<Vertex>> Grow = v => v.Adjacent;
             NullProgressMonitor nullMonitor = new NullProgressMonitor();
 
-            ICollection<EdgeTransform> transforms = Configuration.EdgeTransforms;
+            ICollection<EdgeTransform> transforms = configuration.EdgeTransforms;
 
-            Dictionary<EdgeTransform, int> numbersOfUses = new Dictionary<EdgeTransform, int>();
+            var transformsToUses = transforms.ToDictionary(transform => transform, transform => 0);
 
-            Func<Point[], double> faceEnergy = GetLocalFunctions(field).Evaluate;
-            Energy energy = new CompositeEnergy(new VertexEnergy(alpha), new FaceEnergy(faceEnergy));
-            BoundingBox constraintsProvider = new BoundingBox(-1, 1, -1, 1, -1, 1);
+            energy.Add(alpha, VertexEnergy.Instance);
 
             List<IMeshValidator> validators = new List<IMeshValidator>();
             validators.Add(new DihedralAnglesValidator(0.5));
@@ -127,7 +231,7 @@ namespace Matveev.Mtk.Library
             //ProjectAll(mesh, field, epsilon);
 
             //Этап 2. Улучшение позиций всех вершин сетки
-            ImproveVertexPositions(mesh, field, monitor);
+            ImproveVertexPositions(configuration, mesh.Vertices, monitor, energy);
 
             //Этап 3. Преобразования над структурой сетки
             Random rand = new Random(42);
@@ -135,27 +239,30 @@ namespace Matveev.Mtk.Library
             do
             {
                 changed = false;
-                List<Edge> candidats = new List<Edge>(mesh.Edges);
+                var candidats = mesh.Edges.ToList();
                 Edge candidat, smCandidat;
                 Mesh submesh;
                 Dictionary<Edge, Edge> edgeMap = new Dictionary<Edge, Edge>();
                 double E1, E2;
+                double oldFullEnergy = energy.Eval(mesh);
                 while (candidats.Count != 0 && !monitor.IsCancelled)
                 {
                     monitor.ReportProgress(100 - 100 * candidats.Count / mesh.EdgesCount);
                     candidat = candidats[rand.Next(candidats.Count - 1)];
                     candidats.RemoveAll(edge => edge == candidat || edge == candidat.Pair);
 
-                    IEnumerable<Face> surrounding =
-                        candidat.Begin.AdjacentFaces.Concat(candidat.End.AdjacentFaces).Distinct();
+                    //var surrounding = candidat.Begin.AdjacentFaces.Concat(candidat.End.AdjacentFaces).Distinct();
+                    var surrounding =
+                        candidat.GetVertices(0).SelectMany(Grow).SelectMany(Grow).SelectMany(v => v.AdjacentFaces).Distinct().ToArray();
 
                     submesh = mesh.CloneSub(surrounding, null, edgeMap, null);
+                    //submesh = mesh.Clone(edgeMap);
                     smCandidat = edgeMap[candidat];
                     E1 = energy.Eval(submesh);
 
                     foreach (EdgeTransform transform in transforms)
                     {
-                        if (!transform.IsPossible(candidat, constraintsProvider))
+                        if (!transform.IsPossible(candidat, configuration.BoundingBox))
                         {
                             continue;
                         }
@@ -174,44 +281,60 @@ namespace Matveev.Mtk.Library
                             continue;
                         }
 
+                        //ImproveVertexPositions(configuration, smResult.GetVertices(0), nullMonitor, energy);
+                        OptimizeSubmesh(configuration, submesh2, energy);
+
                         if (!validators.TrueForAll(v => v.IsValid(submesh2)))
                         {
                             continue;
                         }
 
-                        ImproveVertexPositions(smResult.GetVertices(0), field, nullMonitor);
-
                         E2 = energy.Eval(submesh2);
-
-                        if (E1 <= E2)
+                        double localBoost = E1 - E2;
+                        if (localBoost <= 1e-5)
                         {
                             continue;
                         }
 
-                        if (numbersOfUses.ContainsKey(transform))
-                        {
-                            numbersOfUses[transform] = numbersOfUses[transform] + 1;
-                        }
-                        else
-                        {
-                            numbersOfUses.Add(transform, 1);
-                        }
-                        /*foreach (Edge edge in edgeMap.Keys)
-                        {
-                            candidats.RemoveAll(e => e == edge);
-                        }*/
                         candidats.RemoveAll(edgeMap.ContainsKey);
 
-                        MeshPart result = transform.Execute(candidat);
+                        //MeshPart result = transform.Execute(candidat);
+                        transformsToUses[transform]++;
 
-                        ImproveVertexPositions(result.GetVertices(0), field, nullMonitor);
-                        candidats.AddRange(result.GetEdges(1));
+                        //var vertices = result.GetVertices(0);
+                        //var vertices =
+                          //  result.GetVertices(0).SelectMany(Grow).SelectMany(Grow).Distinct();
+                        //ImproveVertexPositions(configuration, vertices, nullMonitor, energy);
+                        foreach(var key in edgeMap.Keys.ToList())
+                        {
+                            edgeMap[key] = edgeMap2[edgeMap[key]];
+                        }
+                        mesh.Attach(submesh2, edgeMap);
+                        double newFullEnergy = energy.Eval(mesh);
+                        double globalBoost = oldFullEnergy - newFullEnergy;
+                        Contract.Assert(globalBoost > 0,
+                            "Energy has been grown during optimization");
+                        //Contract.Assert(globalBoost >= local11Boost,
+                          //  "Global boost is smaller than local");
+                        oldFullEnergy = newFullEnergy;
+                        candidats.AddRange(submesh2.Edges);
                         changed = true;
                         break;
                     }
                 }
             }
             while (changed && !monitor.IsCancelled);
+
+            foreach (var item in transformsToUses)
+            {
+                Console.WriteLine("{0} used {1} time(s).", item.Key, item.Value);
+            }
+        }
+
+        internal static void OptimizeSubmesh(Configuration configuration, Mesh mesh, FunctionList energy)
+        {
+            ImproveVertexPositions(configuration, mesh.Vertices, NullProgressMonitor.Instance, energy);
+            //ImproveVertexPositions(configuration, mesh.Vertices.Where(VertexOps.IsInternal), NullProgressMonitor.Instance, energy);
         }
 
         public static void ProjectAll(Mesh mesh, IImplicitSurface field, double epsilon)
@@ -225,43 +348,6 @@ namespace Matveev.Mtk.Library
                 VertexOps.ProjectPointOnSurface(ref p, field, epsilon);
                 vert.Point = p;
                 vert.Normal = Vector.Normalize(field.Grad(p));
-            }
-        }
-
-        public class MeshEnergy
-        {
-            readonly IList<EnergyPart> FaceEnergies = new List<EnergyPart>();
-            readonly IList<EnergyPart> EdgeEnergies = new List<EnergyPart>();
-            readonly IList<EnergyPart> VertexEnergies = new List<EnergyPart>();
-
-            public void AddFaceEnergy(double weight, IPointsFunctionWithGradient function)
-            {
-                EnergyPart faceEnergy;
-                faceEnergy.Weight = weight;
-                faceEnergy.Function = function;
-                FaceEnergies.Add(faceEnergy);
-            }
-
-            public void AddEdgeEnergy(double weight, IPointsFunctionWithGradient function)
-            {
-                EnergyPart edgeEnergy;
-                edgeEnergy.Weight = weight;
-                edgeEnergy.Function = function;
-                EdgeEnergies.Add(edgeEnergy);
-            }
-
-            public void AddVertexEnergy(double weight, IPointsFunctionWithGradient function)
-            {
-                EnergyPart vertexEnergy;
-                vertexEnergy.Weight = weight;
-                vertexEnergy.Function = function;
-                VertexEnergies.Add(vertexEnergy);
-            }
-
-            private struct EnergyPart
-            {
-                public double Weight;
-                public IPointsFunctionWithGradient Function;
             }
         }
 
@@ -280,91 +366,7 @@ namespace Matveev.Mtk.Library
             }
         }
 
-        private interface IPointStrategy
-        {
-            Point GetPoint(Point[] points);
-
-            void AddVector(Vector[] result, Vector vector);
-        }
-
-        private class NormalPointStrategy : IPointStrategy
-        {
-            private readonly int _index;
-
-            public NormalPointStrategy(int index)
-            {
-                _index = index;
-            }
-
-            #region IPointStrategy Members
-
-            public Point GetPoint(Point[] points)
-            {
-                return points[_index];
-            }
-
-            public void AddVector(Vector[] result, Vector vector)
-            {
-                result[_index] += vector;
-            }
-
-            #endregion
-        }
-
-        private class ConstrainedPointStrategy : IPointStrategy
-        {
-            private readonly int _index;
-            private readonly bool[] _locks;
-
-            public ConstrainedPointStrategy(int index, bool[] locks)
-            {
-                _index = index;
-                _locks = locks;
-            }
-
-            #region IPointStrategy Members
-
-            public Point GetPoint(Point[] points)
-            {
-                return points[_index];
-            }
-
-            public void AddVector(Vector[] result, Vector vector)
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    if (!_locks[i])
-                    {
-                        result[_index][i] += vector[i];
-                    }
-                }
-            }
-
-            #endregion
-        }
-
-        private class FixedPointStrategy : IPointStrategy
-        {
-            private readonly Point _point;
-
-            public FixedPointStrategy(Point point)
-            {
-                _point = point;
-            }
-
-            #region IPointStrategy Members
-
-            public Point GetPoint(Point[] points)
-            {
-                return _point;
-            }
-
-            public void AddVector(Vector[] result, Vector vector)
-            {
-            }
-
-            #endregion
-        }
+        
 
         private class LocalPointsFunctionWithGradient : AbstractPointsFunctionWithGradient
         {
@@ -391,25 +393,60 @@ namespace Matveev.Mtk.Library
 
         private class GlobalPointsFunctionWithGradient : AbstractPointsFunctionWithGradient
         {
-            private readonly IPointStrategy[][] _faces;
+            private readonly Dictionary<Pair<double, IPointsFunctionWithGradient>, IPointStrategy<Point[], Vector[]>[][]> _functionsToStrategies;
+            private Vector[] _localGradientValue = new Vector[16];
+
+            public GlobalPointsFunctionWithGradient(
+                Dictionary<Pair<double, IPointsFunctionWithGradient>, IPointStrategy<Point[], Vector[]>[][]> functionsToStrategies)
+            {
+                _functionsToStrategies = functionsToStrategies;
+            }
+
+            /*private readonly IPointStrategy[][] _faces;
+            private readonly IPointStrategy[][] _edges;
+            private readonly IPointStrategy[] _vertices;
             private readonly IPointsFunctionWithGradient _localFunction;
+            private readonly IPointsFunctionWithGradient _edgeFunction;
+            private readonly IPointFunctionWithGradient _vertexFunction;
             private readonly IDictionary<IPointStrategy[], double> _areas;
 
             public GlobalPointsFunctionWithGradient(IPointsFunctionWithGradient localFunction,
-                IPointStrategy[][] faces, IDictionary<IPointStrategy[], double> areas)
+                IPointStrategy[][] faces, IDictionary<IPointStrategy[], double> areas,
+                IPointsFunctionWithGradient edgeFunction, IPointStrategy[][] edges,
+                IPointFunctionWithGradient vertexFunction, IPointStrategy[] vertices)
             {
                 _faces = faces;
+                _edges = edges;
+                _vertices = vertices;
                 _localFunction = localFunction;
+                _edgeFunction = edgeFunction;
+                _vertexFunction = vertexFunction;
                 _areas = areas;
             }
 
             public override double Evaluate(Point[] argument)
             {
                 double result = 0;
-                foreach (IPointStrategy[] face in _faces)
+                if (_localFunction != null)
                 {
-                    Point[] localPoints = Array.ConvertAll(face, strategy => strategy.GetPoint(argument));
-                    result += /*_areas[face] * */ _localFunction.Evaluate(localPoints);
+                    foreach (IPointStrategy[] face in _faces)
+                    {
+                        Point[] localPoints = Array.ConvertAll(face, strategy => strategy.GetPoint(argument));
+                        result += _localFunction.Evaluate(localPoints);
+                        //result += _areas[face] * _localFunction.Evaluate(localPoints);
+                    }
+                }
+                if (_edgeFunction != null)
+                {
+                    foreach (IPointStrategy[] edge in _edges)
+                    {
+                        Point[] localPoints = Array.ConvertAll(edge, strategy => strategy.GetPoint(argument));
+                        result += _edgeFunction.Evaluate(localPoints);
+                    }
+                }
+                if (_vertexFunction != null)
+                {
+                    result += _vertices.Sum(v => _vertexFunction.Eval(v.GetPoint(argument)));
                 }
                 return result;
             }
@@ -417,17 +454,111 @@ namespace Matveev.Mtk.Library
             public override void EvaluateGradient(Point[] argument, Vector[] result)
             {
                 Array.Clear(result, 0, result.Length);
-                foreach (IPointStrategy[] face in _faces)
+                Vector[] localGradientValue = new Vector[3];
+                if (_localFunction != null)
                 {
-                    Point[] localPoints = Array.ConvertAll(face, strategy => strategy.GetPoint(argument));
-                    Vector[] localGradientValue = new Vector[3];
-                    _localFunction.EvaluateValueWithGradient(localPoints, localGradientValue);
-                    for (int i = 0; i < 3; i++)
+                    foreach (IPointStrategy[] face in _faces)
                     {
-                        face[i].AddVector(result, /*_areas[face] * */ localGradientValue[i]);
+                        Point[] localPoints = Array.ConvertAll(face, strategy => strategy.GetPoint(argument));
+                        _localFunction.EvaluateGradient(localPoints, localGradientValue);
+                        for (int i = 0; i < 3; i++)
+                        {
+                            face[i].AddVector(result, localGradientValue[i]);
+                            //face[i].AddVector(result, _areas[face] * localGradientValue[i]);
+                        }
+                    }
+                }
+                if (_edgeFunction != null)
+                {
+                    foreach (IPointStrategy[] edge in _edges)
+                    {
+                        Point[] localPoints = Array.ConvertAll(edge, strategy => strategy.GetPoint(argument));
+                        _edgeFunction.EvaluateGradient(localPoints, localGradientValue);
+                        for (int i = 0; i < 2; i++)
+                        {
+                            edge[i].AddVector(result, localGradientValue[i]);
+                        }
+                    }
+                }
+                if (_vertexFunction != null)
+                {
+                    foreach (IPointStrategy vertex in _vertices)
+                    {
+                        vertex.AddVector(result, _vertexFunction.Grad(vertex.GetPoint(argument)));
+                    }
+                }
+            }*/
+
+            public override double Evaluate(Point[] argument)
+            {
+                double result = 0;
+                foreach (var functionWithStrategies in _functionsToStrategies)
+                {
+                    var weight = functionWithStrategies.Key.First;
+                    var function = functionWithStrategies.Key.Second;
+                    double partialSum = 0;
+                    foreach (var set in functionWithStrategies.Value)
+                    {
+                        Point[] pointsSet = Array.ConvertAll(set, strategy => strategy[argument]);
+                        partialSum += function.Evaluate(pointsSet);
+                    }
+                    result += weight * partialSum;
+                }
+                return result;
+            }
+
+            public override void EvaluateGradient(Point[] argument, Vector[] result)
+            {
+                Array.Clear(result, 0, result.Length);
+                foreach(var functionWithStrategies in _functionsToStrategies)
+                {
+                    foreach (var set in functionWithStrategies.Value)
+                    {
+                        if (set.Length > _localGradientValue.Length)
+                        {
+                            _localGradientValue = new Vector[set.Length * 2];
+                        }
+                        var weight = functionWithStrategies.Key.First;
+                        var function = functionWithStrategies.Key.Second;
+                        Point[] pointsSet = Array.ConvertAll(set, strategy => strategy[argument]);
+                        function.EvaluateGradient(pointsSet, _localGradientValue);
+                        for (int i = 0; i < set.Length; i++)
+                        {
+                            set[i].AddVector(result, weight * _localGradientValue[i]);
+                        }
                     }
                 }
             }
+        }
+    }
+
+    public class FunctionList : List<Pair<double, IPointsFunctionWithGradient>>
+    {
+        public void Add(IPointsFunctionWithGradient function)
+        {
+            Add(new Pair<double, IPointsFunctionWithGradient>
+            {
+                First = 1,
+                Second = function
+            });
+        }
+
+        public void Add(IImplicitSurface surface)
+        {
+            Add(new Pair<double, IPointsFunctionWithGradient>
+            {
+                First = 1,
+                Second = TriangleImplicitApproximations.GetApproximation(surface, "square")
+            });
+        }
+
+        public void Add(double weight, IPointsFunctionWithGradient function)
+        {
+            Add(new Pair<double, IPointsFunctionWithGradient>
+            {
+                First = weight,
+                Second = function
+            });
         }
     }
 }
