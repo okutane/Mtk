@@ -77,6 +77,7 @@
     <Compile Include="HEVertexTest.cs" />
     <Compile Include="ImproveVertexPositionsTests.cs" />
     <Compile Include="IntegrationTests.cs" />
+    <Compile Include="MeshOptimization\OptimizeImplicitTest.cs" />
     <Compile Include="MeshTest.cs" />
     <Compile Include="OneDimensionalOptimizationTest.cs" />
     <None Include="NewtonMethodTest.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="TriangleImplicitApproximationsTests.cs" />
     <Compile Include="UMeshTestHelper.cs" />
     <Compile Include="UMeshTests.cs" />
+    <Compile Include="VertexOpsTests.cs" />
     <Compile Include="YamlSerializerTest.cs" />
   </ItemGroup>
   <ItemGroup>

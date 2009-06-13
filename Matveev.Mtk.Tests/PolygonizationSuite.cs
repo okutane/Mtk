@@ -25,9 +25,26 @@ namespace Matveev.Mtk.Tests
             IImplicitSurfacePolygonizer polygonizer =
                 InstanceCollector<IImplicitSurfacePolygonizer>.Instances[polygonizerKey];
             IImplicitSurface surface = InstanceCollector<IImplicitSurface>.Instances[surfaceKey];
-            Mesh mesh = polygonizer.Create(Configuration.Default, surface, 4, 4, 4);
-            YamlSerializerTest.TestSerialize(string.Format(filename, surface, polygonizer), mesh);
-            YamlSerializerTest.TestSerialize(string.Format(filename, surface, polygonizer), mesh.Clone(null));
+            Configuration.Default.Surface = surface;
+            Mesh mesh = polygonizer.Create(Configuration.Default, 4, 4, 4);
+            YamlSerializerTest.TestSerialize(filename, mesh);
+            YamlSerializerTest.TestSerialize(filename, mesh.Clone(null));
+        }
+
+        [Test]
+        public void RegularityTest(
+            [ValueSource("GetPolygonizers")]string polygonizerKey,
+            [ValueSource("GetSurfaces")]string surfaceKey)
+        {
+            string filename = string.Format("{0}[{1}]_NonRegular.yaml", surfaceKey, polygonizerKey);
+            IImplicitSurfacePolygonizer polygonizer =
+                InstanceCollector<IImplicitSurfacePolygonizer>.Instances[polygonizerKey];
+            IImplicitSurface surface = InstanceCollector<IImplicitSurface>.Instances[surfaceKey];
+            Configuration.Default.Surface = surface;
+            var internalVertices =
+                polygonizer.Create(Configuration.Default, 4, 4, 4).Vertices.Where(VertexOps.IsInternal);
+            YamlSerializerTest.TestSerialize(filename,
+                internalVertices.Where(v => VertexOps.ExternalCurvature(v) != 0).ToArray());
         }
 
         private IEnumerable GetPolygonizers()

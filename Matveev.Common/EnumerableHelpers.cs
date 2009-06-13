@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Matveev.Common.Utilities;
+
 namespace Matveev.Common
 {
     public delegate T2 Function<T1, T2>(T1 arg);
@@ -20,6 +22,15 @@ namespace Matveev.Common
             }
 
             return -1;
+        }
+
+        public static IEnumerable<T> Prepend<T>(this IEnumerable<T> enumerable, T head)
+        {
+            yield return head;
+            foreach (var item in enumerable)
+            {
+                yield return item;
+            }
         }
 
         public static int Count<T>(IEnumerable<T> enumerable)
@@ -44,6 +55,51 @@ namespace Matveev.Common
             }
 
             return aggregator.Result;
+        }
+
+        public static bool IsEmpty<T>(this IEnumerable<T> enumerable)
+        {
+            return !enumerable.GetEnumerator().MoveNext();
+        }
+
+        public static double SafeSum<T>(this IEnumerable<T> enumerable, Func<T, double> function)
+        {
+            double result = 0;
+            foreach (var item in enumerable)
+            {
+                try
+                {
+                    result += function(item);
+                }
+                catch
+                {
+                }
+            }
+            return result;
+        }
+
+        public static double SafeMean<T>(this IEnumerable<T> enumerable, Func<T, double> function)
+        {
+            double result = 0;
+            int count = 0;
+            foreach (var item in enumerable)
+            {
+                try
+                {
+                    result += function(item);
+                    count++;
+                }
+                catch
+                {
+                }
+            }
+            return result / count;
+        }
+
+        public static double SafeVariance<T>(this IEnumerable<T> enumerable, Func<T, double> function)
+        {
+            double mean = enumerable.SafeMean(function);
+            return enumerable.SafeMean(arg => (function(arg) - mean).Sq());
         }
     }
 }

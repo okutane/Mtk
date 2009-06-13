@@ -64,7 +64,8 @@ namespace Matveev.Mtk.Library.Tests
         [Test]
         public void Execute()
         {
-            Mesh mesh = MC.Instance.Create(Configuration.Default, Plane.Sample, 3, 3, 3);
+            Configuration.Default.Surface = Plane.Sample;
+            Mesh mesh = MC.Instance.Create(Configuration.Default, 3, 3, 3);
             Edge edge = (from e in mesh.Edges
                        where (Math.Abs(e.Begin.Point.X + e.End.Point.X) < 1e-4)
                           && (Math.Abs(e.Begin.Point.Y + e.End.Point.Y) < 1e-4)

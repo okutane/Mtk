@@ -15,12 +15,9 @@ namespace Matveev.Common
             {
                 Dictionary<string, T> instances = new Dictionary<string, T>();
 
-                foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+                foreach(Type type in Assembly.Load("Matveev.Mtk.Library").GetTypes())
                 {
-                    foreach (Type type in assembly.GetTypes())
-                    {
-                        FindInstances(instances, type);
-                    }
+                    FindInstances(instances, type);
                 }
 
                 return instances;

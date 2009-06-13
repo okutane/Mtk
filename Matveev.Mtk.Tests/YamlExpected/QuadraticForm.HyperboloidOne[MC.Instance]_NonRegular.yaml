@@ -1,0 +1,20 @@
+---
+- (-0.15,-0.5,-0.5) Internal
+- (-0.5,-0.15,-0.5) Internal
+- (0.5,-0.15,-0.5) Internal
+- (-0.5,0.15,-0.5) Internal
+- (-0.15,0.5,-0.5) Internal
+- (0.5,0.15,-0.5) Internal
+- (0.15,0.5,-0.5) Internal
+- (0,-0.2,0) Internal
+- (-0.2,0,0) Internal
+- (0.2,0,0) Internal
+- (0,0.2,0) Internal
+- (-0.15,-0.5,0.5) Internal
+- (0.15,-0.5,0.5) Internal
+- (-0.5,-0.15,0.5) Internal
+- (0.5,-0.15,0.5) Internal
+- (-0.5,0.15,0.5) Internal
+- (-0.15,0.5,0.5) Internal
+- (0.5,0.15,0.5) Internal
+- (0.15,0.5,0.5) Internal

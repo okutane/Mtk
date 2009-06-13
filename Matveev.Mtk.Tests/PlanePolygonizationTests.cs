@@ -17,9 +17,8 @@ namespace Matveev.Mtk.Tests
         [Test]
         public void Create()
         {
-            Mesh mesh = MC.Instance.Create(Configuration.Default, QuadraticForm.Plane, 2, 2, 2);
-            
-            //Dictionary<
+            Configuration.Default.Surface = QuadraticForm.Plane;
+            Mesh mesh = MC.Instance.Create(Configuration.Default, 2, 2, 2);
         }
     }
 }

@@ -45,6 +45,11 @@ def print_info(info_table as duck):
 	print ""
 	
 def gather_and_print_all(surface as IImplicitSurface, mesh as Mesh, precise as IFaceEnergyProvider):
+	face_energies = Dictionary[of string, IFaceEnergyProvider]()
+	face_energies["precise"] = precise
+	for name in TriangleImplicitApproximations.AvailableApproximations:
+		face_energies[name] = TriangleImplicitApproximations.GetApproximation(surface, name)
+
 	print "Vertex count: " + count(mesh.Vertices)
 	print "Vertex energy:"
 	print_statistics(mesh.Vertices, { v as Vertex | return Math.Pow(surface.Eval(v.Point), 2) })
@@ -57,10 +62,9 @@ def gather_and_print_all(surface as IImplicitSurface, mesh as Mesh, precise as I
 	print "Face area:"
 	print_statistics(mesh.Faces, { f as Face | points = List[of Vertex](f.Vertices); return points[0].Point.AreaTo(points[1].Point, points[2].Point) })
 
-	face_energies = Dictionary[of string, IFaceEnergyProvider]()
-	face_energies["precise"] = precise
-	for name in TriangleImplicitApproximations.AvailableApproximations:
-		face_energies[name] = TriangleImplicitApproximations.GetApproximation(surface, name)
+	for namedEnergy in face_energies:
+		print namedEnergy.Key + ":"
+		print_statistics(mesh.Faces, { f as Face | points = List[of Vertex](f.Vertices).ToArray(); return points[0].Point.AreaTo(points[1].Point, points[2].Point) * namedEnergy.Value.FaceEnergy((points[0].Point, points[1].Point, points[2].Point)) })
 
 	# Gathering statistics
 	performance = Dictionary[of string, TimeSpan]()
@@ -102,9 +106,9 @@ def gather_and_print_all(surface as IImplicitSurface, mesh as Mesh, precise as I
 	print_info(relative_error)
 
 print "Torus [-1, 1]^3 8x8x8"
-surface as IImplicitSurface = Torus.Sample
+surface as IImplicitSurface = Torus.Unit
 mesh = MC.Instance.Create(HEMesh.Factory, surface, -1, 1, -1, 1, -1, 1, 8, 8, 8)
-gather_and_print_all(surface, mesh, Torus.Sample)
+gather_and_print_all(surface, mesh, Torus.Unit)
 
 print "-----------------------------------"
 print "Sphere [-1, 1]^3 2x2x2"
@@ -117,3 +121,9 @@ print "Sphere [-1, 1]^3 4x4x4"
 surface = CompactQuadraticForm.Sphere
 mesh = MC.Instance.Create(HEMesh.Factory, surface, -1, 1, -1, 1, -1, 1, 4, 4, 4)
 gather_and_print_all(surface, mesh, CompactQuadraticForm.Sphere)
+
+print "-----------------------------------"
+print "Torus [-1, 1]^3 16x16x16"
+surface = Torus.Triple
+mesh = MC.Instance.Create(HEMesh.Factory, surface, -3, 3, -3, 3, -3, 3, 16, 16, 16)
+gather_and_print_all(surface, mesh, Torus.Triple)

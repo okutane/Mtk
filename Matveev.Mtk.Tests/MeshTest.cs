@@ -8,6 +8,8 @@ using NUnit.Framework;
 using Matveev.Mtk.Core;
 using Matveev.Mtk.Library;
 using Matveev.Mtk.Library.Fields;
+using Matveev.Mtk.Library.Utilities;
+using System.Diagnostics;
 
 namespace Matveev.Mtk.Tests
 {
@@ -21,7 +23,8 @@ namespace Matveev.Mtk.Tests
         [Test]
         public void VertexGetRadius1()
         {
-            Mesh mesh = MC.Instance.Create(Configuration, Plane.Sample, 2, 2, 2);
+            Configuration.Surface = Plane.Sample;
+            Mesh mesh = MC.Instance.Create(Configuration, 2, 2, 2);
             Vertex target = UMeshTestHelper.FindVertex(mesh, 0, 0);
             Vertex[] expected = new Vertex[] {
                 UMeshTestHelper.FindVertex(mesh, 1, 0),
@@ -37,7 +40,8 @@ namespace Matveev.Mtk.Tests
         [Test]
         public void BoundaryVertexGetRadius1()
         {
-            Mesh mesh = MC.Instance.Create(Configuration, Plane.Sample, 2, 2, 2);
+            Configuration.Default.Surface = Plane.Sample;
+            Mesh mesh = MC.Instance.Create(Configuration, 2, 2, 2);
             Vertex target = UMeshTestHelper.FindVertex(mesh, 1, 0);
             Vertex[] expected = new Vertex[] {
                 UMeshTestHelper.FindVertex(mesh, 1, -1),
@@ -53,7 +57,8 @@ namespace Matveev.Mtk.Tests
         {
             Configuration configuration = Configuration;
             configuration.BoundingBox = new BoundingBox(-3, 3, -3, 3, -3, 3);
-            Mesh mesh = MC.Instance.Create(configuration, Plane.Sample, 3, 3, 3);
+            configuration.Surface = Plane.Sample;
+            Mesh mesh = MC.Instance.Create(configuration, 3, 3, 3);
             Edge target = mesh.Edges.Single(
                 edge => edge.Begin.Point == new Point(1, 1, 0) && edge.End.Point == new Point(-1, -1, 0));
             Vertex[] expected = new Vertex[] {
@@ -67,6 +72,24 @@ namespace Matveev.Mtk.Tests
                 UMeshTestHelper.FindVertex(mesh, -3, -3),
             };
             TestVertexCycles(expected, target.GetVertices(1).ToArray());
+        }
+
+        [Test]
+        public void AttachSubmesh()
+        {
+            var mesh = MC.Instance.Create(Configuration, 5, 5, 5);
+            var target = mesh.Edges.First(e => (e.GetVertices(0).Aggregate(Point.ORIGIN, (sum, v) => sum + v.Point) - Point.ORIGIN).Norm < 1e-5);
+            var faces = target.GetVertices(0).SelectMany(v => v.AdjacentFaces).Distinct().ToList();
+            var vertexMap = new Dictionary<Vertex, Vertex>();
+            var edgeMap = new Dictionary<Edge, Edge>();
+            var faceMap = new Dictionary<Face, Face>();
+            var submesh = mesh.CloneSub(faces, vertexMap, edgeMap, faceMap);
+            var submeshEdges = submesh.Edges.ToList();
+            mesh.Attach(submesh, edgeMap);
+            Assert.IsFalse(mesh.Faces.Any(faceMap.ContainsKey));
+            Assert.IsFalse(mesh.Edges.Any(edgeMap.ContainsKey));
+            Assert.IsTrue(submeshEdges.All(mesh.Edges.Contains));
+            Assert.IsTrue(mesh.Vertices.All(v => v.OutEdges.All(mesh.Edges.Contains)));
         }
 
         private static void TestVertexCycles(Vertex[] expected, Vertex[] actual)

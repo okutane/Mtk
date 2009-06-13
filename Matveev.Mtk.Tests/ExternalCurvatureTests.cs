@@ -17,7 +17,8 @@ namespace Matveev.Mtk.Tests
         [Test]
         public void SphereTest()
         {
-            Mesh mesh = MC.Instance.Create(Configuration.Default, Sphere.Sample, 4, 4, 4);
+            Configuration.Default.Surface = Sphere.Sample;
+            Mesh mesh = MC.Instance.Create(Configuration.Default, 4, 4, 4);
             var result = from v in mesh.Vertices
                          where VertexOps.ExternalCurvature(v) != 0
                          select new
