@@ -19,6 +19,7 @@ using System.Globalization;
 using OglVisualizer;
 using Matveev.Mtk.Library.EdgeFunctions;
 using Matveev.Mtk.Library.VertexFunctions;
+using System.Diagnostics;
 
 namespace UI
 {
@@ -30,6 +31,7 @@ namespace UI
         private IEnumerable<Point> _points;
 
         private MeshPart _selection;
+        internal static List<Face> _selectionGrown;
 
         private Button btnImprovePositions;
 
@@ -100,6 +102,11 @@ namespace UI
             propertyGrid1.SelectedObject = Parameters.Instance;
         }
 
+        private void MarkAsRed(IEnumerable<Vertex> vertices)
+        {
+            visualizer.MarkedVerts = vertices.ToDictionary(v => v, v => Color.Red);
+        }
+
         private void ListFaceActions(IControlBuilder builder)
         {
             TextBox txtFaceInfo = new TextBox();
@@ -116,6 +123,56 @@ namespace UI
                 }
             };
             builder.AddControl(txtFaceInfo);
+            builder.AddButton("Color(N)", delegate()
+            {
+                var functions = new FunctionList();
+                functions.Add(Configuration.Default.Surface);
+                var vertices = _selection.GetVertices(0).ToList();
+                for(int i = 0 ; i < Parameters.Instance.Grows ; i++)
+                {
+                    vertices = vertices.SelectMany(v => v.Adjacent).Distinct().ToList();
+                }
+                var redVerts = vertices;
+                var blueVerts = FacesSelectionStrategy.Instance.GetAllLinkedSets(vertices.ToArray()).SelectMany(verts => verts).Except(redVerts).Distinct();
+                var colors = new Dictionary<Vertex, Color>();
+                foreach(var redVert in redVerts)
+                {
+                    colors.Add(redVert, Color.Red);
+                }
+                foreach(var blueVert in blueVerts)
+                {
+                    colors.Add(blueVert, Color.Blue);
+                }
+                visualizer.MarkedVerts = colors;
+                Selection = _selection;
+                Invalidate(true);
+            });
+            builder.AddButton("Improve(N)", delegate()
+            {
+                var functions = new FunctionList();
+                functions.Add(Configuration.Default.Surface);
+                var vertices = _selection.GetVertices(0).ToList();
+                for(int i = 0 ; i < Parameters.Instance.Grows ; i++)
+                {
+                    vertices = vertices.SelectMany(v => v.Adjacent).Distinct().ToList();
+                }
+                OptimizeMesh.ImproveVertexPositions(Configuration.Default, vertices,
+                    NullProgressMonitor.Instance, functions);
+                var redVerts = vertices;
+                var blueVerts = FacesSelectionStrategy.Instance.GetAllLinkedSets(vertices.ToArray()).SelectMany(verts => verts).Except(redVerts).Distinct();
+                var colors = new Dictionary<Vertex, Color>();
+                foreach(var redVert in redVerts)
+                {
+                    colors.Add(redVert, Color.Red);
+                }
+                foreach(var blueVert in blueVerts)
+                {
+                    colors.Add(blueVert, Color.Blue);
+                }
+                visualizer.MarkedVerts = colors;
+                Selection = _selection;
+                Invalidate(true);
+            });
         }
 
         private void ListEdgeActions(IControlBuilder builder)
@@ -149,11 +206,13 @@ namespace UI
                             return;
                         }
                         Selection = transform.Execute(selected);
-                        if (Selection is Vertex)
-                            this.visualizer.MarkedVerts = new Vertex[] { (Vertex)Selection };
-                        else if (Selection is Edge)
+                        if(Selection is Vertex)
+                        {
+                            MarkAsRed(new Vertex[] { (Vertex)Selection });
+                        }
+                        else if(Selection is Edge)
                             this.visualizer.SelectedEdge = (Edge)Selection;
-                        else if (Selection is Face)
+                        else if(Selection is Face)
                             this.visualizer.SelectedFace = (Face)Selection;
                     }
                 });
@@ -263,6 +322,10 @@ namespace UI
                 IImplicitSurfacePolygonizer polygonizer =
                     implicitPolygonizers[cbxImplicitPolygonizer.SelectedValue.ToString()];
                 _mesh = polygonizer.Create(Configuration.Default, N, N, N);
+                if(Parameters.Instance.DoCleanUp)
+                {
+                    _mesh.Cleanup();
+                }
                 visualizer.Mesh = _mesh;
                 if (_mesh.Faces.IsEmpty())
                 {
@@ -291,11 +354,14 @@ namespace UI
                 functions.Add(Configuration.Default.Surface);
                 OptimizeMesh.ImproveVertexPositions(Configuration.Default, _mesh.Vertices, pm, functions);
             });
-            builder.AddButton("ImproveVertexPositionsGsl", delegate(IProgressMonitor pm)
+            builder.AddButton("area*approx", delegate(IProgressMonitor pm)
             {
                 var functions = new FunctionList();
-                functions.Add(Configuration.Default.Surface);
-                OptimizeMesh.ImproveVertexPositionsGsl(Configuration.Default, _mesh.Vertices, pm, functions);
+                IPointsFunctionWithGradient surface = TriangleImplicitApproximations.GetApproximation(Configuration.Default.Surface, "square");
+                IPointsFunctionWithGradient area = AreaSquare.Instance;
+                IPointsFunctionWithGradient energy = new MultiplicationFaceFunction(surface, area);
+                functions.Add(energy);
+                OptimizeMesh.ImproveVertexPositions(Configuration.Default, _mesh.Vertices, pm, functions);
             });
             builder.AddButton("Optimize", delegate(IProgressMonitor pm)
             {
@@ -323,14 +389,22 @@ namespace UI
                 var functions = new FunctionList();
                 functions.Add(1E+5, new SquareDecorator(Configuration.Default.Surface));
                 functions.Add(EdgeLengthSquare.Instance);
-                OptimizeMesh.ImproveVertexPositionsGsl(Configuration.Default, _mesh.Vertices, pm, functions);
+                OptimizeMesh.ImproveVertexPositions(Configuration.Default, _mesh.Vertices, pm, functions);
             });
 
             builder.AddButton("Area square", delegate(IProgressMonitor pm)
             {
                 var functions = new FunctionList();
-                functions.Add(new SquareDecorator(Configuration.Default.Surface));
-                functions.Add(1E-5, AreaSquare.Instance);
+                functions.Add(1E+5, new SquareDecorator(Configuration.Default.Surface));
+                functions.Add(AreaSquare.Instance);
+                OptimizeMesh.ImproveVertexPositions(Configuration.Default, _mesh.Vertices, pm, functions);
+            });
+
+            builder.AddButton("Make bad", delegate(IProgressMonitor pm)
+            {
+                var functions = new FunctionList();
+                functions.Add(new SquareDecorator(new Sphere(0)));
+                functions.Add(AreaSquare.Instance);
                 OptimizeMesh.ImproveVertexPositions(Configuration.Default, _mesh.Vertices, pm, functions);
             });
 
@@ -344,10 +418,7 @@ namespace UI
 
             builder.AddButton("Mark nonreg", delegate()
             {
-                visualizer.MarkedVerts = from v in _mesh.Vertices
-                                         where v.Type == VertexType.Internal
-                                         && VertexOps.ExternalCurvature(v) > 0.1
-                                         select v;
+                MarkAsRed(_mesh.Vertices.Where(VertexOps.IsInternal).Where(v => v.ExternalCurvature() > 0.1));
                 Selection = null;
             });
 
@@ -414,9 +485,9 @@ namespace UI
         private string BuildDescription(Mesh arg)
         {
             StringBuilder sb = new StringBuilder();
-            AppendStatistics(sb, "Vertices", arg.Vertices, Globals.VertexFunctions);
-            AppendStatistics(sb, "Edges", arg.Edges, Globals.EdgeFunctions);
-            AppendStatistics(sb, "Faces", arg.Faces, Globals.FaceFunctions);
+            //AppendStatistics(sb, "Vertices", arg.Vertices, Globals.VertexFunctions);
+            //AppendStatistics(sb, "Edges", arg.Edges, Globals.EdgeFunctions);
+            //AppendStatistics(sb, "Faces", arg.Faces, Globals.FaceFunctions);
 
             return sb.ToString();
         }
@@ -497,7 +568,7 @@ namespace UI
                     Selection = newSelection;
                     if (newSelection != null)
                     {
-                        visualizer.MarkedVerts = new Vertex[] { newSelection };
+                        MarkAsRed(new Vertex[] { newSelection });
                     }
                     else
                     {
@@ -657,10 +728,12 @@ namespace UI
         {
             private readonly ICollection<Control> _result = new List<Control>();
             private readonly UI2 _mainWindow;
+            private readonly Stopwatch _stopwatch;
 
             public ControlListBuilder(UI2 mainWindow)
             {
                 _mainWindow = mainWindow;
+                _stopwatch = new Stopwatch();
             }
 
             public Control[] Result
@@ -694,8 +767,11 @@ namespace UI
                     }
                     Action<IProgressMonitor> runnedAction = delegate(IProgressMonitor pm)
                     {
+                        _stopwatch.Reset();
+                        _stopwatch.Start();
                         action(pm);
-                        MessageBox.Show("Done");
+                        _stopwatch.Stop();
+                        MessageBox.Show(string.Format("Done after {0}ms.", _stopwatch.ElapsedMilliseconds));
                     };
                     _mainWindow.algorithmExecutionWorker.RunWorkerAsync(runnedAction);
                 };
@@ -715,18 +791,6 @@ namespace UI
             }
 
             #endregion
-        }
-
-        private void ConsoleButton_CheckedChanged(object sender, EventArgs e)
-        {
-            if (((ToolStripButton)sender).Checked)
-            {
-                Win32.AllocConsole();
-            }
-            else
-            {
-                Win32.FreeConsole();
-            }
         }
     }
 }

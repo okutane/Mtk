@@ -1,0 +1,15 @@
+﻿<config>
+  <OutputFolder>$(AppDir)-Profiled</OutputFolder>
+  <ReportFolderNetFull>$(AppDir)-Profiled\EQATECProfilerLogs</ReportFolderNetFull>
+  <ReportFolderNetCF>\Temp\EQATECProfilerLogs</ReportFolderNetCF>
+  <AutoSnapshot>Main</AutoSnapshot>
+  <TinyMethodAction>Skip</TinyMethodAction>
+  <RuntimeControlEnabled>true</RuntimeControlEnabled>
+  <RuntimeControlPort>3947</RuntimeControlPort>
+  <RuntimeModuleLogLevel>Errors</RuntimeModuleLogLevel>
+  <ExcludeFiles>
+    <ExcludeFile>UI.vshost.exe</ExcludeFile>
+    <ExcludeFile>OglVisualizer.dll</ExcludeFile>
+  </ExcludeFiles>
+  <SignActions />
+</config>

@@ -56,7 +56,7 @@ namespace Matveev.Mtk.Library
         {
             Func<Face, Vector> v = delegate(Face f)
             {
-                Point[] points = f.Vertices.Select(faceVertex => faceVertex.Point).ToArray();
+                Point[] points = f.ToPoints();
                 Point centroid = points[0].Interpolate(points[1], points[2], 1.0 / 3.0, 1.0 / 3.0);
                 Vector pc = centroid - vertex.Point;
                 Vector normal = Vector.Normalize(surface.Grad(centroid));

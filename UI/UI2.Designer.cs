@@ -218,18 +218,6 @@ namespace UI
             this.drawFaceNormalsToolStripMenuItem.Text = "Draw face normals";
             this.drawFaceNormalsToolStripMenuItem.Click += new System.EventHandler(this.drawFaceNormalsToolStripMenuItem_Click);
             // 
-            // consoleButton
-            // 
-            consoleButton.CheckOnClick = true;
-            consoleButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            consoleButton.Image = ((System.Drawing.Image)(resources.GetObject("consoleButton.Image")));
-            consoleButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            consoleButton.Name = "consoleButton";
-            consoleButton.Size = new System.Drawing.Size(36, 36);
-            consoleButton.Text = "toolStripButton1";
-            consoleButton.ToolTipText = "Show/Hide console";
-            consoleButton.CheckedChanged += new System.EventHandler(this.ConsoleButton_CheckedChanged);
-            // 
             // toolStrip1
             // 
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;

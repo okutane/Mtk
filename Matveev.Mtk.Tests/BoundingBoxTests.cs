@@ -36,7 +36,7 @@ namespace Matveev.Mtk.Tests
         [Test]
         public void HyperboloidTest()
         {
-            TestConstraints(QuadraticForm.HyperboloidOne, "Hyperboloid");
+            TestConstraints(CompactQuadraticForm.HyperboloidOne, "Hyperboloid");
         }
 
         private void TestConstraints(IImplicitSurface surface, string name)

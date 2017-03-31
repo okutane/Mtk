@@ -88,6 +88,52 @@ namespace Matveev.Mtk.Library.Utilities
             return result;
         }
 
+        public static void Cleanup(this Mesh mesh)
+        {
+            var visitedFaces = new HashSet<Face>();
+            var facesSets = new List<HashSet<Face>>();
+            foreach(var face in mesh.Faces)
+            {
+                if(visitedFaces.Add(face))
+                {
+                    var newSet = new HashSet<Face>();
+                    newSet.Add(face);
+                    var oldAdded = newSet.ToList();
+                    do
+                    {
+                        var newAdded = new List<Face>();
+                        foreach(var oldAddedFace in oldAdded)
+                        {
+                            foreach(var adjacent in oldAddedFace.Adjacent)
+                            {
+                                if(newSet.Add(adjacent))
+                                {
+                                    visitedFaces.Add(adjacent);
+                                    newAdded.Add(adjacent);
+                                }
+                            }
+                        }
+                        oldAdded = newAdded;
+                    } while(oldAdded.Count != 0);
+                    facesSets.Add(newSet);
+                }
+            }
+            int maxCount = facesSets.Max(set => set.Count);
+            var setToKeep = facesSets.Single(set => set.Count == maxCount);
+            foreach(var facesSet in facesSets.Where(set => set != setToKeep))
+            {
+                var verticesToRemove = facesSet.SelectMany(face => face.Vertices).Distinct().ToList();
+                foreach(var face in facesSet)
+                {
+                    mesh.DeleteFace(face);
+                }
+                foreach(var vertex in verticesToRemove)
+                {
+                    mesh.RemoveVertex(vertex);
+                }
+            }
+        }
+
         private static IDictionary<T, T> GetCleanOrNew<T>(IDictionary<T, T> dictionary)
         {
             if (dictionary == null)

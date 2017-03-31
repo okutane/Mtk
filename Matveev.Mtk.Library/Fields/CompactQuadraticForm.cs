@@ -151,7 +151,7 @@ namespace Matveev.Mtk.Library.Fields
 
         public static readonly CompactQuadraticForm ParabolicHyperboloid =
             new CompactQuadraticForm(new double[,] { { 1, 0, 0 }, { 0, -1, 0 }, { 0, 0, 0 } },
-                new double[] { 0, 0, 1 }, 0);
+                new double[] { 0, 0, -1 }, 0);
 
         public static readonly CompactQuadraticForm Sphere =
             new CompactQuadraticForm(new double[,] { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 } },

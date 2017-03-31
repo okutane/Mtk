@@ -36,6 +36,15 @@ namespace UI
                 t = Math.Max(0, Math.Min(t, 1));
                 return Color.FromArgb((int)(255 * t), (int)(255 * (1 - t)), 0);
             });
+            _faceColorers.Add("Selected + grow", delegate(Face face)
+            {
+                int value = Math.Max(0, (int)(255 * -0.75 * face.Normal.z));
+                if(UI2._selectionGrown.Contains(face))
+                {
+                    return Color.FromArgb(255, value, value);
+                }
+                return Color.FromArgb(value, value, value);
+            });
             _vertexColorers.Add("Vertex normals", delegate(Vertex vertex)
             {
                 int value = Math.Max(0, (int)(255 * -0.75 * vertex.Normal.z));

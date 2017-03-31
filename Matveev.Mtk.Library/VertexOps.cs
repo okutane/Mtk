@@ -30,7 +30,7 @@ namespace Matveev.Mtk.Library
             return 2 * Math.PI - angle;
         }
 
-        public static double ExternalCurvature(Vertex vert)
+        public static double ExternalCurvature(this Vertex vert)
         {
             if (!IsInternal(vert))
             {

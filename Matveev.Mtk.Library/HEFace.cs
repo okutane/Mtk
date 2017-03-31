@@ -51,7 +51,10 @@ namespace Matveev.Mtk.Library
                 HEEdge edge = mainEdge;
                 do
                 {
-                    yield return edge.pair.face;
+                    if(edge.pair != null)
+                    {
+                        yield return edge.pair.face;
+                    }
                     edge = edge.next;
                 }
                 while (edge != mainEdge);
