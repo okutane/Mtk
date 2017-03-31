@@ -7,33 +7,55 @@ using Matveev.Mtk.Core;
 
 namespace Matveev.Mtk.Library.FaceFunctions
 {
-    public sealed class MultiplicationFaceFunction : FaceFunction
+    public sealed class MultiplicationFaceFunction : IPointsFunctionWithGradient
     {
-        private FaceFunction _f1, _f2;
+        private readonly IPointsFunctionWithGradient _f1;
+        private readonly IPointsFunctionWithGradient _f2;
 
-        public MultiplicationFaceFunction(FaceFunction f1, FaceFunction f2)
+        public MultiplicationFaceFunction(IPointsFunctionWithGradient f1, IPointsFunctionWithGradient f2)
         {
-            this._f1 = f1;
-            this._f2 = f2;
+            _f1 = f1;
+            _f2 = f2;
         }
 
-        public override double Evaluate(Face face)
+        #region IPointsFunctionWithGradient Members
+
+        public double Evaluate(Point[] argument)
         {
-            return this._f1.Evaluate(face) * this._f2.Evaluate(face);
+            return _f1.Evaluate(argument) * _f2.Evaluate(argument);
         }
 
-        public override void EvaluateGradientTo(Face face, double[] dest)
+        public void EvaluateGradient(Point[] argument, Vector[] result)
         {
-            double value1 = this._f1.Evaluate(face);
-            double value2 = this._f2.Evaluate(face);
-
-            double[] grad1 = this._f1.EvaluateGradient(face);
-            double[] grad2 = this._f2.EvaluateGradient(face);
-
-            for (int i = 0; i < 9; i++)
+            double value1 = _f1.EvaluateValueWithGradient(argument, result);
+            Vector[] grad2 = new Vector[3];
+            double value2 = _f2.EvaluateValueWithGradient(argument, grad2);
+            for(int i = 0 ; i < 3 ; i++)
             {
-                dest[i] = value1 * grad2[i] + value2 * grad1[i];
+                result[i] = value1 * grad2[i] + value2 * result[i];
             }
         }
+
+        public double EvaluateValueWithGradient(Point[] argument, Vector[] result)
+        {
+            double value1 = _f1.EvaluateValueWithGradient(argument, result);
+            Vector[] grad2 = new Vector[3];
+            double value2 = _f2.EvaluateValueWithGradient(argument, grad2);
+            for(int i = 0 ; i < 3 ; i++)
+            {
+                result[i] = value1 * grad2[i] + value2 * result[i];
+            }
+            return value1 * value2;
+        }
+
+        public IPointSelectionStrategy PointSelectionStrategy
+        {
+            get
+            {
+                return FacesSelectionStrategy.Instance;
+            }
+        }
+
+        #endregion
     }
 }

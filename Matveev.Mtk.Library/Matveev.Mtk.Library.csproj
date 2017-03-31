@@ -93,9 +93,9 @@
     <Compile Include="Fields\MonkeySaddle.cs" />
     <Compile Include="Fields\PiriformTeardrop.cs" />
     <Compile Include="Fields\Plane.cs" />
-    <Compile Include="Fields\QuadraticForm.cs" />
     <Compile Include="Fields\Sphere.cs" />
     <Compile Include="Fields\Torus.cs" />
+    <Compile Include="Fields\Unnamed.cs" />
     <Compile Include="GslPointStrategies.cs" />
     <Compile Include="HeaMesh.cs" />
     <Compile Include="HeaVertex.cs" />

@@ -1,0 +1,122 @@
+Torus [-1, 1]^3 8x8x8
+Vertex count: 56
+Vertex energy:
+Min: 2,58668833510923E-05
+Max: 9,37566342222904E-05
+Sum: 0,00264101917542237
+Avg: 4,7161056703971E-05
+
+Edge count: 288
+Edge length:
+Min: 0,0284357791424414
+Max: 0,278654727460139
+Sum: 43,3194617223223
+Avg: 0,150414797646952
+
+Face count: 96
+Face area:
+Min: 0,000500072290601215
+Max: 0,0149788938082945
+Sum: 0,585837694229591
+Avg: 0,00610247598155823
+
+Performance:
+precise => 00:00:01.2925880
+linear => 00:00:00.5025404
+square => 00:00:00.7979303
+cubic => 00:00:01.2473598
+
+Absolute error:
+precise => 0
+linear => 6,86742024104203E-13
+square => 4,20498556265472E-12
+cubic => 4,26402685515471E-12
+
+Relative error:
+precise => 0
+linear => 0,233762857488321
+square => 0,578443506081338
+cubic => 0,582490250788274
+
+-----------------------------------
+Sphere [-1, 1]^3 2x2x2
+Vertex count: 6
+Vertex energy:
+Min: 0
+Max: 0
+Sum: 0
+Avg: 0
+
+Edge count: 24
+Edge length:
+Min: 1,4142135623731
+Max: 1,4142135623731
+Sum: 33,9411254969543
+Avg: 1,4142135623731
+
+Face count: 8
+Face area:
+Min: 0,866025403784439
+Max: 0,866025403784439
+Sum: 6,92820323027551
+Avg: 0,866025403784439
+
+Performance:
+precise => 00:00:00.0750386
+linear => 00:00:00.0516652
+square => 00:00:00.0880204
+cubic => 00:00:00.1396144
+
+Absolute error:
+precise => 0
+linear => 0,426666666666667
+square => 2,46519032881566E-32
+cubic => 0
+
+Relative error:
+precise => 0
+linear => 1
+square => 2,40370335797945E-16
+cubic => 0
+
+-----------------------------------
+Sphere [-1, 1]^3 4x4x4
+Vertex count: 54
+Vertex energy:
+Min: 0
+Max: 0,00308641975308643
+Sum: 0,148148148148148
+Avg: 0,0027434842249657
+
+Edge count: 312
+Edge length:
+Min: 0,235702260395516
+Max: 0,781735959970572
+Sum: 164,187565723974
+Avg: 0,526242197833249
+
+Face count: 104
+Face area:
+Min: 0,0240562612162344
+Max: 0,138192699598142
+Sum: 11,1845986139813
+Avg: 0,107544217442128
+
+Performance:
+precise => 00:00:00.9735790
+linear => 00:00:00.6649146
+square => 00:00:01.1403308
+cubic => 00:00:01.7944430
+
+Absolute error:
+precise => 0
+linear => 0,000350311620751845
+square => 3,42211384779323E-34
+cubic => 1,42137397355172E-33
+
+Relative error:
+precise => 0
+linear => 0,876148998207245
+square => 8,65960182792574E-16
+cubic => 1,76483812091133E-15
+

@@ -47,7 +47,7 @@ namespace OglVisualizer
 		FaceColorEvaluatorDelegate ^_faceColorEvaluator;
 		VertexColorEvaluatorDelegate ^_vertexColorEvaluator;
 
-        IEnumerable<Vertex^> ^_vertsMarked;
+        IDictionary<Vertex^, System::Drawing::Color> ^_vertsMarked;
         Edge ^_edgeSelected;
         Face ^_faceSelected;
 
@@ -163,9 +163,9 @@ namespace OglVisualizer
 			}
 		}
 
-        property IEnumerable<Vertex^> ^MarkedVerts
+        property IDictionary<Vertex^, System::Drawing::Color> ^MarkedVerts
 		{
-            void set(IEnumerable<Vertex^> ^value)
+            void set(IDictionary<Vertex^, System::Drawing::Color> ^value)
 			{
 				_vertsMarked = value;
                 _edgeSelected = nullptr;
@@ -241,7 +241,7 @@ namespace OglVisualizer
 			glMatrixMode(GL_PROJECTION);
 			glLoadIdentity();
 			GLdouble zNear = 1;
-			GLdouble zFar = zNear + diameter * 2;
+			GLdouble zFar = zNear + diameter * 2+2;
 			GLdouble left = -diameter;
 			GLdouble right = diameter;
 			GLdouble top = -diameter;
@@ -398,8 +398,11 @@ namespace OglVisualizer
                     glColor3f(1, 0, 0);
                     glPointSize(5);
                     glBegin(GL_POINTS);
-                    for each(Matveev::Mtk::Core::Vertex ^v in _vertsMarked)
-                        PutVertex(v->Point);
+                    for each(KeyValuePair<Vertex^, System::Drawing::Color> ^entry in _vertsMarked)
+                    {
+                        glColor3ub(entry->Value.R, entry->Value.G, entry->Value.B);
+                            PutVertex(entry->Key->Point);
+                    }
                     glEnd();
                 }
 
